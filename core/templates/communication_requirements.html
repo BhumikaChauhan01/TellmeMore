@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Communication Practice{% endblock %}
+
+{% block content %}
+<div class="w-full min-h-screen bg-gradient-to-br from-[#190019] via-[#2B124C] to-[#522B5B] flex items-center justify-center p-8">
+    <div class="w-full max-w-[1000px] rounded-3xl shadow-2xl p-12 text-[#FBE4D8]">
+        <h2 class="text-4xl font-bold text-center mb-2">Communication Skills Practice</h2>
+        <p class="text-center mb-8 text-[#DFB6B2]">Complete the form below to create your personalized roleplay</p>
+
+        <form method="POST" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+
+            <!-- Basic Info -->
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <label class="block mb-2 font-semibold">Full Name *</label>
+                    <input type="text" name="full_name" placeholder="Your Name" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" required />
+                </div>
+                <div>
+                    <label class="block mb-2 font-semibold">Age</label>
+                    <input type="number" name="age" placeholder="Your Age" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
+                </div>
+                <div class="col-span-2">
+                    <label class="block mb-2 font-semibold">Email</label>
+                    <input type="email" name="email" placeholder="you@example.com" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
+                </div>
+            </div>
+
+            <!-- Language & Proficiency -->
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <label class="block mb-2 font-semibold">Language</label>
+                    <select name="language" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
+                        <option value="english" selected>English</option>
+                        <option value="hindi">Hindi</option>
+                        <option value="spanish">Spanish</option>
+                        <option value="french">French</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block mb-2 font-semibold">Language Proficiency</label>
+                    <select name="language_proficiency" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
+                        <option value="basic" selected>Basic</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="pro">Proficient</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Mode / Roleplay Level -->
+            <div>
+                <label class="block mb-2 font-semibold">Roleplay Level</label>
+                <select name="mode" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
+                    <option value="basic_intro" selected>Basic Intro (Self Intro / Simple Conversation)</option>
+                    <option value="intermediate">Intermediate (Group / Peer Conversations)</option>
+                    <option value="pro">Pro Level (Professional Scenario)</option>
+                </select>
+            </div>
+
+            <!-- Reason -->
+            <div>
+                <label class="block mb-2 font-semibold">Reason for Learning</label>
+                <select id="reason_select" name="reason" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
+                    <option value="office">Office / Workplace Communication</option>
+                    <option value="travel">Travel / Tour Communication</option>
+                    <option value="students">Classroom / Student Interaction</option>
+                    <option value="presentation">Presentations / Public Speaking</option>
+                    <option value="personal" selected>Personal Growth / Confidence</option>
+                    <option value="custom">Other (User defined)</option>
+                </select>
+                <input type="text" name="custom_reason" id="custom_reason_input" placeholder="Write your reason here" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C] mt-2 hidden" />
+            </div>
+
+            <!-- JS to show custom reason -->
+            <script>
+                const reasonSelect = document.getElementById('reason_select');
+                const customReasonInput = document.getElementById('custom_reason_input');
+
+                reasonSelect.addEventListener('change', function() {
+                    if(this.value === 'custom') {
+                        customReasonInput.style.display = 'block';
+                    } else {
+                        customReasonInput.style.display = 'none';
+                        customReasonInput.value = '';
+                    }
+                });
+            </script>
+
+            <!-- Roleplay Settings -->
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <label class="block mb-2 font-semibold">Time per Round (seconds)</label>
+                    <input type="number" name="time_per_round" value="60" min="60" max="180" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
+                </div>
+                <div>
+                    <label class="block mb-2 font-semibold">Number of Rounds</label>
+                    <select name="num_rounds" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
+                        <option value="3" selected>3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center mt-6">
+                <button type="submit" class="bg-[#854F6C] px-8 py-3 rounded-xl hover:bg-[#FBE4D8] hover:text-[#190019] font-semibold text-lg transition">
+                    Submit Communication Practice
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

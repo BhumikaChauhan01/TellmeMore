@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-screen bg-gradient-to-br from-purple-900 via-purple-700 to-indigo-800 p-6">
+  <div class="w-full max-w-3xl bg-white shadow-2xl rounded-2xl p-8">
+
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Edit Profile</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
+      {% csrf_token %}
+
+      <!-- User fields (editable now) -->
+      <div>
+        <label class="font-semibold">First Name</label>
+        <input type="text" name="first_name" value="{{ user.first_name }}" class="w-full p-3 border rounded-lg bg-gray-50">
+      </div>
+      <div>
+        <label class="font-semibold">Last Name</label>
+        <input type="text" name="last_name" value="{{ user.last_name }}" class="w-full p-3 border rounded-lg bg-gray-50">
+      </div>
+      <div>
+        <label class="font-semibold">Email</label>
+        <input type="email" name="email" value="{{ user.email }}" class="w-full p-3 border rounded-lg bg-gray-50">
+      </div>
+      <div>
+        <label class="font-semibold">Username</label>
+        <input type="text" value="{{ user.username }}" disabled class="w-full p-3 border rounded-lg bg-gray-100 text-gray-500">
+      </div>
+
+      <!-- Profile fields -->
+      <div>
+        <label class="font-semibold">Gender</label>
+        <select name="gender" class="w-full p-3 border rounded-lg bg-gray-50">
+          <option value="" {% if not profile.gender %}selected{% endif %}>Select</option>
+          <option value="M" {% if profile.gender == "M" %}selected{% endif %}>Male</option>
+          <option value="F" {% if profile.gender == "F" %}selected{% endif %}>Female</option>
+          <option value="O" {% if profile.gender == "O" %}selected{% endif %}>Other</option>
+        </select>
+      </div>
+      <div>
+        <label class="font-semibold">Date of Birth</label>
+        <input type="date" name="dob" value="{{ profile.dob|date:'Y-m-d' }}" class="w-full p-3 border rounded-lg bg-gray-50">
+      </div>
+      <div class="md:col-span-2">
+        <label class="font-semibold">Bio</label>
+        <textarea name="bio" class="w-full p-3 border rounded-lg bg-gray-50">{{ profile.bio }}</textarea>
+      </div>
+
+      <div class="md:col-span-2">
+        <label class="font-semibold">Profile Picture</label>
+        {% if profile.profile_picture %}
+          <div class="mb-2">
+            <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="w-24 h-24 rounded-full border-2 border-indigo-500 object-cover">
+          </div>
+        {% endif %}
+        <input type="file" name="profile_picture" class="w-full p-3 border rounded-lg bg-gray-50">
+      </div>
+
+      <!-- Save Button -->
+      <div class="md:col-span-2 flex justify-end">
+        <button type="submit" class="px-6 py-3 bg-indigo-600 text-white rounded-xl shadow-md hover:bg-indigo-700 transition">
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

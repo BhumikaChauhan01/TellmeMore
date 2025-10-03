@@ -1,0 +1,107 @@
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Custom styles for the dashboard to create a new UI feel */
+    body {
+        background: linear-gradient(to bottom right, #2B124C, #522B5B, #854F6C);
+        color: #FBE4D8;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .card {
+        background-color: #DFB6B2;
+        border-radius: 1.5rem;
+        padding: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .btn-dashboard {
+        background-color: #854F6C;
+        color: #FBE4D8;
+        padding: 1rem 2.5rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-dashboard:hover {
+        background-color: #522B5B;
+        transform: scale(1.05);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 md:px-8 py-10 w-full max-w-6xl">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <div class="lg:col-span-1 p-8 rounded-3xl bg-[#522B5B]/70 backdrop-blur-lg shadow-2xl border border-[#854F6C] flex flex-col items-center text-center space-y-4 transform transition-all duration-300 hover:scale-[1.02]">
+            <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-[#FBE4D8] shadow-lg">
+                <img src="https://via.placeholder.com/150/854F6C/FBE4D8?text=You" alt="User Profile Picture" class="w-full h-full object-cover">
+            </div>
+            <h1 class="text-4xl font-extrabold text-[#FBE4D8] tracking-tight">
+                Welcome, <br class="md:hidden">User!
+            </h1>
+            <p class="text-lg text-[#DFB6B2] font-light">
+                Your AI coach is ready.
+            </p>
+        </div>
+
+        <div class="lg:col-span-2 space-y-8">
+            
+            <div class="card grid grid-cols-1 md:grid-cols-2 gap-6 bg-[#DFB6B2]">
+                <h2 class="col-span-1 md:col-span-2 text-3xl font-bold text-[#190019] mb-4">Quick Actions</h2>
+                <button class="btn-dashboard">
+                    Start New Session
+                </button>
+                <button class="btn-dashboard">
+                    View Practice History
+                </button>
+                <button class="btn-dashboard">
+                    Review Uploaded Content
+                </button>
+                <button class="btn-dashboard">
+                    Analyze My Voice
+                </button>
+            </div>
+
+            <div class="card bg-[#DFB6B2] text-[#190019]">
+                <h2 class="text-3xl font-bold mb-4">My Progress</h2>
+                <p class="text-lg text-[#522B5B] font-medium mb-6">
+                    Analyze your voice, tone, and delivery.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                    <div class="bg-[#FBE4D8] p-6 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105">
+                        <p class="text-5xl font-extrabold text-[#854F6C]">85%</p>
+                        <p class="text-sm font-medium text-[#2B124C] mt-2">Confidence Score</p>
+                    </div>
+                    <div class="bg-[#FBE4D8] p-6 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105">
+                        <p class="text-5xl font-extrabold text-[#854F6C]">150</p>
+                        <p class="text-sm font-medium text-[#2B124C] mt-2">Words/Minute</p>
+                    </div>
+                    <div class="bg-[#FBE4D8] p-6 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105">
+                        <p class="text-5xl font-extrabold text-[#854F6C]">42</p>
+                        <p class="text-sm font-medium text-[#2B124C] mt-2">Sessions Completed</p>
+                    </div>
+                    <div class="bg-[#FBE4D8] p-6 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105">
+                        <p class="text-5xl font-extrabold text-[#854F6C]">9/10</p>
+                        <p class="text-sm font-medium text-[#2B124C] mt-2">Clarity Rating</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

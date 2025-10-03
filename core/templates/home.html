@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="text-center text-[#FBE4D8] max-w-3xl">
+    <!-- Hero Section -->
+    <h1 class="text-5xl font-extrabold mb-6">
+        Welcome to <span class="text-[#DFB6B2]">TellmeMore</span>
+    </h1>
+    <p class="text-lg mb-8">
+        Learn. Build. Grow. 🚀  
+        Explore coding, projects, and creativity with us.
+    </p>
+
+    {% if not user.is_authenticated %}
+        <a href="{% url 'register' %}" 
+           class="bg-[#854F6C] text-[#FBE4D8] px-6 py-3 rounded-lg hover:bg-[#190019] transition text-lg">
+            Get Started
+        </a>
+    {% else %}
+        <a href="{% url 'dashboard' %}" 
+           class="bg-[#854F6C] text-[#FBE4D8] px-6 py-3 rounded-lg hover:bg-[#190019] transition text-lg">
+            Go to Dashboard
+        </a>
+    {% endif %}
+
+    <!-- Quote Section -->
+    <div class="mt-16 quote text-2xl italic">
+        "Ignite your learning journey with us — code, create, and conquer."
+    </div>
+</div>
+{% endblock %}

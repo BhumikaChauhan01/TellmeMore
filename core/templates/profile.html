@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}My Profile{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Define custom colors from the provided palette */
+    :root {
+        --color-primary-dark: #190019; /* Darkest */
+        --color-secondary-dark: #2B124C;
+        --color-primary-mid: #522B5B;
+        --color-secondary-mid: #854F6C;
+        --color-light-accent: #DFB6B2;
+        --color-lightest: #FBE4D8; /* Lightest */
+    }
+
+    /* Apply custom colors to Tailwind classes */
+    .bg-gradient-profile-card {
+        background: linear-gradient(135deg, var(--color-secondary-dark), var(--color-primary-mid), var(--color-secondary-mid));
+    }
+    .text-primary-dark { color: var(--color-primary-dark); }
+    .text-secondary-dark { color: var(--color-secondary-dark); }
+    .text-primary-mid { color: var(--color-primary-mid); }
+    .text-secondary-mid { color: var(--color-secondary-mid); }
+    .text-light-accent { color: var(--color-light-accent); }
+    .text-lightest { color: var(--color-lightest); }
+
+    .bg-primary-dark { background-color: var(--color-primary-dark); }
+    .bg-secondary-dark { background-color: var(--color-secondary-dark); }
+    .bg-primary-mid { background-color: var(--color-primary-mid); }
+    .bg-secondary-mid { background-color: var(--color-secondary-mid); }
+    .bg-light-accent { background-color: var(--color-light-accent); }
+    .bg-lightest { background-color: var(--color-lightest); }
+
+    .border-primary-dark { border-color: var(--color-primary-dark); }
+    .border-secondary-dark { border-color: var(--color-secondary-dark); }
+    .border-primary-mid { border-color: var(--color-primary-mid); }
+    .border-secondary-mid { border-color: var(--color-secondary-mid); }
+    .border-light-accent { border-color: var(--color-light-accent); }
+    .border-lightest { border-color: var(--color-lightest); }
+
+    /* Glow effect for inputs (using lightest accent color) */
+    .glow-input:focus {
+        box-shadow: 0 0 0 3px rgba(223, 182, 178, 0.5), 0 0 8px rgba(223, 182, 178, 0.8); /* DFB6B2 with opacity */
+        border-color: var(--color-light-accent);
+        transition: all 0.3s ease-in-out;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center px-6 py-12">
+    <div class="w-full max-w-5xl bg-gradient-profile-card rounded-3xl shadow-2xl p-8 md:p-12 backdrop-blur-sm border border-primary-mid">
+
+        <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-12 mb-10 pb-6 border-b border-primary-mid/50">
+            {% if profile.profile_picture %}
+                <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-lightest shadow-xl object-cover hover:scale-105 transition duration-300 transform">
+            {% else %}
+                <div class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-secondary-mid flex items-center justify-center text-lightest text-4xl font-bold shadow-xl border-4 border-lightest flex-shrink-0">
+                    {{ user.first_name.0|default:'J' }}{{ user.last_name.0|default:'P' }}
+                </div>
+            {% endif %}
+
+            <div class="text-center md:text-left">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-lightest leading-tight">{{ user.first_name }} {{ user.last_name }}</h2>
+                <p class="text-light-accent text-xl md:text-2xl mt-2 font-medium hover:text-lightest transition duration-300">@{{ user.username }}</p>
+                <p class="text-light-accent text-lg md:text-xl mt-1 hover:text-lightest transition duration-300">{{ user.email }}</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-lightest">
+            <div>
+                <label class="block font-semibold mb-2 text-light-accent">First Name</label>
+                <input type="text" value="{{ user.first_name }}" disabled
+                       class="w-full p-4 rounded-xl bg-secondary-dark/50 border border-primary-mid text-lightest placeholder-light-accent focus:outline-none glow-input">
+            </div>
+            <div>
+                <label class="block font-semibold mb-2 text-light-accent">Last Name</label>
+                <input type="text" value="{{ user.last_name }}" disabled
+                       class="w-full p-4 rounded-xl bg-secondary-dark/50 border border-primary-mid text-lightest placeholder-light-accent focus:outline-none glow-input">
+            </div>
+            <div>
+                <label class="block font-semibold mb-2 text-light-accent">Username</label>
+                <input type="text" value="{{ user.username }}" disabled
+                       class="w-full p-4 rounded-xl bg-secondary-dark/30 border border-primary-mid text-light-accent font-medium focus:outline-none">
+            </div>
+            <div>
+                <label class="block font-semibold mb-2 text-light-accent">Email</label>
+                <input type="email" value="{{ user.email }}" disabled
+                       class="w-full p-4 rounded-xl bg-secondary-dark/50 border border-primary-mid text-lightest placeholder-light-accent focus:outline-none glow-input">
+            </div>
+            <div>
+                <label class="block font-semibold mb-2 text-light-accent">Gender</label>
+                <input type="text" value="{{ profile.get_gender_display|default:'Not set' }}" disabled
+                       class="w-full p-4 rounded-xl bg-secondary-dark/30 border border-primary-mid text-lightest focus:outline-none">
+            </div>
+            <div>
+                <label class="block font-semibold mb-2 text-light-accent">Date of Birth</label>
+                <input type="text" value="{{ profile.dob|date:'d M Y'|default:'Not set' }}" disabled
+                       class="w-full p-4 rounded-xl bg-secondary-dark/30 border border-primary-mid text-lightest focus:outline-none">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block font-semibold mb-2 text-light-accent">Bio</label>
+                <textarea disabled
+                          class="w-full p-4 rounded-xl bg-secondary-dark/30 border border-primary-mid text-lightest h-32 resize-none focus:outline-none">{{ profile.bio|default:'No bio provided yet.' }}</textarea>
+            </div>
+        </div>
+
+        <div class="mt-12 flex justify-center md:justify-end">
+            <a href="{% url 'profile_edit' %}"
+               class="px-10 py-4 bg-light-accent text-primary-dark font-extrabold rounded-full shadow-lg
+                      hover:bg-lightest hover:scale-105 transition duration-300 transform tracking-wide text-lg">
+                Edit Profile 🚀
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

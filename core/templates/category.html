@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block title %}Practice Categories{% endblock %}
+
+{% block extra_head %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for colors, fonts, and animations specific to this page */
+        :root {
+            --c1: #190019;
+            --c2: #2B124C;
+            --c3: #522B5B;
+            --c4: #854F6C;
+            --c5: #DFB6B2;
+            --c6: #FBE4D8;
+        }
+
+        /* The base body background is already set in base.html, but we can override or add if needed */
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- Loader Styles --- */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--c1);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border: 8px solid var(--c3);
+            border-top-color: var(--c5);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* --- Image Scroller Animation --- */
+        .scroller {
+            height: 100%;
+            overflow: hidden;
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+            mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+        }
+
+        .scroller-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            animation: scroll-vertical 15s linear infinite;
+        }
+        
+        .scroller[data-direction="down"] .scroller-inner {
+             animation: scroll-vertical-reverse 15s linear infinite;
+        }
+
+        @keyframes scroll-vertical {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-50%);
+            }
+        }
+        
+        @keyframes scroll-vertical-reverse {
+            from {
+                transform: translateY(-50%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+        
+        /* Custom shadow for the central card */
+        .card-shadow {
+            box-shadow: 0px 0px 40px rgba(223, 182, 178, 0.2);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="page-content" class="hidden w-full">
+
+        <div class="relative w-full flex justify-center items-center h-[70vh]">
+
+            <div class="hidden md:block absolute left-0 top-0 h-full w-1/5 lg:w-1/4">
+                <div class="scroller">
+                    <div class="scroller-inner">
+                        <img src="https://i.pinimg.com/736x/68/e1/f3/68e1f3e225a57e7240e8c54e43ddfb96.jpg" class="w-full h-auto rounded-lg mb-4">
+                        <img src="https://i.pinimg.com/736x/68/e1/f3/68e1f3e225a57e7240e8c54e43ddfb96.jpg" class="w-full h-auto rounded-lg mb-4">
+                        <img src="https://i.pinimg.com/736x/68/e1/f3/68e1f3e225a57e7240e8c54e43ddfb96.jpg" class="w-full h-auto rounded-lg mb-4">
+                        <img src="https://i.pinimg.com/736x/68/e1/f3/68e1f3e225a57e7240e8c54e43ddfb96.jpg" class="w-full h-auto rounded-lg mb-4">
+                        <img src="https://i.pinimg.com/736x/68/e1/f3/68e1f3e225a57e7240e8c54e43ddfb96.jpg" class="w-full h-auto rounded-lg mb-4">
+                        <img src="https://i.pinimg.com/736x/68/e1/f3/68e1f3e225a57e7240e8c54e43ddfb96.jpg" class="w-full h-auto rounded-lg mb-4">
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative z-10 w-full max-w-md p-8 rounded-2xl card-shadow" style="background-color: var(--c2);">
+                <h1 class="text-3xl font-bold text-center mb-8" style="color: var(--c6);">Choose a Category</h1>
+                <div class="space-y-4">
+                    <a href="{% url 'interview_requirements' %}" class="block w-full text-center p-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c3); color: var(--c6);">
+                        Interview Practice
+                    </a>
+                    <a href="{% url 'presentation_requirements' %}" class="block w-full text-center p-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c3); color: var(--c6);">
+                        Presentation Practice
+                    </a>
+                    <a href="{% url 'communication_requirements' %}" class="block w-full text-center p-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c3); color: var(--c6);">
+                        Communication Skills
+                    </a>
+                    <a href="{% url 'question_requirements' %}" class="block w-full text-center p-4 rounded-lg font-bold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c5); color: var(--c1);">
+                        Make your own Set
+                    </a>
+                </div>
+            </div>
+
+            <div class="hidden md:block absolute right-0 top-0 h-full w-1/5 lg:w-1/4">
+                <div class="scroller" data-direction="down">
+                     <div class="scroller-inner">
+                        <img src="https://i.pinimg.com/1200x/c4/27/52/c4275261c9109469b66efbdcedda240b.jpg" class="w-full h-auto rounded-lg mb-4">
+                        <img src="https://i.pinimg.com/1200x/c4/27/52/c4275261c9109469b66efbdcedda240b.jpg" class="w-full h-auto rounded-lg mb-4">
+                        <img src="https://i.pinimg.com/1200x/c4/27/52/c4275261c9109469b66efbdcedda240b.jpg" class="w-full h-auto rounded-lg mb-4">
+                        <img src="https://i.pinimg.com/1200x/c4/27/52/c4275261c9109469b66efbdcedda240b.jpg" class="w-full h-auto rounded-lg mb-4">
+                        <img src="https://i.pinimg.com/1200x/c4/27/52/c4275261c9109469b66efbdcedda240b.jpg" class="w-full h-auto rounded-lg mb-4">
+                        <img src="https://i.pinimg.com/1200x/c4/27/52/c4275261c9109469b66efbdcedda240b.jpg" class="w-full h-auto rounded-lg mb-4">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        </div>
+{% endblock %}
+
+
+{% block extra_scripts %}
+    <script>
+        // JavaScript to hide loader and show content when page is loaded
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            const pageContent = document.getElementById('page-content');
+            
+            // Fade out loader
+            loader.style.opacity = '0';
+            
+            // Wait for fade out animation to finish before hiding it
+            setTimeout(() => {
+                loader.style.display = 'none';
+                pageContent.classList.remove('hidden');
+            }, 500);
+        });
+        
+        // The mobile menu script is removed because the navbar is now controlled by base.html
+    </script>
+{% endblock %}

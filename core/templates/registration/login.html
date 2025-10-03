@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full max-w-6xl fade-in">
+  
+  <!-- Left Side - Welcome Message -->
+  <div class="flex flex-col justify-center text-[#FBE4D8] space-y-4">
+    <h1 class="quote text-4xl md:text-5xl font-extrabold leading-snug cursor-pointer">
+      WELCOME BACK, {{ request.user|capfirst }}
+    </h1>
+    <p class="text-[#DFB6B2] italic text-lg">
+      Ready to pick up where you left off? Login to continue your journey to become best 🚀
+    </p>
+  </div>
+
+  <!-- Right Side - Login Form -->
+  <div class="bg-[#2B124C]/80 backdrop-blur-md p-8 rounded-2xl shadow-lg fade-in">
+    <h2 class="text-3xl font-bold text-[#FBE4D8] mb-6 text-center">Login</h2>
+
+    <!-- Non-field errors -->
+    {% if form.non_field_errors %}
+      <div class="bg-red-500/30 border border-red-400 text-red-200 rounded p-3 mb-4">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <form method="POST" class="space-y-4">
+      {% csrf_token %}
+
+      <!-- Username -->
+      <div>
+        <label class="block text-[#DFB6B2] mb-1">Username</label>
+        <input type="text" name="username" value="{{ form.username.value }}" placeholder="Enter your username" class="glow w-full px-4 py-2 rounded-lg bg-[#522B5B] text-[#FBE4D8] focus:outline-none">
+        {% if form.username.errors %}
+          <p class="text-red-400 text-sm mt-1">{{ form.username.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label class="block text-[#DFB6B2] mb-1">Password</label>
+        <input type="password" name="password" placeholder="Enter your password" class="glow w-full px-4 py-2 rounded-lg bg-[#522B5B] text-[#FBE4D8] focus:outline-none">
+        {% if form.password.errors %}
+          <p class="text-red-400 text-sm mt-1">{{ form.password.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="w-full bg-[#854F6C] text-[#FBE4D8] py-2 rounded-lg font-semibold hover:bg-[#190019] hover:scale-105 transition duration-300">
+        Login
+      </button>
+
+      <!-- Forgot password -->
+      <p class="text-[#DFB6B2] text-sm mt-2 text-center">
+        <a href="{% url 'password_reset' %}" class="hover:text-[#FBE4D8]">Forgot Password?</a>
+      </p>
+
+      <!-- Registration link -->
+      <p class="text-[#DFB6B2] text-sm mt-1 text-center">
+        Don’t have an account? <a href="{% url 'register' %}" class="hover:text-[#FBE4D8] font-semibold">Register</a>
+      </p>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

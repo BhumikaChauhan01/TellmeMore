@@ -1,0 +1,44 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Uploaded Items{% endblock %}
+
+{% block extra_head %}
+<style>
+    :root {
+        --color-primary-dark: #190019;
+        --color-secondary-dark: #2B124C;
+        --color-primary-mid: #522B5B;
+        --color-secondary-mid: #854F6C;
+        --color-light-accent: #DFB6B2;
+        --color-lightest: #FBE4D8;
+    }
+
+    .bg-gradient-card {
+        background: linear-gradient(135deg, var(--color-secondary-dark), var(--color-primary-mid), var(--color-secondary-mid));
+    }
+    .text-lightest { color: var(--color-lightest); }
+    .text-light-accent { color: var(--color-light-accent); }
+    .bg-secondary-dark { background-color: var(--color-secondary-dark); }
+    .border-primary-mid { border-color: var(--color-primary-mid); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col items-center justify-start px-6 py-12 gap-6">
+
+    <h2 class="text-3xl md:text-4xl font-extrabold text-lightest mb-6">Uploaded Items</h2>
+
+    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-6">
+        {% for item in uploaded_items %}
+        <div class="bg-gradient-card rounded-2xl shadow-lg p-4 border border-primary-mid hover:scale-105 transition transform">
+            {% if item.image %}
+            <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-48 object-cover rounded-xl mb-4">
+            {% endif %}
+            <h3 class="text-lightest font-bold text-lg mb-2">{{ item.title }}</h3>
+            <p class="text-light-accent text-sm">{{ item.description }}</p>
+        </div>
+        {% empty %}
+        <p class="text-light-accent col-span-3 text-center">No uploaded items yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

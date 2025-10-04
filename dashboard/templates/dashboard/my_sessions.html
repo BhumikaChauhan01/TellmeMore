@@ -1,0 +1,50 @@
+{% extends "dashboard/base.html" %}
+{% block title %}My Sessions{% endblock %}
+
+{% block extra_head %}
+<style>
+    :root {
+        --color-primary-dark: #190019;
+        --color-secondary-dark: #2B124C;
+        --color-primary-mid: #522B5B;
+        --color-secondary-mid: #854F6C;
+        --color-light-accent: #DFB6B2;
+        --color-lightest: #FBE4D8;
+    }
+
+    .bg-gradient-card {
+        background: linear-gradient(135deg, var(--color-secondary-dark), var(--color-primary-mid), var(--color-secondary-mid));
+    }
+    .text-lightest { color: var(--color-lightest); }
+    .text-light-accent { color: var(--color-light-accent); }
+    .bg-secondary-dark { background-color: var(--color-secondary-dark); }
+    .border-primary-mid { border-color: var(--color-primary-mid); }
+
+    .glow-input:focus {
+        box-shadow: 0 0 0 3px rgba(223,182,178,0.5), 0 0 8px rgba(223,182,178,0.8);
+        border-color: var(--color-light-accent);
+        transition: all 0.3s ease-in-out;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col items-center justify-start px-6 py-12 gap-6">
+
+    <h2 class="text-3xl md:text-4xl font-extrabold text-lightest mb-6">My Sessions</h2>
+
+    <div class="w-full max-w-5xl bg-gradient-card rounded-3xl shadow-2xl p-6 md:p-10 backdrop-blur-sm border border-primary-mid grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        {% for session in sessions %}
+        <div class="p-4 rounded-xl bg-secondary-dark border border-primary-mid text-lightest hover:scale-105 transition transform shadow-lg">
+            <h3 class="text-xl font-bold mb-2">{{ session.title }}</h3>
+            <p class="text-light-accent mb-2">{{ session.description }}</p>
+            <p class="text-sm text-lightest">{{ session.date|date:"d M Y, H:i" }}</p>
+        </div>
+        {% empty %}
+        <p class="text-light-accent col-span-2 text-center">No sessions found.</p>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}

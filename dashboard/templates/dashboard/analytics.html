@@ -1,0 +1,56 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Analytics{% endblock %}
+
+{% block extra_head %}
+<style>
+    :root {
+        --color-primary-dark: #190019;
+        --color-secondary-dark: #2B124C;
+        --color-primary-mid: #522B5B;
+        --color-secondary-mid: #854F6C;
+        --color-light-accent: #DFB6B2;
+        --color-lightest: #FBE4D8;
+    }
+
+    .bg-gradient-card {
+        background: linear-gradient(135deg, var(--color-secondary-dark), var(--color-primary-mid), var(--color-secondary-mid));
+    }
+    .text-lightest { color: var(--color-lightest); }
+    .text-light-accent { color: var(--color-light-accent); }
+    .bg-secondary-dark { background-color: var(--color-secondary-dark); }
+    .border-primary-mid { border-color: var(--color-primary-mid); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col items-center justify-start px-6 py-12 gap-6">
+
+    <h2 class="text-3xl md:text-4xl font-extrabold text-lightest mb-6">Analytics</h2>
+
+    <div class="w-full max-w-5xl bg-gradient-card rounded-3xl shadow-2xl p-6 md:p-10 backdrop-blur-sm border border-primary-mid">
+
+        <!-- Example analytics table -->
+        <table class="w-full table-auto text-lightest">
+            <thead>
+                <tr class="border-b border-primary-mid">
+                    <th class="px-4 py-2 text-left text-light-accent">Metric</th>
+                    <th class="px-4 py-2 text-left text-light-accent">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for metric in analytics %}
+                <tr class="border-b border-primary-mid hover:bg-secondary-dark/50 transition">
+                    <td class="px-4 py-2">{{ metric.name }}</td>
+                    <td class="px-4 py-2">{{ metric.value }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" class="px-4 py-2 text-light-accent text-center">No analytics data available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,69 +1,105 @@
 {% extends "dashboard/base.html" %}
 {% block title %}Edit Profile{% endblock %}
 
+{% block extra_head %}
+<style>
+    :root {
+        --color-primary-dark: #190019;
+        --color-secondary-dark: #2B124C;
+        --color-primary-mid: #522B5B;
+        --color-secondary-mid: #854F6C;
+        --color-light-accent: #DFB6B2;
+        --color-lightest: #FBE4D8;
+    }
+
+    .bg-gradient-card {
+        background: linear-gradient(135deg, var(--color-secondary-dark), var(--color-primary-mid), var(--color-secondary-mid));
+    }
+    .text-lightest { color: var(--color-lightest); }
+    .text-light-accent { color: var(--color-light-accent); }
+    .bg-lightest { background-color: var(--color-lightest); }
+    .bg-light-accent { background-color: var(--color-light-accent); }
+    .bg-secondary-dark { background-color: var(--color-secondary-dark); }
+    .border-primary-mid { border-color: var(--color-primary-mid); }
+
+    .glow-input:focus {
+        box-shadow: 0 0 0 3px rgba(223,182,178,0.5), 0 0 8px rgba(223,182,178,0.8);
+        border-color: var(--color-light-accent);
+        transition: all 0.3s ease-in-out;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="flex justify-center items-center min-h-screen bg-gradient-to-br from-purple-900 via-purple-700 to-indigo-800 p-6">
-  <div class="w-full max-w-3xl bg-white shadow-2xl rounded-2xl p-8">
+<div class="min-h-screen flex items-center justify-center px-6 py-12">
+    <div class="w-full max-w-5xl bg-gradient-card rounded-3xl shadow-2xl p-8 md:p-12 backdrop-blur-sm border border-primary-mid">
 
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">Edit Profile</h2>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-lightest mb-8 text-center">Edit Profile</h2>
 
-    <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
-      {% csrf_token %}
+        <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lightest">
+            {% csrf_token %}
 
-      <!-- User fields (editable now) -->
-      <div>
-        <label class="font-semibold">First Name</label>
-        <input type="text" name="first_name" value="{{ user.first_name }}" class="w-full p-3 border rounded-lg bg-gray-50">
-      </div>
-      <div>
-        <label class="font-semibold">Last Name</label>
-        <input type="text" name="last_name" value="{{ user.last_name }}" class="w-full p-3 border rounded-lg bg-gray-50">
-      </div>
-      <div>
-        <label class="font-semibold">Email</label>
-        <input type="email" name="email" value="{{ user.email }}" class="w-full p-3 border rounded-lg bg-gray-50">
-      </div>
-      <div>
-        <label class="font-semibold">Username</label>
-        <input type="text" value="{{ user.username }}" disabled class="w-full p-3 border rounded-lg bg-gray-100 text-gray-500">
-      </div>
+            <!-- User fields -->
+            <div>
+                <label class="block font-semibold mb-2 text-light-accent">First Name</label>
+                <input type="text" name="first_name" value="{{ user.first_name }}" 
+                       class="w-full p-4 rounded-xl bg-secondary-dark border border-primary-mid text-lightest placeholder-light-accent focus:outline-none glow-input">
+            </div>
+            <div>
+                <label class="block font-semibold mb-2 text-light-accent">Last Name</label>
+                <input type="text" name="last_name" value="{{ user.last_name }}" 
+                       class="w-full p-4 rounded-xl bg-secondary-dark border border-primary-mid text-lightest placeholder-light-accent focus:outline-none glow-input">
+            </div>
+            <div>
+                <label class="block font-semibold mb-2 text-light-accent">Email</label>
+                <input type="email" name="email" value="{{ user.email }}" 
+                       class="w-full p-4 rounded-xl bg-secondary-dark border border-primary-mid text-lightest placeholder-light-accent focus:outline-none glow-input">
+            </div>
+            <div>
+                <label class="block font-semibold mb-2 text-light-accent">Username</label>
+                <input type="text" value="{{ user.username }}" disabled 
+                       class="w-full p-4 rounded-xl bg-secondary-dark border border-primary-mid text-light-accent font-medium focus:outline-none">
+            </div>
 
-      <!-- Profile fields -->
-      <div>
-        <label class="font-semibold">Gender</label>
-        <select name="gender" class="w-full p-3 border rounded-lg bg-gray-50">
-          <option value="" {% if not profile.gender %}selected{% endif %}>Select</option>
-          <option value="M" {% if profile.gender == "M" %}selected{% endif %}>Male</option>
-          <option value="F" {% if profile.gender == "F" %}selected{% endif %}>Female</option>
-          <option value="O" {% if profile.gender == "O" %}selected{% endif %}>Other</option>
-        </select>
-      </div>
-      <div>
-        <label class="font-semibold">Date of Birth</label>
-        <input type="date" name="dob" value="{{ profile.dob|date:'Y-m-d' }}" class="w-full p-3 border rounded-lg bg-gray-50">
-      </div>
-      <div class="md:col-span-2">
-        <label class="font-semibold">Bio</label>
-        <textarea name="bio" class="w-full p-3 border rounded-lg bg-gray-50">{{ profile.bio }}</textarea>
-      </div>
+            <!-- Profile fields -->
+            <div>
+                <label class="block font-semibold mb-2 text-light-accent">Gender</label>
+                <select name="gender" class="w-full p-4 rounded-xl bg-secondary-dark border border-primary-mid text-lightest focus:outline-none glow-input">
+                    <option value="" {% if not profile.gender %}selected{% endif %}>Select</option>
+                    <option value="M" {% if profile.gender == "M" %}selected{% endif %}>Male</option>
+                    <option value="F" {% if profile.gender == "F" %}selected{% endif %}>Female</option>
+                    <option value="O" {% if profile.gender == "O" %}selected{% endif %}>Other</option>
+                </select>
+            </div>
+            <div>
+                <label class="block font-semibold mb-2 text-light-accent">Date of Birth</label>
+                <input type="date" name="dob" value="{{ profile.dob|date:'Y-m-d' }}" 
+                       class="w-full p-4 rounded-xl bg-secondary-dark border border-primary-mid text-lightest placeholder-light-accent focus:outline-none glow-input">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block font-semibold mb-2 text-light-accent">Bio</label>
+                <textarea name="bio" class="w-full p-4 rounded-xl bg-secondary-dark border border-primary-mid text-lightest h-32 resize-none focus:outline-none glow-input">{{ profile.bio }}</textarea>
+            </div>
 
-      <div class="md:col-span-2">
-        <label class="font-semibold">Profile Picture</label>
-        {% if profile.profile_picture %}
-          <div class="mb-2">
-            <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="w-24 h-24 rounded-full border-2 border-indigo-500 object-cover">
-          </div>
-        {% endif %}
-        <input type="file" name="profile_picture" class="w-full p-3 border rounded-lg bg-gray-50">
-      </div>
+            <!-- Profile picture -->
+            <div class="md:col-span-2">
+                <label class="block font-semibold mb-2 text-light-accent">Profile Picture</label>
+                {% if profile.profile_picture %}
+                    <div class="mb-2">
+                        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="w-24 h-24 rounded-full border-2 border-light-accent object-cover">
+                    </div>
+                {% endif %}
+                <input type="file" name="profile_picture" class="w-full p-4 rounded-xl bg-secondary-dark border border-primary-mid text-lightest focus:outline-none glow-input">
+            </div>
 
-      <!-- Save Button -->
-      <div class="md:col-span-2 flex justify-end">
-        <button type="submit" class="px-6 py-3 bg-indigo-600 text-white rounded-xl shadow-md hover:bg-indigo-700 transition">
-          Save Changes
-        </button>
-      </div>
-    </form>
-  </div>
+            <!-- Save button -->
+            <div class="md:col-span-2 flex justify-end">
+                <button type="submit" class="px-8 py-4 bg-light-accent text-primary-dark font-extrabold rounded-full shadow-lg hover:bg-lightest hover:scale-105 transition duration-300 transform tracking-wide text-lg">
+                    Save Changes 🚀
+                </button>
+            </div>
+        </form>
+
+    </div>
 </div>
 {% endblock %}

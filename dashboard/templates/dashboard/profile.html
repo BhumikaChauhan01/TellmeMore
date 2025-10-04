@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "dashboard/base.html" %}
 {% block title %}My Profile{% endblock %}
 
 {% block extra_head %}
@@ -106,7 +106,7 @@
         </div>
 
         <div class="mt-12 flex justify-center md:justify-end">
-            <a href="{% url 'profile_edit' %}"
+            <a href="{% url 'dashboard:profile_edit' %}"
                class="px-10 py-4 bg-light-accent text-primary-dark font-extrabold rounded-full shadow-lg
                       hover:bg-lightest hover:scale-105 transition duration-300 transform tracking-wide text-lg">
                 Edit Profile 🚀

@@ -131,7 +131,7 @@ def question_requirements_view(request):
 @login_required
 def profile_view(request):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
-    return render(request, "profile.html", {"profile": profile, "user": request.user})
+    return render(request, "dashboard/profile.html", {"profile": profile, "user": request.user})
 
 @login_required
 def profile_edit_view(request):

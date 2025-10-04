@@ -1,43 +1,104 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard | {% block title %}{% endblock %}</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .sidebar a:hover { background-color: #854F6C; color: #FBE4D8; transition: 0.3s; }
-  </style>
-  {% block extra_head %}{% endblock %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TellmeMore Dashboard | {% block title %}{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sidebar-bg {
+            background-image: linear-gradient(to bottom, #2B124C, #522B5B);
+        }
+        .sidebar-link {
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            border-radius: 0.5rem;
+        }
+        .sidebar-link:hover {
+            background-color: #854F6C;
+            transform: scale(1.02);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            color: #FBE4D8;
+        }
+        .main-content-bg {
+            background-image: linear-gradient(to bottom, #190019, #2B124C);
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
 </head>
-<body class="flex min-h-screen bg-[#1B0B2B] text-[#DFB6B2]">
+<body class="flex min-h-screen bg-[#190019] text-[#DFB6B2]">
 
-  <!-- Sidebar -->
-  <aside class="sidebar w-64 bg-[#2B124C]/90 backdrop-blur-md p-6 flex flex-col fixed h-full">
-    <h2 class="text-2xl font-bold text-[#FBE4D8] mb-8">Dashboard</h2>
-    <nav class="flex flex-col space-y-3">
-      <a href="{% url 'dashboard:dashboard' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Home</a>
-      <a href="{% url 'dashboard:my_sessions' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">My Sessions</a>
-      <a href="{% url 'dashboard:uploaded_items' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Uploaded Items</a>
-      <a href="{% url 'dashboard:analytics' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Analytics</a>
-      <a href="{% url 'dashboard:category' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Category</a>
-      <a href="{% url 'dashboard:interview_requirements' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Interview Req</a>
-      <a href="{% url 'dashboard:presentation_requirements' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Presentation Req</a>
-      <a href="{% url 'dashboard:communication_requirements' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Communication Req</a>
-      <a href="{% url 'dashboard:question_requirements' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Questions</a>
-      <a href="{% url 'dashboard:profile' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Profile</a>
-      <form action="{% url 'logout' %}" method="POST">
-        {% csrf_token %}
-        <button type="submit" class="px-3 py-2 rounded w-full text-left hover:bg-[#854F6C]">Logout</button>
-      </form>
-    </nav>
-  </aside>
+    <!-- Sidebar -->
+    <aside class="w-64 sidebar-bg flex-shrink-0 flex flex-col fixed h-full z-30">
+        <!-- Logo -->
+        <div class="p-6 pb-4 flex items-center space-x-3 border-b border-[#522B5B]">
+            <img src="{% static 'images/logo.png' %}" alt="App Logo" class="h-9 w-9 rounded-full object-cover shadow-md">
+            <div class="text-[#FBE4D8] font-extrabold text-xl tracking-wide">TellmeMore</div>
+        </div>
+        <!-- Nav Links -->
+        <nav class="p-4 flex-1 overflow-y-auto space-y-3 mt-2">
+            <a href="{% url 'dashboard:dashboard' %}" class="sidebar-link flex items-center space-x-3 p-3 text-[#DFB6B2] hover:text-[#FBE4D8]">
+                <span>&#128200;</span> <span>Dashboard</span>
+            </a>
+            <a href="{% url 'dashboard:my_sessions' %}" class="sidebar-link flex items-center space-x-3 p-3 text-[#DFB6B2]">
+                <span>&#128253;</span> <span>My Sessions</span>
+            </a>
+            <a href="{% url 'dashboard:uploaded_items' %}" class="sidebar-link flex items-center space-x-3 p-3 text-[#DFB6B2]">
+                <span>&#128190;</span> <span>Uploaded Items</span>
+            </a>
+            <a href="{% url 'dashboard:analytics' %}" class="sidebar-link flex items-center space-x-3 p-3 text-[#DFB6B2]">
+                <span>&#128202;</span> <span>Analytics</span>
+            </a>
+            <a href="{% url 'dashboard:category' %}" class="sidebar-link flex items-center space-x-3 p-3 text-[#DFB6B2]">
+                <span>&#128218;</span> <span>Category</span>
+            </a>
 
-  <!-- Main Content -->
-  <main class="ml-64 flex-1 p-8">
-    {% block content %}{% endblock %}
-  </main>
+            <div class="h-px bg-[#522B5B] my-4"></div>
 
-  {% block extra_scripts %}{% endblock %}
+            <!-- Profile & Logout -->
+            <a href="{% url 'dashboard:profile' %}" class="sidebar-link flex items-center space-x-3 p-3 text-[#DFB6B2]">
+                {% if user.userprofile.profile_picture %}
+                    <img src="{{ user.userprofile.profile_picture.url }}" class="h-6 w-6 rounded-full object-cover" alt="Profile">
+                {% else %}
+                    <span>&#128100;</span>
+                {% endif %}
+                <span>Profile Settings</span>
+            </a>
+            <form action="{% url 'logout' %}" method="POST" class="w-full">
+                {% csrf_token %}
+                <button type="submit" class="sidebar-link flex items-center space-x-3 p-3 w-full text-left text-[#DFB6B2] hover:bg-[#854F6C]">
+                    <span>&#128682;</span> <span>Logout</span>
+                </button>
+            </form>
+        </nav>
+    </aside>
+
+    <!-- Main content -->
+    <div class="ml-64 flex-1 flex flex-col overflow-x-hidden">
+        <!-- Header -->
+        <header class="h-16 bg-[#2B124C]/80 backdrop-blur-sm shadow-xl flex items-center justify-end px-8 sticky top-0 z-20 flex-shrink-0 border-b border-[#522B5B]">
+            <div class="flex items-center space-x-4">
+                <span class="text-[#FBE4D8] font-semibold text-base hidden sm:block">Hello, {{ user.first_name|default:'Learner' }}</span>
+                <a href="{% url 'dashboard:profile' %}" class="h-10 w-10 rounded-full border-2 border-[#DFB6B2] hover:border-[#FBE4D8] transition duration-300 transform hover:scale-105 overflow-hidden">
+                    {% if user.userprofile.profile_picture %}
+                        <img src="{{ user.userprofile.profile_picture.url }}" class="w-full h-full object-cover" alt="Profile Picture">
+                    {% else %}
+                        <div class="bg-[#854F6C] w-full h-full flex items-center justify-center text-[#FBE4D8] font-bold text-lg">
+                            {{ user.first_name|first|upper|default:'L' }}
+                        </div>
+                    {% endif %}
+                </a>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="flex-1 p-8 main-content-bg">
+            <div class="max-w-7xl mx-auto">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    {% block extra_scripts %}{% endblock %}
 </body>
 </html>

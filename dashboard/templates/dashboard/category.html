@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'dashboard/base.html' %}
 
 {% block title %}Practice Categories{% endblock %}
 
@@ -122,16 +122,16 @@
             <div class="relative z-10 w-full max-w-md p-8 rounded-2xl card-shadow" style="background-color: var(--c2);">
                 <h1 class="text-3xl font-bold text-center mb-8" style="color: var(--c6);">Choose a Category</h1>
                 <div class="space-y-4">
-                    <a href="{% url 'interview_requirements' %}" class="block w-full text-center p-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c3); color: var(--c6);">
+                    <a href="{% url 'dashboard:interview_requirements' %}" class="block w-full text-center p-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c3); color: var(--c6);">
                         Interview Practice
                     </a>
-                    <a href="{% url 'presentation_requirements' %}" class="block w-full text-center p-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c3); color: var(--c6);">
+                    <a href="{% url 'dashboard:presentation_requirements' %}" class="block w-full text-center p-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c3); color: var(--c6);">
                         Presentation Practice
                     </a>
-                    <a href="{% url 'communication_requirements' %}" class="block w-full text-center p-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c3); color: var(--c6);">
+                    <a href="{% url 'dashboard:communication_requirements' %}" class="block w-full text-center p-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c3); color: var(--c6);">
                         Communication Skills
                     </a>
-                    <a href="{% url 'question_requirements' %}" class="block w-full text-center p-4 rounded-lg font-bold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c5); color: var(--c1);">
+                    <a href="{% url 'dashboard:question_requirements' %}" class="block w-full text-center p-4 rounded-lg font-bold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c5); color: var(--c1);">
                         Make your own Set
                     </a>
                 </div>

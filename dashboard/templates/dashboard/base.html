@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | {% block title %}{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .sidebar a:hover { background-color: #854F6C; color: #FBE4D8; transition: 0.3s; }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="flex min-h-screen bg-[#1B0B2B] text-[#DFB6B2]">
+
+  <!-- Sidebar -->
+  <aside class="sidebar w-64 bg-[#2B124C]/90 backdrop-blur-md p-6 flex flex-col fixed h-full">
+    <h2 class="text-2xl font-bold text-[#FBE4D8] mb-8">Dashboard</h2>
+    <nav class="flex flex-col space-y-3">
+      <a href="{% url 'dashboard:dashboard' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Home</a>
+      <a href="{% url 'dashboard:my_sessions' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">My Sessions</a>
+      <a href="{% url 'dashboard:uploaded_items' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Uploaded Items</a>
+      <a href="{% url 'dashboard:analytics' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Analytics</a>
+      <a href="{% url 'dashboard:category' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Category</a>
+      <a href="{% url 'dashboard:interview_requirements' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Interview Req</a>
+      <a href="{% url 'dashboard:presentation_requirements' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Presentation Req</a>
+      <a href="{% url 'dashboard:communication_requirements' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Communication Req</a>
+      <a href="{% url 'dashboard:question_requirements' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Questions</a>
+      <a href="{% url 'dashboard:profile' %}" class="px-3 py-2 rounded hover:bg-[#854F6C]">Profile</a>
+      <form action="{% url 'logout' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="px-3 py-2 rounded w-full text-left hover:bg-[#854F6C]">Logout</button>
+      </form>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="ml-64 flex-1 p-8">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

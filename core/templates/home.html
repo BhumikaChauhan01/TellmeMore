@@ -1,33 +1,95 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Your Place{% endblock %}
 
 {% block content %}
-<div class="text-center text-[#FBE4D8] max-w-3xl">
-    <!-- Hero Section -->
-    <h1 class="text-5xl font-extrabold mb-6">
-        Welcome to <span class="text-[#DFB6B2]">TellmeMore</span>
-    </h1>
-    <p class="text-lg mb-8">
-        Learn. Build. Grow. 🚀  
-        Explore coding, projects, and creativity with us.
-    </p>
+<!-- Hero Section -->
+<section class="text-center py-20 lg:py-32 w-full max-w-7xl mx-auto relative overflow-hidden">
 
-    {% if not user.is_authenticated %}
-        <a href="{% url 'register' %}" 
-           class="bg-[#854F6C] text-[#FBE4D8] px-6 py-3 rounded-lg hover:bg-[#190019] transition text-lg">
-            Get Started
-        </a>
-    {% else %}
-        <a href="{% url 'dashboard' %}" 
-           class="bg-[#854F6C] text-[#FBE4D8] px-6 py-3 rounded-lg hover:bg-[#190019] transition text-lg">
-            Go to Dashboard
-        </a>
-    {% endif %}
-
-    <!-- Quote Section -->
-    <div class="mt-16 quote text-2xl italic">
-        "Ignite your learning journey with us — code, create, and conquer."
+    <!-- Innovative Abstract Glowing Visual Background Element (Subtle, dark, and complex) -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl h-full -rotate-6 z-0 pointer-events-none">
+        <!-- Glowing Ring 1 (lightest glow) -->
+        <div class="absolute inset-0 bg-[#522B5B] opacity-10 blur-3xl rounded-full"></div>
+        <!-- Glowing Ring 2 (mid glow) -->
+        <div class="absolute inset-40 bg-[#2B124C] opacity-20 blur-3xl rounded-full"></div>
+        <!-- Central Dark Spot -->
+        <div class="absolute inset-1/4 bg-[#190019] rounded-full"></div>
     </div>
-</div>
+    
+    <!-- Hero Content (z-index 10 to ensure it is above the background effects) -->
+    <div class="relative z-10 space-y-8 px-4 sm:px-6 lg:px-8">
+        
+        <!-- Pre-Headline / Subtitle -->
+        <p class="text-[#DFB6B2] text-lg font-medium tracking-widest uppercase animate-fade-in-down">
+            Future-Proof Your Skills & Career
+        </p>
+
+        <!-- Main Headline: Eye-Catchy and High-Contrast -->
+        <h1 class="text-6xl sm:text-7xl lg:text-8xl font-extrabold leading-tight text-[#FBE4D8] animate-fade-in">
+            <span class="block">Master New Concepts.</span>
+            <span class="block text-[#DFB6B2] transition duration-700 ease-in-out">Create the Future.</span>
+        </h1>
+
+        <!-- Sub-Text / Value Proposition: Informative -->
+        <p class="mt-4 text-xl text-[#DFB6B2] max-w-3xl mx-auto opacity-90 animate-fade-in-up">
+            TellmeMore offers personalized, project-based learning paths in technology, creativity, and professional development. Stop endlessly scrolling, start confidently building.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 pt-6">
+            <a href="{% url 'register' %}" class="bg-[#854F6C] text-[#FBE4D8] font-bold text-lg px-10 py-4 rounded-xl shadow-2xl transition duration-300 transform hover:scale-105 glow border-2 border-transparent hover:border-[#DFB6B2]/50">
+                Start Learning for Free
+            </a>
+            <a href="{% url 'how_to' %}" class="bg-transparent border-2 border-[#DFB6B2] text-[#DFB6B2] font-semibold text-lg px-10 py-4 rounded-xl transition duration-300 transform hover:scale-105 hover:bg-[#522B5B]/30">
+                Explore Learning Paths &rarr;
+            </a>
+        </div>
+
+        <!-- Social Proof / Key Stat Bar (Innovative & Trust-Building) -->
+        <div class="pt-16">
+            <div class="inline-grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-12 lg:gap-20 bg-[#2B124C]/60 backdrop-blur-sm p-6 rounded-3xl border border-[#522B5B] shadow-xl">
+                
+                <div class="text-left border-b sm:border-b-0 sm:border-r border-[#522B5B]/50 pb-4 sm:pb-0 sm:pr-8">
+                    <p class="text-4xl font-extrabold text-[#FBE4D8]">$5M+</p>
+                    <p class="text-sm text-[#DFB6B2] uppercase tracking-wider mt-1">Learner Earning Potential</p>
+                </div>
+                
+                <div class="text-left border-b sm:border-b-0 sm:border-r border-[#522B5B]/50 pb-4 sm:pb-0 sm:pr-8">
+                    <p class="text-4xl font-extrabold text-[#FBE4D8]">300+</p>
+                    <p class="text-sm text-[#DFB6B2] uppercase tracking-wider mt-1">Expert-Led Projects</p>
+                </div>
+                
+                <div class="text-left">
+                    <p class="text-4xl font-extrabold text-[#FBE4D8]">98%</p>
+                    <p class="text-sm text-[#DFB6B2] uppercase tracking-wider mt-1">Career Transition Rate</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Custom keyframes for a subtle entry animation */
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* Apply animations */
+    .animate-fade-in-down { animation: fadeInDown 1s ease-out 0.2s backwards; }
+    .animate-fade-in { animation: fadeIn 1s ease-out 0.5s backwards; }
+    .animate-fade-in-up { animation: fadeInUp 1s ease-out 0.8s backwards; }
+</style>
 {% endblock %}

@@ -58,7 +58,7 @@ def interview_requirements_view(request):
             interview_instance.resume_file = request.FILES["resume_file"]
 
         interview_instance.save()
-        return redirect("dashboard:dashboard")
+        return redirect("dashboard:ai_page")
 
     return render(request, "dashboard/interview_requirements.html")
 
@@ -157,3 +157,10 @@ def profile_edit_view(request):
         "profile": profile,
         "user": request.user
     })
+
+#=======================================================================================================================
+
+
+
+def ai_page_view(request):
+    return render(request, 'dashboard/ai_page.html')

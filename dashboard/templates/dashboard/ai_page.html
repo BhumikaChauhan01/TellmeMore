@@ -40,10 +40,28 @@
     .pulse-blue {
         animation: pulse-blue-anim 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
+    
+    .pulse-glow-purple {
+        animation: pulse-purple-anim 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    
+    .pulse-glow-pink {
+        animation: pulse-pink-anim 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
 
     @keyframes pulse-blue-anim {
         0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
         50% { box-shadow: 0 0 8px 4px rgba(59, 130, 246, 0.6), 0 0 0 8px rgba(59, 130, 246, 0.1); }
+    }
+    
+    @keyframes pulse-purple-anim {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.4); }
+        50% { box-shadow: 0 0 8px 4px rgba(147, 51, 234, 0.6), 0 0 0 8px rgba(147, 51, 234, 0.1); }
+    }
+    
+    @keyframes pulse-pink-anim {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.4); }
+        50% { box-shadow: 0 0 8px 4px rgba(236, 72, 153, 0.6), 0 0 0 8px rgba(236, 72, 153, 0.1); }
     }
     
     /* Timer Critical State */
@@ -250,6 +268,65 @@
 <script>
     // Initialize Lucide Icons
     lucide.createIcons();
+</script>
+
+<script>
+    // Safe parsing of Django data
+    let interviewData = {};
+    try {
+        {% if interview_details %}
+        interviewData = {
+            time_per_question: {{ interview_details.time_per_question|default:60 }},
+            role: "{{ interview_details.role|default:'Software Developer'|escapejs }}",
+            skills: "{{ interview_details.skills|default:'Python, JavaScript, Problem Solving'|escapejs }}",
+            difficulty: "{{ interview_details.difficulty|default:'medium'|escapejs }}",
+            mode: "{{ interview_details.mode|default:'technical'|escapejs }}",
+            experience: "{{ interview_details.experience|default:''|escapejs }}",
+            about_you: "{{ interview_details.about_you|default:''|escapejs }}"
+        };
+        {% else %}
+        interviewData = {
+            time_per_question: 60,
+            role: 'Software Developer',
+            skills: 'Python, JavaScript, Problem Solving',
+            difficulty: 'medium',
+            mode: 'technical',
+            experience: '',
+            about_you: ''
+        };
+        {% endif %}
+    } catch (e) {
+        console.error('Error parsing interview data:', e);
+        interviewData = {
+            time_per_question: 60,
+            role: 'Software Developer',
+            skills: 'Python, JavaScript, Problem Solving',
+            difficulty: 'medium',
+            mode: 'technical',
+            experience: '',
+            about_you: ''
+        };
+    }
+    
+    // Django variables for JavaScript
+    window.interviewConfig = {
+        timePerQuestion: interviewData.time_per_question || 60,
+        position: interviewData.role || 'Software Developer',
+        skills: interviewData.skills || 'Python, JavaScript, Problem Solving',
+        difficulty: interviewData.difficulty || 'medium',
+        mode: interviewData.mode || 'technical',
+        experience: interviewData.experience || '',
+        aboutYou: interviewData.about_you || ''
+    };
+    
+    // CSRF Token for AJAX requests
+    window.csrfToken = '{{ csrf_token }}';
+    
+    // Debug logging
+    console.log('Interview Config:', window.interviewConfig);
+</script>
+
+<script>
     
     // --- Custom Modal (Tailwind Styled) ---
     const showModal = (message, isConfirm = false, onConfirm = () => {}) => {
@@ -304,16 +381,49 @@
     // --- Core Redesigned Logic ---
     document.addEventListener('DOMContentLoaded', () => {
         // --- Constants & Elements ---
-        const ANSWER_TIME_LIMIT = 60; // 60 seconds per question
+        const ANSWER_TIME_LIMIT = window.interviewConfig.timePerQuestion; // Seconds per question from user settings
         const AI_RESPONSE_SIM_DELAY = 40; // Time in ms per character for typing animation
-        // Dynamic question generation from Gemini API
-        let AI_QUESTION_BANK = [];
+        
+        // Interview context from backend
         let interviewContext = {
-            position: '{{ interview_details.role|default:"Software Developer" }}',
-            skills: '{{ interview_details.skills|default:"Python, JavaScript, Problem Solving" }}',
-            difficulty: '{{ interview_details.difficulty|default:"medium" }}',
-            mode: '{{ interview_details.mode|default:"technical" }}'
+            position: window.interviewConfig.position,
+            skills: window.interviewConfig.skills,
+            difficulty: window.interviewConfig.difficulty,
+            mode: window.interviewConfig.mode,
+            experience: window.interviewConfig.experience,
+            about_you: window.interviewConfig.aboutYou
         };
+        
+        // Session management
+        let currentSessionId = null;
+        let speechRecognition = null;
+        let isRecording = false;
+        
+        // Initialize Web Speech API
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            speechRecognition = new SpeechRecognition();
+            speechRecognition.continuous = false;
+            speechRecognition.interimResults = false;
+            speechRecognition.lang = 'en-US';
+            
+            speechRecognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                chatInput.value = transcript;
+                stopUserTurn(false, transcript);
+            };
+            
+            speechRecognition.onerror = function(event) {
+                console.error('Speech recognition error:', event.error);
+                stopUserTurn(false, 'Error recognizing speech. Please try typing your answer.');
+            };
+            
+            speechRecognition.onend = function() {
+                isRecording = false;
+                userMicIcon.setAttribute('data-lucide', 'mic');
+                lucide.createIcons();
+            };
+        }
         const USER_RESPONSE_BANK = [
             "My team achieved a 15% efficiency increase in my previous role by implementing a new automated reporting system.",
             "In that project, I chose a microservices architecture, prioritizing scalability over initial development speed. The latency trade-off was minimal, but the deployment flexibility was a huge win.",
@@ -369,6 +479,26 @@
         const appendMessage = (isAI, message, isTyping = false, callback = null) => {
             const templateId = isAI ? 'ai-message-template' : 'user-message-template';
             const template = document.getElementById(templateId);
+            
+            if (!template) {
+                console.error(`Template element '${templateId}' not found`);
+                // Fallback: create simple message element
+                const fallbackMessage = document.createElement('div');
+                fallbackMessage.className = `flex ${isAI ? 'justify-start' : 'justify-end'} mb-4`;
+                fallbackMessage.innerHTML = `
+                    <div class="max-w-xs sm:max-w-lg ${isAI ? 'message-ai' : 'message-user'} p-4 rounded-2xl shadow-sm">
+                        <p class="font-semibold ${isAI ? 'text-accent-600' : 'text-green-600'} mb-2 text-sm">
+                            ${isAI ? 'AI Interviewer' : 'You'}
+                        </p>
+                        <p class="text-primary-700 text-sm leading-relaxed">${message}</p>
+                    </div>
+                `;
+                chatDisplay.appendChild(fallbackMessage);
+                smoothScrollToBottom();
+                if (callback) callback();
+                return;
+            }
+            
             const newMessageContainer = template.cloneNode(true);
             
             newMessageContainer.removeAttribute('id');
@@ -464,7 +594,7 @@
             // Text/Display Reset
             answerTimerElement.textContent = "00:00";
             answerTimerElement.classList.remove('bg-red-700/50', 'timer-critical');
-            aiStatusText.textContent = "Click 'Start Session' at the bottom to begin your interactive interview.";
+            aiStatusText.textContent = "Click 'Start Session' below to begin your interactive interview.";
             
             // Icon/Prompt Reset
             aiPromptText.classList.remove('opacity-100');
@@ -520,23 +650,44 @@
         };
 
         // --- Conversation Flow Functions ---
-        const startSession = () => {
-            sessionActive = true;
-            startSessionBtn.disabled = true;
-            endSessionBtn.disabled = false;
-            pauseBtn.disabled = false;
-            
-            aiStatusText.textContent = "Session Active. Click AI button to begin the interview.";
-            aiButton.disabled = false; // Enable AI button for the first question
-            aiPromptText.textContent = "Ask First Q";
-            aiPromptText.classList.add('opacity-100');
-            aiButton.classList.add('pulse-glow-purple');
+        const startSession = async () => {
+            try {
+                // Start session in backend
+                const response = await fetch('/dashboard/start_session/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({})
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    currentSessionId = data.session_id;
+                    sessionActive = true;
+                    startSessionBtn.disabled = true;
+                    endSessionBtn.disabled = false;
+                    pauseBtn.disabled = false;
+                    
+                    aiStatusText.textContent = "Session Active. Click AI button to begin the interview.";
+                    aiButton.disabled = false;
+                    aiPromptText.textContent = "Ask First Q";
+                    aiPromptText.classList.add('opacity-100');
+                    aiButton.classList.add('pulse-glow-purple');
+                } else {
+                    showModal(`Error starting session: ${data.error}`);
+                }
+            } catch (error) {
+                console.error('Error starting session:', error);
+                showModal('Error starting interview session. Please try again.');
+            }
         };
 
         const startAITurn = async () => {
             if (isPaused || isAITalking) return;
             
-            if (currentQuestionIndex >= 10) { // Limit to 10 questions
+            if (currentQuestionIndex >= (window.interviewConfig.numQuestions || 10)) {
                 showModal("Interview Complete! Generating your feedback report...", false, () => endSessionBtn.click());
                 return;
             }
@@ -554,7 +705,7 @@
             lucide.createIcons();
             
             try {
-                const question = await generateQuestionWithGemini(currentQuestionIndex);
+                const question = await generateQuestionWithGemini(currentQuestionIndex + 1);
                 
                 // Simulate AI generating and speaking a question with typing effect
                 appendMessage(true, question, true, () => {
@@ -583,12 +734,13 @@
         const startUserRecording = () => {
             if (isPaused || isAITalking || isUserRecording) return;
             
+            if (!speechRecognition) {
+                showModal("Speech recognition is not supported in your browser. Please type your answer instead.");
+                return;
+            }
+            
+            isRecording = true;
             isUserRecording = true;
-            stopAnswerTimer(); // Pause timer while "listening" to simulate real-time transcription
-            // Re-start timer logic: We could restart or continue based on preference. 
-            // For simplicity, we'll keep the timer running until the response is finalized.
-            // But for a **recording** state:
-            startAnswerTimer(); 
 
             // UI update for User recording
             userButton.classList.add('pulse-glow-pink');
@@ -596,36 +748,46 @@
             userMicIcon.setAttribute('data-lucide', 'mic-off');
             aiButton.disabled = true;
             chatInput.disabled = true; // Disable text input while recording
-            aiStatusText.textContent = "Recording your response. Click mic to stop.";
+            aiStatusText.textContent = "Recording your response. Speak now...";
             lucide.createIcons();
             
-            // Display User Message container (Placeholder)
-            appendMessage(false, "Listening... (Transcription will appear when you stop)", false);
+            // Start speech recognition
+            try {
+                speechRecognition.start();
+            } catch (error) {
+                console.error('Speech recognition error:', error);
+                showModal("Error starting speech recognition. Please type your answer instead.");
+                stopUserRecording();
+            }
         };
         
-        const stopUserTurn = (timedOut = false, userText = null) => {
-            if (!sessionActive) return;
-            if (!isUserRecording && userText === null) return; // Only stop if recording, unless submitting text
+        const stopUserRecording = () => {
+            if (speechRecognition && isRecording) {
+                speechRecognition.stop();
+            }
+            isRecording = false;
+            isUserRecording = false;
+            
+            // Reset UI
+            userButton.classList.remove('pulse-glow-pink');
+            userPromptText.textContent = "Voice";
+            userMicIcon.setAttribute('data-lucide', 'mic');
+            chatInput.disabled = false;
+            lucide.createIcons();
+        };
+        
+        const stopUserTurn = async (timedOut = false, userText = null) => {
+            if (!sessionActive || !currentSessionId) return;
 
             stopAnswerTimer();
-            isUserRecording = false;
+            stopUserRecording();
 
-            const response = userText || (timedOut ? "Time's up! Answer stopped automatically. (Simulated Partial Answer)" : USER_RESPONSE_BANK[currentQuestionIndex % USER_RESPONSE_BANK.length]);
+            const response = userText || (timedOut ? "Time's up! I apologize for not completing my answer in time." : "I need more time to formulate my response.");
 
-            // Find the latest user message container (the "Listening..." one)
-            const latestUserMessage = chatDisplay.querySelector('#user-message-template:last-of-type, .flex-col ~ .flex-grow > .flex:last-child');
-            if(latestUserMessage) {
-                const contentElement = latestUserMessage.querySelector('[data-message-content]');
-                contentElement.textContent = response;
-                // Simple fade/scale to indicate finality
-                latestUserMessage.querySelector('div:last-child').style.boxShadow = '0 0 10px rgba(244, 114, 182, 0.6)';
-            } else {
-                 // Fallback: If no message container found (e.g., text input submit)
-                appendMessage(false, response, false);
-            }
+            // Add user message to chat
+            appendMessage(false, response, false);
 
             // UI update for processing user answer
-            userButton.classList.remove('pulse-glow-pink');
             userPromptText.textContent = "Processing...";
             userMicIcon.setAttribute('data-lucide', 'loader-2');
             lucide.createIcons();
@@ -633,27 +795,66 @@
             setButtonStatesForUserTurn(false);
             chatInput.value = '';
             
-            // Next step: Enable AI to give feedback/ask the next question
-            setTimeout(() => {
-                userPromptText.classList.remove('opacity-100');
-                userMicIcon.setAttribute('data-lucide', 'mic');
-                lucide.createIcons();
+            try {
+                // Submit answer to backend
+                const submitResponse = await fetch('/dashboard/submit_answer/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        answer: response,
+                        question_number: currentQuestionIndex + 1,
+                        session_id: currentSessionId,
+                        time_taken: ANSWER_TIME_LIMIT - currentAnswerSeconds
+                    })
+                });
                 
-                aiButton.disabled = false; 
-                aiButton.classList.add('pulse-glow-purple');
-                aiPromptText.textContent = "Ask Next Q";
-                aiPromptText.classList.add('opacity-100');
-                
-                aiStatusText.textContent = "Your response is processed. Click the AI button to get feedback and the next question.";
-                currentQuestionIndex++;
-                smoothScrollToBottom();
-            }, 1500); // Delay to show "Processing..."
+                const data = await submitResponse.json();
+                if (data.success) {
+                    // Show AI feedback
+                    if (data.feedback) {
+                        setTimeout(() => {
+                            appendMessage(true, data.feedback, true);
+                        }, 500);
+                    }
+                    
+                    // Enable next question after feedback
+                    setTimeout(() => {
+                        userPromptText.classList.remove('opacity-100');
+                        userMicIcon.setAttribute('data-lucide', 'mic');
+                        lucide.createIcons();
+                        
+                        currentQuestionIndex++;
+                        
+                        if (currentQuestionIndex >= 10 || currentQuestionIndex >= data.session_progress?.total) {
+                            aiStatusText.textContent = "Interview complete! Click End Session to finish.";
+                            endSessionBtn.disabled = false;
+                        } else {
+                            aiButton.disabled = false; 
+                            aiButton.classList.add('pulse-glow-purple');
+                            aiPromptText.textContent = "Ask Next Q";
+                            aiPromptText.classList.add('opacity-100');
+                            aiStatusText.textContent = "Click the AI button for the next question.";
+                        }
+                        
+                        smoothScrollToBottom();
+                    }, 2000);
+                } else {
+                    showModal(`Error submitting answer: ${data.error}`);
+                }
+            } catch (error) {
+                console.error('Error submitting answer:', error);
+                showModal('Error submitting answer. Please try again.');
+            }
         };
+
+        // Get CSRF token
+        const csrfToken = window.csrfToken || document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
 
         // --- Gemini API Integration ---
         async function generateQuestionWithGemini(questionIndex) {
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-            
             try {
                 const response = await fetch('/dashboard/generate_question/', {
                     method: 'POST',
@@ -662,9 +863,10 @@
                         'X-CSRFToken': csrfToken
                     },
                     body: JSON.stringify({
-                        question_number: questionIndex + 1,
+                        question_number: questionIndex,
                         context: interviewContext,
-                        previous_answers: getPreviousAnswers()
+                        previous_answers: getPreviousAnswers(),
+                        session_id: currentSessionId
                     })
                 });
                 
@@ -678,12 +880,13 @@
                 console.error('Error generating question:', error);
                 // Fallback questions
                 const fallbackQuestions = [
-                    `Tell me about your experience with ${interviewContext.skills.split(',')[0]}.`,
+                    "Tell me about yourself and your background.",
+                    `Walk me through your experience with ${interviewContext.skills.split(',')[0]}.`,
                     "Describe a challenging project you've worked on and how you overcame obstacles.",
                     "How do you stay updated with the latest technologies in your field?",
                     "Walk me through your problem-solving approach when facing a complex technical issue."
                 ];
-                return fallbackQuestions[questionIndex % fallbackQuestions.length];
+                return fallbackQuestions[(questionIndex - 1) % fallbackQuestions.length];
             }
         }
         
@@ -693,7 +896,6 @@
         }
         
         async function evaluateAnswerWithGemini(answer) {
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
             
             try {
                 const response = await fetch('/dashboard/evaluate_answer/', {
@@ -733,10 +935,31 @@
         });
         
         endSessionBtn.addEventListener('click', () => {
-            showModal('Do you want to end the session? Analysis data will be saved.', true, (confirmed) => {
-                if (confirmed) {
-                    resetUI();
-                    showModal("Session ended. Analysis saved (simulated).");
+            showModal('Do you want to end the session? Analysis data will be saved.', true, async (confirmed) => {
+                if (confirmed && currentSessionId) {
+                    try {
+                        const response = await fetch('/dashboard/end_session/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrfToken
+                            },
+                            body: JSON.stringify({
+                                session_id: currentSessionId
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        if (data.success) {
+                            resetUI();
+                            showModal(`Session completed! You answered ${data.session_summary.questions_answered} questions in ${data.session_summary.duration_minutes} minutes.`);
+                        } else {
+                            showModal(`Error ending session: ${data.error}`);
+                        }
+                    } catch (error) {
+                        console.error('Error ending session:', error);
+                        showModal('Error ending session. Please try again.');
+                    }
                 }
             });
         });
@@ -748,7 +971,7 @@
             if (!isUserRecording) {
                 startUserRecording();
             } else {
-                stopUserTurn();
+                stopUserRecording();
             }
         });
 

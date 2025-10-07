@@ -59,6 +59,25 @@
 <!-- Quick Actions -->
 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     
+    <!-- Quick AI Interview -->
+    <a href="{% url 'dashboard:simple_interview' %}" class="dashboard-card rounded-2xl p-6 group">
+        <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+        </div>
+        <h3 class="text-lg font-semibold text-primary-800 mb-2">Quick AI Interview</h3>
+        <p class="text-primary-600 text-sm">Practice with AI - simple & effective</p>
+        <div class="mt-4 flex items-center text-blue-600 text-sm font-medium">
+            <span>Start Now</span>
+            <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+        </div>
+    </a>
+
     <!-- Start Practice -->
     <a href="{% url 'dashboard:category' %}" class="dashboard-card rounded-2xl p-6 group">
         <div class="flex items-center mb-4">
@@ -68,8 +87,8 @@
                 </svg>
             </div>
         </div>
-        <h3 class="text-lg font-semibold text-primary-800 mb-2">Start Practice</h3>
-        <p class="text-primary-600 text-sm">Begin a new mock interview session</p>
+        <h3 class="text-lg font-semibold text-primary-800 mb-2">Full Practice</h3>
+        <p class="text-primary-600 text-sm">Complete interview setup & practice</p>
         <div class="mt-4 flex items-center text-accent-600 text-sm font-medium">
             <span>Get Started</span>
             <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

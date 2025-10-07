@@ -24,8 +24,12 @@ urlpatterns = [
     path("profile_edit/",views.profile_edit_view, name="profile_edit"), 
 
     path('ai_session/', views.ai_page_view, name='ai_page'),
+    path('simple_interview/', views.simple_interview_view, name='simple_interview'),
+    path('start_session/', views.start_interview_session, name='start_session'),
     path('generate_question/', views.generate_question, name='generate_question'),
-    path('evaluate_answer/', views.evaluate_answer, name='evaluate_answer'),
+    path('submit_answer/', views.submit_answer, name='submit_answer'),
+    path('evaluate_answer/', views.evaluate_answer, name='evaluate_answer'),  # Legacy support
+    path('end_session/', views.end_interview_session, name='end_session'),
 ]
 
 if settings.DEBUG:

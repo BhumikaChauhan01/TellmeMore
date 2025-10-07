@@ -1,286 +1,321 @@
 {% extends "dashboard/base.html" %}
 
-{% block title %}Dual-Panel AI Interaction{% endblock %}
+{% block title %}Quantum AI Interface{% endblock %}
 
 {% block extra_head %}
+<script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
+
 <style>
-    /* --- General Styling & Colors --- */
+    /* * Custom Tailwind Configuration for Premium Aesthetic 
+     * Note: In a real project, use a custom tailwind.config.js file.
+     */
     :root {
-        --color-ai-primary: #522B5B;
-        --color-user-primary: #854F6C;
-        --color-accent: #DFB6B2;
-        --color-background: #2B124C;
-        --color-text-light: #FBE4D8;
+        --color-bg-dark: #070213;         /* Ultra Dark Space Black */
+        --color-primary-dark: #120a2e;    /* Dark Card Background / Midnight Blue */
+        --color-accent-purple: #a78bfa;   /* Bright Violet (purple-400) */
+        --color-accent-pink: #f472b6;     /* Hot Pink (pink-400) for secondary focus */
+        --color-text-light: #eef2ff;      /* Light text (indigo-50) */
+        --color-border: #3730a3;          /* Subtler border/divider (indigo-700) */
+        --color-shadow-purple: rgba(167, 139, 250, 0.4); /* Neon Shadow Purple */
+        --color-shadow-pink: rgba(244, 114, 182, 0.4);   /* Neon Shadow Pink */
     }
 
-    /* --- Circle Button Styling --- */
-    .circle-btn-container {
-        /* The container handles the hover and subtle animation */
-        transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
-        cursor: pointer;
-        animation: subtle-pulse 15s linear infinite;
-        border-radius: 50%;
-        box-shadow: 0 0 0 0 rgba(223, 182, 178, 0); /* Initial shadow for pulse */
-    }
-
-    .circle-btn-container:hover {
-        transform: scale(1.05);
-        filter: drop-shadow(0 0 15px var(--color-accent));
+    /* Override Default Colors and set global dark background */
+    html {
+        background-color: var(--color-bg-dark);
     }
     
-    @keyframes subtle-pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.01); }
+    /* Subtle background gradient for "AI control room" vibe */
+    .bg-futuristic {
+        background-color: var(--color-bg-dark);
+        background-image: 
+            radial-gradient(circle at 10% 20%, var(--color-primary-dark) 0%, transparent 40%),
+            radial-gradient(circle at 90% 80%, var(--color-primary-dark) 0%, transparent 40%);
+        min-height: 100vh;
     }
 
-    /* Pulse Animation for Active Recording */
-    .pulse {
-        animation: pulse-animation 2s infinite;
-        border-radius: 50%;
+    /* Premium, Subtle Neon Glow for Cards and Hovered Buttons */
+    .premium-card-shadow {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 0 20px 0px rgba(167, 139, 250, 0.1);
+    }
+    .glow-hover:hover {
+        box-shadow: 0 0 15px var(--color-shadow-purple);
+        transform: translateY(-2px);
     }
 
-    @keyframes pulse-animation {
-        0% {
-            box-shadow: 0 0 0 0 rgba(223, 182, 178, 0.6);
-        }
-        70% {
-            box-shadow: 0 0 0 25px rgba(223, 182, 178, 0);
-        }
-        100% {
-            box-shadow: 0 0 0 0 rgba(223, 182, 178, 0);
-        }
-    }
-
-    /* Fixed size for mic icon placement */
-    .circle-btn-container foreignObject {
-        width: 70px;
-        height: 70px;
+    /* Typing Animation for AI Response (smooth blinking cursor) */
+    .typing-cursor::after {
+        content: "|";
+        display: inline-block;
+        color: var(--color-accent-pink);
+        margin-left: 2px;
+        animation: blink-caret 0.7s step-end infinite;
     }
     
-    /* Recording indicator text */
-    .recording-text {
-        color: var(--color-accent);
-        animation: blink 1s step-start infinite;
-    }
-
-    @keyframes blink {
-        50% { opacity: 0; }
-    }
-
-    /* Transcript Box - SET TO FIXED HEIGHT FOR SYMMETRY */
-    .transcript-box {
-        height: 150px; /* Fixed height for identical appearance */
-        overflow-y: auto;
-        word-wrap: break-word;
-        background-color: rgba(25, 0, 25, 0.7); /* Darker background */
-        border: 2px solid var(--color-ai-primary);
+    @keyframes blink-caret {
+        from, to { opacity: 0 }
+        50% { opacity: 1; }
     }
     
-    /* Styling for the Answer Timer */
-    #answer-timer {
-        background-color: var(--color-background);
-        color: var(--color-text-light);
-        transition: color 0.3s;
+    /* Pulse Animation for Active State (Microphone/AI Speaking) */
+    .pulse-glow-purple {
+        animation: pulse-glow-anim-purple 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    .pulse-glow-pink {
+        animation: pulse-glow-anim-pink 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse-glow-anim-purple {
+        0%, 100% { box-shadow: 0 0 0 0 var(--color-shadow-purple), 0 0 0 0 var(--color-shadow-purple); }
+        50% { box-shadow: 0 0 8px 4px rgba(167, 139, 250, 0.7), 0 0 0 8px rgba(167, 139, 250, 0.1); }
+    }
+    @keyframes pulse-glow-anim-pink {
+        0%, 100% { box-shadow: 0 0 0 0 var(--color-shadow-pink), 0 0 0 0 var(--color-shadow-pink); }
+        50% { box-shadow: 0 0 8px 4px rgba(244, 114, 182, 0.7), 0 0 0 8px rgba(244, 114, 182, 0.1); }
     }
     
+    /* Timer Critical Glow */
     .timer-critical {
-        color: #ff4d4d !important; /* Bright red for low time */
+        box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
     }
 
+    /* Custom Scrollbar for Chat Display */
+    #chat-display::-webkit-scrollbar {
+        width: 8px;
+    }
+    #chat-display::-webkit-scrollbar-thumb {
+        background-color: var(--color-accent-purple);
+        border-radius: 4px;
+    }
+    #chat-display::-webkit-scrollbar-track {
+        background-color: var(--color-primary-dark);
+    }
+    
+    /* Utility class for transition */
+    .transition-all-300 {
+        transition: all 0.3s ease-in-out;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="flex flex-col h-full p-4 sm:p-8 bg-transparent">
-
-    <!-- 1. DUAL INTERACTION AREA (AI Left, User Right) -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-grow">
-
-        <!-- LEFT PANEL: AI's Interaction (Asking Questions) -->
-        <div class="flex flex-col items-center justify-start space-y-6 bg-[--color-background]/30 p-6 sm:p-10 rounded-3xl border border-[--color-ai-primary] shadow-2xl h-full">
-
-            <!-- UPDATED HEADING STYLE: Bigger, Bolder, Italic, Underlined -->
-            <h2 class="text-3xl font-extrabold italic underline text-[--color-accent] mb-4">AI Question Panel</h2>
-
-            <!-- AI INTERACTION BUTTON (Circle) -->
-            <button id="ai-interaction-btn" class="circle-btn-container relative focus:outline-none block" disabled>
-                <svg class="w-48 h-48 sm:w-60 sm:h-60" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Simple Circle Shape -->
-                    <circle cx="100" cy="100" r="80" fill="var(--color-ai-primary)" stroke="var(--color-accent)" stroke-width="4" />
-                    <foreignObject x="65" y="70">
-                        <div class="flex flex-col items-center justify-center text-center text-[--color-text-light] h-full w-full">
-                            <i id="ai-mic-icon" data-lucide="message-square-text" class="w-10 h-10 mb-1 text-[--color-text-light] drop-shadow-lg"></i>
-                            <p id="ai-prompt-text" class="font-semibold text-xs transition-opacity duration-300">Start Session</p>
-                        </div>
-                    </foreignObject>
-                </svg>
-            </button>
-            <br><br>
-            <p id="ai-status" class="text-sm font-medium text-[--color-accent] h-6">Click 'Start Session' at the bottom to begin.</p>
-
-            <!-- AI's Transcript Output Box (Question) - Fixed Height -->
-            <div id="ai-transcript-box"
-                class="transcript-box w-full max-w-lg rounded-xl p-4 shadow-inner text-[--color-text-light] text-left border-[--color-accent]">
-                <p id="ai-transcript-text" class="text-sm italic font-light text-[--color-accent]">
-                    The AI's question or reply will appear here as text.
-                </p>
-            </div>
-        </div>
-
-        <!-- RIGHT PANEL: User's Interaction (Answering) -->
-        <div class="flex flex-col items-center justify-start space-y-6 bg-[--color-background]/30 p-6 sm:p-10 rounded-3xl border border-[--color-user-primary] shadow-2xl h-full">
-
-            <!-- UPDATED HEADING STYLE: Bigger, Bolder, Italic, Underlined -->
-            <h2 class="text-3xl font-extrabold italic underline text-[--color-accent] mb-4">Your Answer Panel</h2>
-
-            <!-- USER INTERACTION BUTTON (Circle) -->
-            <button id="user-interaction-btn" class="circle-btn-container relative focus:outline-none block" disabled>
-                <svg class="w-48 h-48 sm:w-60 sm:h-60" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Simple Circle Shape (using user primary color) -->
-                    <circle cx="100" cy="100" r="80" fill="var(--color-user-primary)" stroke="var(--color-accent)" stroke-width="4" />
-                    <foreignObject x="65" y="70">
-                        <div class="flex flex-col items-center justify-center text-center text-[--color-text-light] h-full w-full">
-                            <i id="user-mic-icon" data-lucide="mic" class="w-10 h-10 mb-1 text-[--color-text-light] drop-shadow-lg"></i>
-                            <p id="user-prompt-text" class="font-semibold text-xs transition-opacity duration-300">Start Answering</p>
-                        </div>
-                    </foreignObject>
-                </svg>
-            </button>
-            
-            <!-- Per-Question Answer Timer -->
-            <div class="flex flex-col items-center space-y-2">
-                <span class="text-sm font-semibold text-[--color-accent]">Answer Time Limit:</span>
-                <div id="answer-timer" class="text-3xl font-extrabold px-4 py-1.5 rounded-lg tracking-wide shadow-lg w-28 text-center border-2 border-transparent">
-                    00:00
-                </div>
-            </div>
-
-            <!-- User's Transcript Output Box (Answer) - Fixed Height -->
-            <div id="user-transcript-box"
-                class="transcript-box w-full max-w-lg rounded-xl p-4 shadow-inner text-[--color-text-light] text-left border-[--color-accent]">
-                <p id="user-transcript-text" class="text-sm italic font-light text-[--color-accent]">
-                    Your spoken answer will appear here as text.
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. GLOBAL CONTROL PANEL (Timer and Action Buttons) -->
-    <div
-        class="mt-8 bg-[--color-background]/30 p-4 rounded-xl border border-[--color-ai-primary] shadow-2xl flex flex-col sm:flex-row items-center justify-center space-x-0 sm:space-x-6 space-y-4 sm:space-y-0">
+<div class="bg-futuristic min-h-screen py-10 px-4 sm:px-8 text-[--color-text-light] font-sans">
+    
+    <h1 class="text-4xl sm:text-5xl font-extrabold text-center mb-12 tracking-tighter text-[--color-text-light] drop-shadow-lg">
+        <span class="text-[--color-accent-purple]">Quantum</span> <span class="text-[--color-accent-pink]">AI</span> Interface
+    </h1>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
         
-        <!-- Control Buttons -->
-        <button id="start-session-btn"
-            class="px-6 py-2 bg-green-600 text-[--color-text-light] font-bold rounded-lg shadow-lg hover:bg-green-500 transition duration-300 transform hover:scale-105">
-            Start Session
-        </button>
-        <button id="pause-btn" disabled
-            class="px-6 py-2 bg-[--color-user-primary] text-[--color-text-light] font-bold rounded-lg shadow-lg hover:bg-[--color-ai-primary] transition duration-300 transform hover:scale-105">
-            Pause
-        </button>
-        <button id="start-over-btn"
-            class="px-6 py-2 bg-yellow-600 text-[#190019] font-bold rounded-lg shadow-lg hover:bg-yellow-500 transition duration-300 transform hover:scale-105">
-            Start Over
-        </button>
-        <a id="end-session-btn" disabled
-            class="px-6 py-2 bg-red-700 text-[--color-text-light] font-bold rounded-lg shadow-lg hover:bg-red-600 transition duration-300 transform hover:scale-105">
-            End Session
-    </a>
+        <div id="ai-panel" class="lg:col-span-1 flex flex-col space-y-6 p-6 rounded-3xl bg-[--color-primary-dark] border border-[--color-border] premium-card-shadow transition-all-300 h-full">
+            <h2 class="text-2xl font-bold border-b pb-4 border-[--color-border] mb-2 text-[--color-accent-pink] flex items-center">
+                <i data-lucide="cog" class="w-6 h-6 mr-3"></i> Session Context
+            </h2>
+            
+            <div class="space-y-4">
+                
+                <div class="p-4 bg-[--color-bg-dark] rounded-xl shadow-inner border border-indigo-700/50">
+                    <p class="text-sm font-semibold text-[--color-accent-purple] flex items-center">
+                        <i data-lucide="monitor" class="w-4 h-4 mr-2"></i> System Status
+                    </p>
+                    <p id="ai-status" class="text-sm italic mt-2 text-gray-400">
+                        Click 'Start Session' at the bottom to begin your interactive interview.
+                    </p>
+                </div>
+
+                <div class="p-4 bg-[--color-bg-dark] rounded-xl shadow-inner border border-indigo-700/50">
+                    <p class="text-sm font-semibold text-[--color-accent-purple]">
+                        <i data-lucide="clock" class="w-4 h-4 mr-2"></i> Answer Time Remaining:
+                    </p>
+                    <div id="answer-timer" 
+                        class="text-4xl font-mono font-extrabold px-3 py-2 mt-2 rounded-lg tracking-widest text-center bg-gray-900/50 border border-gray-700 w-full transition-colors duration-500">
+                        00:00
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="pt-6 border-t border-[--color-border] flex flex-col space-y-4 mt-auto">
+                <button id="start-session-btn"
+                    class="w-full px-4 py-3 bg-green-600/70 text-[--color-text-light] font-bold rounded-xl shadow-lg hover:bg-green-500 glow-hover transition-all-300 text-lg">
+                    <i data-lucide="rocket" class="w-5 h-5 mr-2 inline-block"></i> Start Session
+                </button>
+                <div class="flex space-x-4">
+                    <button id="pause-btn" disabled
+                        class="flex-1 px-4 py-3 bg-indigo-700/70 text-[--color-text-light] font-semibold rounded-xl shadow-lg hover:bg-indigo-600 glow-hover transition-all-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i data-lucide="pause" class="w-5 h-5 mr-1 inline-block"></i> <span id="pause-text">Pause</span>
+                    </button>
+                    <button id="start-over-btn"
+                        class="flex-1 px-4 py-3 bg-yellow-600/70 text-gray-900 font-semibold rounded-xl shadow-lg hover:bg-yellow-500 glow-hover transition-all-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i data-lucide="rotate-ccw" class="w-5 h-5 mr-1 inline-block"></i> Reset
+                    </button>
+                </div>
+                <button id="end-session-btn" disabled
+                    class="w-full text-center px-4 py-3 bg-red-700/70 text-[--color-text-light] font-bold rounded-xl shadow-lg hover:bg-red-600 glow-hover transition-all-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i data-lucide="square" class="w-5 h-5 mr-2 inline-block"></i> End Session
+                </button>
+            </div>
+            
+        </div>
+        
+        <div class="lg:col-span-2 flex flex-col h-[80vh] min-h-[600px] p-6 rounded-3xl bg-[--color-primary-dark] border border-[--color-border] shadow-2xl shadow-[--color-shadow-purple] transition-all-300">
+            
+            <h2 class="text-2xl font-bold border-b pb-4 border-[--color-border] mb-4 text-[--color-accent-purple] flex items-center">
+                <i data-lucide="message-circle-code" class="w-6 h-6 mr-3"></i> Core Interaction
+            </h2>
+            
+            <div id="chat-display" class="flex-grow overflow-y-auto space-y-6 p-2 mb-6 scroll-smooth">
+                
+                <div class="flex justify-start">
+                    <div class="max-w-xs sm:max-w-lg bg-[--color-bg-dark] p-4 rounded-2xl rounded-tl-sm shadow-xl border border-[--color-accent-purple]/50 transition-all-300 animate-fade-in">
+                        <p class="font-bold text-[--color-accent-purple] mb-1 flex items-center">
+                            <i data-lucide="bot" class="w-4 h-4 mr-2"></i> AI Assistant
+                        </p>
+                        <p class="text-sm">Welcome to the Quantum Chat Interface. I'm ready to begin the interview. Please click **'Start Session'** on the left to activate the interface.</p>
+                    </div>
+                </div>
+                
+                <div id="ai-message-template" class="flex justify-start hidden">
+                    <div class="max-w-xs sm:max-w-lg bg-[--color-bg-dark] p-4 rounded-2xl rounded-tl-sm shadow-xl border border-[--color-accent-purple]/50 transition-all-300 opacity-0 transform translate-y-4">
+                        <p class="font-bold text-[--color-accent-purple] mb-1 flex items-center">
+                            <i data-lucide="brain" class="w-4 h-4 mr-2"></i> AI Question / Feedback
+                        </p>
+                        <p class="text-sm" data-message-content></p>
+                    </div>
+                </div>
+                
+                <div id="user-message-template" class="flex justify-end hidden">
+                    <div class="max-w-xs sm:max-w-lg bg-[--color-accent-pink]/20 p-4 rounded-2xl rounded-br-sm shadow-xl border border-[--color-accent-pink]/50 transition-all-300 opacity-0 transform translate-y-4">
+                        <p class="font-bold text-[--color-accent-pink] mb-1 flex items-center">
+                            <i data-lucide="user" class="w-4 h-4 mr-2"></i> Your Response
+                        </p>
+                        <p class="text-sm" data-message-content></p>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="flex items-center space-x-4 pt-4 border-t border-[--color-border]">
+                
+                <button id="ai-interaction-btn" disabled 
+                    class="relative p-3 rounded-full bg-[--color-accent-purple] text-[--color-text-light] transition-all-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                    aria-label="Ask AI for next step">
+                    <i id="ai-mic-icon" data-lucide="message-square-text" class="w-6 h-6 transition-all-300"></i>
+                    <span id="ai-prompt-text" class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-[--color-accent-purple] opacity-0 transition-opacity duration-300 whitespace-nowrap">AI Waiting</span>
+                </button>
+                
+                <div class="relative flex-grow">
+                    <input type="text" id="chat-input" placeholder="Type your response and hit Enter or use the Voice Mic..." 
+                        class="w-full p-3 pl-5 pr-14 bg-[--color-bg-dark] rounded-full border border-[--color-border] text-[--color-text-light] placeholder-gray-500 focus:border-[--color-accent-pink] focus:ring-1 focus:ring-[--color-accent-pink] transition-colors duration-200 disabled:opacity-70"
+                        disabled>
+                    {% csrf_token %} <button id="send-btn" disabled class="absolute right-1 top-1/2 transform -translate-y-1/2 p-2 bg-[--color-accent-pink] rounded-full hover:bg-pink-300 transition-all-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i data-lucide="send" class="w-5 h-5 text-[--color-bg-dark]"></i>
+                    </button>
+                </div>
+                
+                <button id="user-interaction-btn" disabled 
+                    class="relative p-3 rounded-full bg-[--color-accent-pink] text-[--color-text-light] transition-all-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                    aria-label="Start/Stop recording">
+                    <i id="user-mic-icon" data-lucide="mic" class="w-6 h-6 transition-all-300"></i>
+                    <span id="user-prompt-text" class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-[--color-accent-pink] opacity-0 transition-opacity duration-300 whitespace-nowrap">Start Answer</span>
+                </button>
+                
+            </div>
+            
+        </div>
+        
     </div>
 </div>
+
+<div id="custom-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 transition-opacity duration-300 opacity-0 hidden">
+    <div class="bg-[--color-primary-dark] p-8 rounded-2xl shadow-2xl w-full max-w-sm transform transition-all duration-300 scale-90 text-[--color-text-light] border border-[--color-border] text-center">
+        <p id="modal-message" class="text-lg font-semibold mb-6"></p>
+        <div id="modal-actions" class="flex justify-center space-x-4">
+            <button id="modal-cancel" class="px-5 py-2 bg-gray-700/70 rounded-lg hover:bg-gray-600 transition-all-300 hidden">Cancel</button>
+            <button id="modal-ok" class="px-5 py-2 bg-[--color-accent-purple] rounded-lg hover:bg-[--color-accent-pink] transition-all-300 text-white font-bold"></button>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
     // Initialize Lucide Icons
     lucide.createIcons();
-
-    // --- Custom Modal (Non-Blocking) ---
-    function showModal(message, isConfirm = false, onConfirm = () => {}) {
+    
+    // --- Custom Modal (Tailwind Styled) ---
+    const showModal = (message, isConfirm = false, onConfirm = () => {}) => {
         let modal = document.getElementById('custom-modal');
-        if (!modal) {
-            modal = document.createElement('div');
-            modal.id = 'custom-modal';
-            modal.className = 'fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50';
-            modal.innerHTML = `
-                <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-sm transform transition-all duration-300 scale-95 opacity-0 text-white border border-gray-600">
-                    <p id="modal-message" class="text-lg font-semibold mb-4 text-center"></p>
-                    <div id="modal-actions" class="flex justify-end space-x-4">
-                        <button id="modal-cancel" class="px-4 py-2 bg-gray-500/80 rounded-lg hover:bg-gray-600 transition">Cancel</button>
-                        <button id="modal-ok" class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition">OK</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-        }
-
         const modalContent = modal.querySelector('div');
         const messageElement = document.getElementById('modal-message');
         const okBtn = document.getElementById('modal-ok');
         const cancelBtn = document.getElementById('modal-cancel');
 
-        // Apply theme colors to the modal
-        modalContent.style.backgroundColor = 'var(--color-background)';
-        modalContent.style.color = 'var(--color-text-light)';
-        okBtn.style.backgroundColor = 'var(--color-user-primary)';
-        okBtn.classList.add('hover:bg-[--color-ai-primary]');
-        
         messageElement.textContent = message;
 
         if (isConfirm) {
-            cancelBtn.style.display = 'inline-block';
+            cancelBtn.classList.remove('hidden');
             okBtn.textContent = 'Confirm';
         } else {
-            cancelBtn.style.display = 'none';
+            cancelBtn.classList.add('hidden');
             okBtn.textContent = 'OK';
         }
-
+        
+        // Clone to remove old listeners
+        const newOk = okBtn.cloneNode(true);
+        const newCancel = cancelBtn.cloneNode(true);
+        okBtn.parentNode.replaceChild(newOk, okBtn);
+        cancelBtn.parentNode.replaceChild(newCancel, cancelBtn);
+        
         const closeAndRemoveListeners = () => {
-            modalContent.classList.remove('scale-100', 'opacity-100');
-            modalContent.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                modal.style.display = 'none';
-                // Clone/replace buttons to remove event listeners cleanly (safer than removeEventListener in this dynamic context)
-                const newOk = okBtn.cloneNode(true);
-                const newCancel = cancelBtn.cloneNode(true);
-                okBtn.parentNode.replaceChild(newOk, okBtn);
-                cancelBtn.parentNode.replaceChild(newCancel, cancelBtn);
-            }, 300);
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-90');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
         };
         
-        const okHandler = () => {
+        modal.querySelector('#modal-ok').addEventListener('click', () => {
             closeAndRemoveListeners();
             if (isConfirm) onConfirm(true);
-        };
-
-        const cancelHandler = () => {
+            else onConfirm(); // For simple OK
+        });
+        modal.querySelector('#modal-cancel').addEventListener('click', () => {
             closeAndRemoveListeners();
             if (isConfirm) onConfirm(false);
-        };
+        });
         
-        // Add listeners to the new buttons
-        modal.querySelector('#modal-ok').addEventListener('click', okHandler);
-        modal.querySelector('#modal-cancel').addEventListener('click', cancelHandler);
-
-        modal.style.display = 'flex';
+        modal.classList.remove('hidden');
         setTimeout(() => {
-            modalContent.classList.remove('scale-95', 'opacity-0');
-            modalContent.classList.add('scale-100', 'opacity-100');
+            modal.classList.remove('opacity-0');
+            modalContent.classList.remove('scale-90');
+            modalContent.classList.add('scale-100');
         }, 10);
-    }
+    };
     // --- End Custom Modal ---
 
-
+    // --- Core Redesigned Logic ---
     document.addEventListener('DOMContentLoaded', () => {
         // --- Constants & Elements ---
         const ANSWER_TIME_LIMIT = 60; // 60 seconds per question
-        const AI_RESPONSE_TIME = 2500; // 2.5 seconds simulation for AI to "speak"
+        const AI_RESPONSE_SIM_DELAY = 40; // Time in ms per character for typing animation
+        const AI_QUESTION_BANK = [
+            "Excellent point. Building on that, how do you approach technical debt in an agile sprint, and what's your preferred way to quantify its impact?",
+            "That's a very thorough answer. Now, walk me through a complex architectural decision you had to make, including the tradeoffs and the final outcome.",
+            "I see. Let's pivot slightly. Describe a situation where you had to influence a cross-functional team without direct authority. What was the result?"
+        ];
+        const USER_RESPONSE_BANK = [
+            "My team achieved a 15% efficiency increase in my previous role by implementing a new automated reporting system.",
+            "In that project, I chose a microservices architecture, prioritizing scalability over initial development speed. The latency trade-off was minimal, but the deployment flexibility was a huge win.",
+            "I influenced the marketing team by presenting clear data showing their current content was underperforming, leading them to adopt my proposed SEO strategy, which resulted in a 40% lead increase."
+        ];
 
+        const chatDisplay = document.getElementById('chat-display');
         const aiButton = document.getElementById('ai-interaction-btn');
         const userButton = document.getElementById('user-interaction-btn');
-        const aiTranscriptText = document.getElementById('ai-transcript-text');
-        const userTranscriptText = document.getElementById('user-transcript-text');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
         const aiPromptText = document.getElementById('ai-prompt-text');
         const userPromptText = document.getElementById('user-prompt-text');
         const aiMicIcon = document.getElementById('ai-mic-icon');
@@ -292,6 +327,7 @@
         const pauseBtn = document.getElementById('pause-btn');
         const startOverBtn = document.getElementById('start-over-btn');
         const endSessionBtn = document.getElementById('end-session-btn');
+        const pauseText = document.getElementById('pause-text');
 
         // --- State ---
         let isPaused = false;
@@ -300,31 +336,89 @@
         let isAITalking = false;
         let currentAnswerSeconds = ANSWER_TIME_LIMIT;
         let answerTimerInterval = null;
-        let currentQuestion = 0;
-
-
-        // --- Timer Functions ---
+        let currentQuestionIndex = 0;
+        let typingTimeout = null;
+        
+        // --- Utility Functions ---
         const formatTime = (seconds) => {
             const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
             const secs = (seconds % 60).toString().padStart(2, '0');
             return `${mins}:${secs}`;
         };
+        
+        const smoothScrollToBottom = () => {
+            // Use requestAnimationFrame for smooth non-interrupting scroll
+            requestAnimationFrame(() => {
+                chatDisplay.scrollTo({
+                    top: chatDisplay.scrollHeight,
+                    behavior: 'smooth'
+                });
+            });
+        };
+        
+        // Dynamic Message Appending and Animation
+        const appendMessage = (isAI, message, isTyping = false, callback = null) => {
+            const templateId = isAI ? 'ai-message-template' : 'user-message-template';
+            const template = document.getElementById(templateId);
+            const newMessageContainer = template.cloneNode(true);
+            
+            newMessageContainer.removeAttribute('id');
+            newMessageContainer.classList.remove('hidden');
+            
+            const contentElement = newMessageContainer.querySelector('[data-message-content]');
+            const messageBox = newMessageContainer.querySelector('div:last-child'); // The actual message box for animation
 
+            chatDisplay.appendChild(newMessageContainer);
+            smoothScrollToBottom();
+
+            // Animate message box in
+            setTimeout(() => {
+                messageBox.classList.remove('opacity-0', 'translate-y-4');
+                messageBox.classList.add('opacity-100', 'translate-y-0');
+            }, 10);
+            
+            if (isTyping) {
+                // Start typing animation
+                contentElement.textContent = ""; // Clear for animation
+                contentElement.classList.add('typing-cursor');
+                let i = 0;
+                
+                const typingInterval = setInterval(() => {
+                    if (i < message.length) {
+                        contentElement.textContent += message.charAt(i);
+                        i++;
+                        smoothScrollToBottom();
+                    } else {
+                        clearInterval(typingInterval);
+                        contentElement.classList.remove('typing-cursor');
+                        if (callback) callback();
+                    }
+                }, AI_RESPONSE_SIM_DELAY);
+                
+                typingTimeout = typingInterval; // Store for clearing on pause/reset
+            } else {
+                // Immediate text display
+                contentElement.textContent = message;
+                if (callback) callback();
+            }
+        };
+
+        // --- Timer Functions ---
         const startAnswerTimer = () => {
             if (answerTimerInterval) clearInterval(answerTimerInterval);
             currentAnswerSeconds = ANSWER_TIME_LIMIT;
             answerTimerElement.textContent = formatTime(currentAnswerSeconds);
-            answerTimerElement.classList.remove('timer-critical');
+            answerTimerElement.classList.remove('bg-red-700/50', 'timer-critical'); 
 
             answerTimerInterval = setInterval(() => {
                 if (currentAnswerSeconds > 0) {
                     currentAnswerSeconds--;
                     answerTimerElement.textContent = formatTime(currentAnswerSeconds);
                     if (currentAnswerSeconds <= 10) {
-                        answerTimerElement.classList.add('timer-critical');
+                        answerTimerElement.classList.add('bg-red-700/50', 'timer-critical'); // Glowing Red Effect
                     }
                 } else {
-                    stopUserTurn(true); // Stop recording because time is up
+                    stopUserTurn(true); // Time is up
                 }
             }, 1000);
         };
@@ -334,45 +428,46 @@
         };
 
         // --- UI & Control Functions ---
-
         const resetUI = () => {
-            // General state
+            // State Reset
             isPaused = false;
             sessionActive = false;
             isUserRecording = false;
             isAITalking = false;
-            currentQuestion = 0;
+            currentQuestionIndex = 0;
             stopAnswerTimer();
-            currentAnswerSeconds = ANSWER_TIME_LIMIT;
-            answerTimerElement.textContent = "00:00";
-            answerTimerElement.classList.remove('timer-critical');
+            clearTimeout(typingTimeout);
 
-            // Button states
+            // Button/Control Reset
             startSessionBtn.disabled = false;
-            startSessionBtn.textContent = 'Start Session';
-            pauseBtn.textContent = 'Pause';
-            pauseBtn.disabled = true;
             endSessionBtn.disabled = true;
+            pauseBtn.disabled = true;
+            pauseText.textContent = 'Pause';
             aiButton.disabled = true;
             userButton.disabled = true;
-            userButton.classList.remove('pulse');
-
-            // AI Panel
-            aiPromptText.textContent = "Start Session";
-            aiPromptText.classList.remove('recording-text');
-            aiMicIcon.setAttribute('data-lucide', 'message-square-text');
-            aiTranscriptText.textContent = "The AI's question or reply will appear here as text.";
-            aiTranscriptText.classList.add('italic', 'text-[--color-accent]');
-            aiStatusText.textContent = "Click 'Start Session' at the bottom to begin.";
-
-            // User Panel
-            userPromptText.textContent = "Start Answering";
-            userPromptText.classList.remove('recording-text');
-            userMicIcon.setAttribute('data-lucide', 'mic');
-            userTranscriptText.textContent = "Your spoken answer will appear here as text.";
-            userTranscriptText.classList.add('italic', 'text-[--color-accent]');
+            chatInput.value = '';
+            chatInput.disabled = true;
+            sendBtn.disabled = true;
             
-            lucide.createIcons(); // Re-render icons after changing attribute
+            aiButton.classList.remove('pulse-glow-purple');
+            userButton.classList.remove('pulse-glow-pink');
+            
+            // Text/Display Reset
+            answerTimerElement.textContent = "00:00";
+            answerTimerElement.classList.remove('bg-red-700/50', 'timer-critical');
+            aiStatusText.textContent = "Click 'Start Session' at the bottom to begin your interactive interview.";
+            
+            // Icon/Prompt Reset
+            aiPromptText.classList.remove('opacity-100');
+            userPromptText.classList.remove('opacity-100');
+            aiMicIcon.setAttribute('data-lucide', 'message-square-text');
+            userMicIcon.setAttribute('data-lucide', 'mic');
+            lucide.createIcons();
+            
+            // Clear all messages except the welcome message
+            const initialMessage = chatDisplay.querySelector('.flex:first-child');
+            chatDisplay.innerHTML = '';
+            chatDisplay.appendChild(initialMessage);
         };
 
         const togglePause = () => {
@@ -381,169 +476,214 @@
             isPaused = !isPaused;
             if (isPaused) {
                 stopAnswerTimer();
-                pauseBtn.textContent = 'Resume';
+                clearTimeout(typingTimeout);
                 
-                // Disable all interaction buttons
+                pauseText.textContent = 'Resume';
+                aiStatusText.textContent = "Session PAUSED";
+                
+                // Disable all interaction buttons and animations
                 aiButton.disabled = true;
                 userButton.disabled = true;
-                userButton.classList.remove('pulse');
-                
-                aiStatusText.textContent = "Session PAUSED";
-                userPromptText.textContent = "Paused";
-                userPromptText.classList.remove('recording-text');
-                isUserRecording = false;
-
+                chatInput.disabled = true;
+                sendBtn.disabled = true;
+                aiButton.classList.remove('pulse-glow-purple');
+                userButton.classList.remove('pulse-glow-pink');
             } else {
-                pauseBtn.textContent = 'Pause';
-                
-                // Re-enable the button corresponding to the current state
-                if (currentQuestion === 0 || !isAITalking) {
-                    // If before Q1 or after an answer (waiting for AI)
-                    aiButton.disabled = false;
-                    aiStatusText.textContent = "Click AI button for next question.";
+                pauseText.textContent = 'Pause';
+                // Resume logic: AI turn or User turn?
+                if (isAITalking) {
+                    aiStatusText.textContent = "AI is generating question/feedback. Please wait...";
+                } else if (currentQuestionIndex > 0) {
+                    aiStatusText.textContent = "Your response is processed. Click the AI button to get feedback and the next question.";
+                    aiButton.disabled = false; // Allow AI to be triggered again
                 } else {
-                    // If AI has asked, enable user button
-                    userButton.disabled = false;
-                    aiStatusText.textContent = "AI waiting for your response.";
+                    aiStatusText.textContent = "Click AI button for first question.";
+                    aiButton.disabled = false;
                 }
-                userPromptText.textContent = "Start Answering";
             }
         };
-
-        const endSession = () => {
-            showModal('Do you want to end the session? Analysis data will be saved.', true, (confirmed) => {
-                if (confirmed) {
-                    // Placeholder for saving data and redirecting
-                    // window.location.href = "{% url 'dashboard:category' %}"; // Example redirect
-                    resetUI();
-                    showModal("Session ended. Analysis saved (simulated).");
-                }
-            });
-        };
-
-        const resetSession = () => {
-            showModal('Are you sure you want to restart? All progress will be reset.', true, (confirmed) => {
-                if (confirmed) {
-                    resetUI();
-                    showModal("Session restarted successfully! Click 'Start Session' to begin.");
-                }
-            });
+        
+        const setButtonStatesForUserTurn = (enable) => {
+             // This function handles enabling/disabling of user input methods
+            chatInput.disabled = !enable;
+            userButton.disabled = !enable;
+            sendBtn.disabled = !enable; // Send button enabled when input is enabled
         };
 
         // --- Conversation Flow Functions ---
-
         const startSession = () => {
             sessionActive = true;
             startSessionBtn.disabled = true;
             endSessionBtn.disabled = false;
             pauseBtn.disabled = false;
             
-            // First step is always AI asking
-            startAITurn();
+            aiStatusText.textContent = "Session Active. Click AI button to begin the interview.";
+            aiButton.disabled = false; // Enable AI button for the first question
+            aiPromptText.textContent = "Ask First Q";
+            aiPromptText.classList.add('opacity-100');
+            aiButton.classList.add('pulse-glow-purple');
         };
 
         const startAITurn = () => {
             if (isPaused || isAITalking) return;
-
-            isAITalking = true;
-            userButton.disabled = true; // User cannot interrupt
-
-            // UI update for AI speaking
-            aiButton.classList.add('pulse');
-            aiPromptText.textContent = "AI is Speaking...";
-            aiStatusText.textContent = `Question ${currentQuestion + 1} is being generated.`;
-            aiMicIcon.setAttribute('data-lucide', 'message-square-text');
-            lucide.createIcons();
-
-            // Simulate AI generating and speaking a question
-            setTimeout(() => {
-                currentQuestion++;
-                const question = `Question ${currentQuestion}: What is your greatest professional accomplishment and how did you achieve it?`;
-                aiTranscriptText.textContent = question; // Display AI's spoken question
-                aiTranscriptText.classList.remove('italic', 'text-[--color-accent]');
-                
-                isAITalking = false;
-                aiButton.classList.remove('pulse');
-
-                // Next step: Enable user to answer
-                aiPromptText.textContent = "AI Waiting";
-                aiStatusText.textContent = "Ready! Click 'Start Answering' to record your response.";
-                userButton.disabled = false;
-                aiButton.disabled = true;
-
-            }, AI_RESPONSE_TIME); 
-        };
-
-        const startUserTurn = () => {
-            if (isPaused || isAITalking || isUserRecording) return;
-            if (currentQuestion === 0) {
-                 showModal("Please wait for the AI to ask the first question.");
-                 return;
+            
+            if (currentQuestionIndex >= AI_QUESTION_BANK.length) {
+                showModal("Interview Complete!", false, () => endSessionBtn.click());
+                return;
             }
 
+            isAITalking = true;
+            setButtonStatesForUserTurn(false);
+            aiButton.disabled = true;
+            
+            // UI update for AI speaking
+            aiButton.classList.add('pulse-glow-purple');
+            aiPromptText.textContent = "AI Speaking...";
+            aiPromptText.classList.add('opacity-100');
+            aiMicIcon.setAttribute('data-lucide', 'headphones');
+            aiStatusText.textContent = `AI is providing feedback and asking Question ${currentQuestionIndex + 1}.`;
+            lucide.createIcons();
+            
+            const question = AI_QUESTION_BANK[currentQuestionIndex];
+            
+            // Simulate AI generating and speaking a question with typing effect
+            appendMessage(true, question, true, () => {
+                // Animation Complete Callback
+                isAITalking = false;
+                aiButton.classList.remove('pulse-glow-purple');
+                aiPromptText.textContent = "AI Waiting";
+                
+                // Next step: Enable user to answer
+                aiStatusText.textContent = "Ready! Respond via text or voice mic below.";
+                setButtonStatesForUserTurn(true);
+                userPromptText.classList.add('opacity-100');
+                
+                // Start answer timer implicitly with the user's turn
+                startAnswerTimer();
+                chatInput.focus();
+            });
+        };
+
+        const startUserRecording = () => {
+            if (isPaused || isAITalking || isUserRecording) return;
+            
             isUserRecording = true;
-            startAnswerTimer();
+            stopAnswerTimer(); // Pause timer while "listening" to simulate real-time transcription
+            // Re-start timer logic: We could restart or continue based on preference. 
+            // For simplicity, we'll keep the timer running until the response is finalized.
+            // But for a **recording** state:
+            startAnswerTimer(); 
 
             // UI update for User recording
-            userButton.classList.add('pulse');
-            userPromptText.textContent = "Recording Answer...";
-            userPromptText.classList.add('recording-text');
+            userButton.classList.add('pulse-glow-pink');
+            userPromptText.textContent = "Recording...";
             userMicIcon.setAttribute('data-lucide', 'mic-off');
-            aiButton.disabled = true; // AI button disabled while user answers
-            aiStatusText.textContent = "Recording your response...";
-            
-            userTranscriptText.textContent = "User is speaking... (Transcription will appear when you stop recording or time runs out)";
-            userTranscriptText.classList.add('italic', 'text-[--color-accent]');
+            aiButton.disabled = true;
+            chatInput.disabled = true; // Disable text input while recording
+            aiStatusText.textContent = "Recording your response. Click mic to stop.";
             lucide.createIcons();
+            
+            // Display User Message container (Placeholder)
+            appendMessage(false, "Listening... (Transcription will appear when you stop)", false);
         };
         
-        const stopUserTurn = (timedOut = false) => {
-            if (!isUserRecording) return;
+        const stopUserTurn = (timedOut = false, userText = null) => {
+            if (!sessionActive) return;
+            if (!isUserRecording && userText === null) return; // Only stop if recording, unless submitting text
 
             stopAnswerTimer();
             isUserRecording = false;
 
-            // UI update for processing user answer
-            userButton.classList.remove('pulse');
-            userPromptText.textContent = "Processing...";
-            userPromptText.classList.remove('recording-text');
-            userMicIcon.setAttribute('data-lucide', 'mic');
-            lucide.createIcons();
-            
-            if (timedOut) {
-                showModal("Time's up! Your answer recording has stopped.");
-                userTranscriptText.textContent = "Answer stopped automatically due to time limit. (Simulated partial answer)";
+            const response = userText || (timedOut ? "Time's up! Answer stopped automatically. (Simulated Partial Answer)" : USER_RESPONSE_BANK[currentQuestionIndex % USER_RESPONSE_BANK.length]);
+
+            // Find the latest user message container (the "Listening..." one)
+            const latestUserMessage = chatDisplay.querySelector('#user-message-template:last-of-type, .flex-col ~ .flex-grow > .flex:last-child');
+            if(latestUserMessage) {
+                const contentElement = latestUserMessage.querySelector('[data-message-content]');
+                contentElement.textContent = response;
+                // Simple fade/scale to indicate finality
+                latestUserMessage.querySelector('div:last-child').style.boxShadow = '0 0 10px rgba(244, 114, 182, 0.6)';
             } else {
-                userTranscriptText.textContent = "Simulated User Answer: I achieved a 15% efficiency increase in my previous role by implementing a new automated reporting system.";
+                 // Fallback: If no message container found (e.g., text input submit)
+                appendMessage(false, response, false);
             }
 
+            // UI update for processing user answer
+            userButton.classList.remove('pulse-glow-pink');
+            userPromptText.textContent = "Processing...";
+            userMicIcon.setAttribute('data-lucide', 'loader-2');
+            lucide.createIcons();
+            
+            setButtonStatesForUserTurn(false);
+            chatInput.value = '';
+            
             // Next step: Enable AI to give feedback/ask the next question
             setTimeout(() => {
-                userPromptText.textContent = "Start Answering";
+                userPromptText.classList.remove('opacity-100');
+                userMicIcon.setAttribute('data-lucide', 'mic');
+                lucide.createIcons();
+                
                 aiButton.disabled = false; 
-                userButton.disabled = true;
-                aiStatusText.textContent = "Your response is processed. Click AI button for next question/feedback.";
-            }, 1500); // Short delay to show "Processing..."
+                aiButton.classList.add('pulse-glow-purple');
+                aiPromptText.textContent = "Ask Next Q";
+                aiPromptText.classList.add('opacity-100');
+                
+                aiStatusText.textContent = "Your response is processed. Click the AI button to get feedback and the next question.";
+                currentQuestionIndex++;
+                smoothScrollToBottom();
+            }, 1500); // Delay to show "Processing..."
         };
 
         // --- Event Listeners ---
         startSessionBtn.addEventListener('click', startSession);
         pauseBtn.addEventListener('click', togglePause);
-        startOverBtn.addEventListener('click', resetSession);
-        endSessionBtn.addEventListener('click', endSession);
         
-        // AI button starts the AI's speaking turn (only when session is active and user has answered)
+        startOverBtn.addEventListener('click', () => {
+            showModal('Are you sure you want to restart? All progress will be reset.', true, (confirmed) => {
+                if (confirmed) {
+                    resetUI();
+                    showModal("Session restarted successfully! Click 'Start Session' to begin.");
+                }
+            });
+        });
+        
+        endSessionBtn.addEventListener('click', () => {
+            showModal('Do you want to end the session? Analysis data will be saved.', true, (confirmed) => {
+                if (confirmed) {
+                    resetUI();
+                    showModal("Session ended. Analysis saved (simulated).");
+                }
+            });
+        });
+        
         aiButton.addEventListener('click', startAITurn); 
 
-        // User button starts/stops the user's answer turn
+        // User Mic/Send Button Logic
         userButton.addEventListener('click', () => {
             if (!isUserRecording) {
-                startUserTurn();
+                startUserRecording();
             } else {
                 stopUserTurn();
             }
         });
 
+        // Text Input & Send Logic
+        const handleTextSubmission = () => {
+            const text = chatInput.value.trim();
+            if (text && sessionActive && !isAITalking) {
+                stopUserTurn(false, text); // Submit text as the user response
+            }
+        };
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleTextSubmission();
+                e.preventDefault(); // Prevent default form submission
+            }
+        });
+
+        sendBtn.addEventListener('click', handleTextSubmission);
+        
         // --- Initial Setup ---
         resetUI();
     });

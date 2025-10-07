@@ -1,107 +1,383 @@
+{% extends 'dashboard/base.html' %}
 
-{% extends "dashboard/base.html" %}
-
-{% block title %}Dashboard{% endblock %}
+{% block title %}My Dashboard{% endblock %}
 
 {% block extra_head %}
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Damion&display=swap" rel="stylesheet">
+
+
 <style>
-    /* Custom styles for the dashboard to create a new UI feel */
+    /* Custom Colors defined based on user's palette */
+    :root {
+        --color-darkest: #190019;
+        /* Main Background (Dark Mode BG) */
+        --color-dark: #2B124C;
+        /* Sidebar/Card Accent (Darker Purple) */
+        --color-medium: #522B5B;
+        /* Buttons/Progress Fill (Mid Purple) */
+        --color-light-medium: #854F6C;
+        /* Secondary Text/Accent */
+        --color-light: #DFB6B2;
+        /* Contrast Background/Text (Mauve) */
+        --color-lightest: #FBE4D8;
+        /* Main Text/UI Background (Cream) */
+    }
+    
+    /* === Cursive font for score === */
+    .font-cursive {
+        font-family: 'Damion', cursive;
+    }
+
+
+    /* === Global Body Style & Gradient === */
     body {
-        background: linear-gradient(to bottom right, #2B124C, #522B5B, #854F6C);
-        color: #FBE4D8;
         font-family: 'Poppins', sans-serif;
-    }
-
-    .card {
-        background-color: #DFB6B2;
-        border-radius: 1.5rem;
-        padding: 2.5rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-    }
-
-    .btn-dashboard {
-        background-color: #854F6C;
-        color: #FBE4D8;
-        padding: 1rem 2.5rem;
-        border-radius: 9999px;
-        font-weight: 600;
+        color: var(--color-darkest);
+        /* Subtle Global Gradient (Light Mode) */
+        background-image: linear-gradient(135deg, var(--color-lightest) 0%, #F5F1EF 100%);
         transition: all 0.3s ease;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    .btn-dashboard:hover {
-        background-color: #522B5B;
-        transform: scale(1.05);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    /* === Generic Card Hover & Transition === */
+    .dashboard-card {
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 15px 30px rgba(82, 43, 91, 0.3);
+        /* Stronger shadow on hover */
+    }
+
+    /* === Card Specific Gradients (Light Mode) === */
+    .quick-card-light {
+        /* Mauve to lighter Mauve Gradient */
+        background-image: linear-gradient(145deg, var(--color-light) 0%, #F5E9E7 100%);
+    }
+
+    .quick-card-cream {
+        /* Cream to near White Gradient */
+        background-image: linear-gradient(145deg, var(--color-lightest) 0%, #FFFAFA 100%);
+    }
+
+    /* Tailwind Custom Configuration */
+    .bg-darkest {
+        background-color: var(--color-darkest);
+    }
+
+    .bg-dark {
+        background-color: var(--color-dark);
+    }
+
+    .bg-medium {
+        background-color: var(--color-medium);
+    }
+
+    .text-darkest {
+        color: var(--color-darkest);
+    }
+
+    .text-lightest {
+        color: var(--color-lightest);
+    }
+
+
+    /* === Dark Mode Specific Styles & Gradient Overrides === */
+    .dark-mode {
+        color: var(--color-lightest);
+        /* Dark Mode Global Gradient */
+        background-image: linear-gradient(135deg, var(--color-darkest) 0%, #130313 100%);
+    }
+
+    /* === VISIBILITY FIXES START HERE === */
+
+    /* 1. Ensure all text in the main content area is light for best contrast */
+    .dark-mode main {
+        color: var(--color-lightest) !important;
+    }
+
+    /* 2. Specific rule for quick cards to ensure all inherited text is light (they become dark cards in dark mode) */
+    .dark-mode .quick-card-light,
+    .dark-mode .quick-card-cream {
+        color: var(--color-lightest) !important;
+    }
+
+    /* 3. Ensure the light/dark toggle icon is always visible */
+    .dark-mode #light-dark-toggle #mode-icon {
+        color: var(--color-lightest) !important;
+    }
+
+    /* === VISIBILITY FIXES END HERE === */
+
+    /* Text color overrides for Dark Mode */
+    .dark-mode .text-darkest {
+        color: var(--color-lightest) !important;
+    }
+
+    .dark-mode .text-medium {
+        color: var(--color-light) !important;
+    }
+
+    .dark-mode .text- {
+        color: var(--color-lightest) !important;
+    }
+
+    .dark-mode .text- {
+        color: var(--color-lightest) !important;
+    }
+
+    /* Card Gradient Overrides for Dark Mode */
+    .dark-mode .quick-card-light,
+    .dark-mode .quick-card-cream {
+        /* Dark Purple to Darker Purple Gradient */
+        background-image: linear-gradient(145deg, var(--color-dark) 0%, #3a1a5b 100%) !important;
+        border-color: var(--color-medium) !important;
+    }
+
+    /* Sidebar and fixed element background overrides */
+    .dark-mode .bg- {
+        background-color: var(--color-lightest) !important;
+    }
+
+    .dark-mode .quick-card-light button,
+    .dark-mode .quick-card-cream button {
+        background-color: var(--color-medium) !important;
+        color: var(--color-lightest) !important;
+    }
+
+    /* Specific Start Your Journey Card Gradients in Dark Mode */
+    .dark-mode .bg-dark {
+        background-image: linear-gradient(145deg, #3a1a5b 0%, var(--color-dark) 100%);
+        background-color: transparent;
+    }
+
+    .dark-mode .bg-medium {
+        background-image: linear-gradient(145deg, var(--color-medium) 0%, #683b70 100%);
+        background-color: transparent;
+    }
+
+    /* New rule for Header in Dark Mode to match base.html style */
+    .dark-mode header {
+        /* The color #2B124C at 80% opacity */
+        background-color: rgba(43, 18, 76, 0.8);
+        /* The backdrop blur effect */
+        backdrop-filter: blur(8px);
+        /* The border color #522B5B */
+        border-color: var(--color-medium) !important;
+        /* Ensure border-bottom is applied if not done by a Tailwind class */
+        border-bottom: 1px solid var(--color-medium) !important;
+    }
+
+    /* You should also add a rule for the light mode header to ensure a default look when .dark-mode is off */
+    header {
+        background-color: var(--color-lightest);
+        /* A light, non-transparent default */
+        border-bottom: 1px solid var(--color-light);
+        /* Light border */
+    }
+
+    .dark-mode .bg- {
+        background-image: linear-gradient(145deg, var(--color-light-medium) 0%, #9e6481 100%);
+        background-color: transparent;
+    }
+
+    /* Ensuring all text is visible in dark mode cards */
+    .dark-mode .quick-card-light .text-darkest,
+    .dark-mode .quick-card-cream .text-darkest {
+        color: var(--color-lightest) !important;
     }
 </style>
 {% endblock %}
 
+
 {% block content %}
-<div class="container mx-auto px-4 md:px-8 py-10 w-full max-w-6xl">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-        <div class="lg:col-span-1 p-8 rounded-3xl bg-[#522B5B]/70 backdrop-blur-lg shadow-2xl border border-[#854F6C] flex flex-col items-center text-center space-y-4 transform transition-all duration-300 hover:scale-[1.02]">
-            <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-[#FBE4D8] shadow-lg">
-                <img src="https://via.placeholder.com/150/854F6C/FBE4D8?text=You" alt="User Profile Picture" class="w-full h-full object-cover">
+<main class="flex-1 p-6 sm:p-10">
+
+
+    <div class="mb-10">
+        <h3 class="text-2xl font-extrabold text-[#FBE4D8] mb-4 italic  decoration-[#854F6C]">
+            QUICK LINKS :</h3>
+        <div class="flex flex-wrap gap-6">
+            <div
+                class="flex-1 min-w-[200px] quick-card-light dashboard-card text-darkest p-5 rounded-2xl shadow-xl border border-[#854F6C]">
+                <h4 class="font-semibold text-lg mb-1">My Recent Sessions</h4>
+                <p class="text-sm text-[#522B5B] mb-3">Continue where you left off.</p>
+                <a href="{% url 'dashboard:my_sessions' %}"
+                    class="bg-dark text-lightest py-2 px-4 rounded-xl text-sm font-semibold hover:bg-[#854F6C] transition-colors shadow-md inline-block">
+                    <i data-lucide="play" class="w-4 h-4 inline mr-2"></i>
+                    Continue Sessions
+                </a>
             </div>
-            <h1 class="text-4xl font-extrabold text-[#FBE4D8] tracking-tight">
-                Welcome, <br class="md:hidden">User!
-            </h1>
-            <p class="text-lg text-[#DFB6B2] font-light">
-                Your AI coach is ready.
-            </p>
-        </div>
-
-        <div class="lg:col-span-2 space-y-8">
-            
-            <div class="card grid grid-cols-1 md:grid-cols-2 gap-6 bg-[#DFB6B2]">
-                <h2 class="col-span-1 md:col-span-2 text-3xl font-bold text-[#190019] mb-4">Quick Actions</h2>
-                <button class="btn-dashboard">
-                    Start New Session
-                </button>
-                <button class="btn-dashboard">
-                    View Practice History
-                </button>
-                <button class="btn-dashboard">
-                    Review Uploaded Content
-                </button>
-                <button class="btn-dashboard">
-                    Analyze My Voice
-                </button>
-            </div>
-
-            <div class="card bg-[#DFB6B2] text-[#190019]">
-                <h2 class="text-3xl font-bold mb-4">My Progress</h2>
-                <p class="text-lg text-[#522B5B] font-medium mb-6">
-                    Analyze your voice, tone, and delivery.
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-                    <div class="bg-[#FBE4D8] p-6 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105">
-                        <p class="text-5xl font-extrabold text-[#854F6C]">85%</p>
-                        <p class="text-sm font-medium text-[#2B124C] mt-2">Confidence Score</p>
-                    </div>
-                    <div class="bg-[#FBE4D8] p-6 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105">
-                        <p class="text-5xl font-extrabold text-[#854F6C]">150</p>
-                        <p class="text-sm font-medium text-[#2B124C] mt-2">Words/Minute</p>
-                    </div>
-                    <div class="bg-[#FBE4D8] p-6 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105">
-                        <p class="text-5xl font-extrabold text-[#854F6C]">42</p>
-                        <p class="text-sm font-medium text-[#2B124C] mt-2">Sessions Completed</p>
-                    </div>
-                    <div class="bg-[#FBE4D8] p-6 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105">
-                        <p class="text-5xl font-extrabold text-[#854F6C]">9/10</p>
-                        <p class="text-sm font-medium text-[#2B124C] mt-2">Clarity Rating</p>
-                    </div>
-                </div>
+            <div
+                class="flex-1 min-w-[200px] quick-card-cream dashboard-card border border-medium text-darkest p-5 rounded-2xl shadow-xl">
+                <h4 class="font-semibold text-lg mb-1">My Analytics</h4>
+                <p class="text-sm text-[#190019] mb-3">Latest feedback is ready for review.</p>
+                <a href="{% url 'dashboard:analytics' %}"
+                    class="text-dark bg-[#DFB6B2] py-2 px-4 rounded-xl text-sm font-semibold hover:bg-[#854F6C] hover:text-lightest transition-colors shadow-md inline-block">
+                    <i data-lucide="trending-up" class="w-4 h-4 inline mr-2"></i>
+                    View Latest Feedback
+                </a>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="mb-10">
+        <h3 class="text-2xl font-extrabold text-[#FBE4D8] mb-4 italic  decoration-[#854F6C]">
+            START YOUR JOURNEY:</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <a href="{% url 'dashboard:category' %}"
+                class="bg-dark dashboard-card text-lightest p-6 rounded-2xl shadow-2xl transition-all transform duration-300 flex flex-col justify-between min-h-[180px]">
+                <i data-lucide="brain-circuit" class="w-10 h-10 mb-4 text-[#DFB6B2] drop-shadow-lg"></i>
+                <div>
+                    <h4 class="text-xl font-semibold mb-1">AI Mock Practice</h4>
+                    <p class="text-sm text-light">Choose scenarios: Interviews, Presentations, etc.</p>
+                </div>
+                <span
+                    class="mt-4 text-xs font-medium border border-light p-1 rounded-full w-fit px-3 hover:bg-[#854F6C] transition-colors">Start
+                    Now</span>
+            </a>
+
+            <a href="{% url 'dashboard:uploaded_items' %}"
+                class="bg-medium dashboard-card text-lightest p-6 rounded-2xl shadow-2xl transition-all transform duration-300 flex flex-col justify-between min-h-[180px]">
+                <i data-lucide="file-check-2" class="w-10 h-10 mb-4 text-[#FBE4D8] drop-shadow-lg"></i>
+                <div>
+                    <h4 class="text-xl font-semibold mb-1">Uploaded Documents</h4>
+                    <p class="text-sm text-light">Get AI questions tailored specifically to your profile.</p>
+                </div>
+                <span
+                    class="mt-4 text-xs font-medium border border-lightest p-1 rounded-full w-fit px-3 bg-lightest text-medium hover:bg-[#854F6C] transition-colors">Boost
+                    Accuracy</span>
+            </a>
+
+            <div
+                class="p-6 bg-[#854F6C] dashboard-card text-lightest rounded-2xl shadow-xl flex flex-col justify-between">
+                <div class="flex items-start mb-4">
+                    <i data-lucide="lightbulb" class="w-6 h-6 text-[#FBE4D8] mr-3 mt-1"></i>
+                    <div>
+                        <h4 class="font-extrabold text-[#DFB6B2] text-lg">PRO-TIP</h4>
+
+                        <p class="text-sm font-light leading-relaxed italic">
+                            {{ ai_tip|default:"AI is preparing your personalized tip..." }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div>
+        <h3 class="text-2xl font-extrabold text-[#FBE4D8] mb-4 italic decoration-[#854F6C]">
+            RECENT ACTIVITY:</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <div
+                class="quick-card-light dashboard-card p-5 rounded-2xl shadow-xl border-b-4 border-medium flex flex-col">
+                <div class="flex items-start justify-between mb-3">
+                    <div>
+                        <h4 class="font-bold text-lg text-darkest">Recent Practice</h4>
+                        <p class="text-xs text-medium">Your last 5 sessions.</p>
+                    </div>
+                    <i data-lucide="history" class="w-8 h-8 text-darkest opacity-80"></i>
+                </div>
+                
+                <ul class="space-y-2 text-sm text-darkest flex-grow">
+                    {% for session in recent_sessions %}
+                    <li class="flex items-center">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 mr-2 text-medium"></i>
+                        <span>Session on: {{ session.created_at|date:"F j, Y" }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="text-center text-medium italic py-4">
+                        No recent practice sessions found. Start one now!
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <a href="{% url 'dashboard:my_sessions' %}"
+                    class="mt-4 text-sm bg-medium text-lightest px-3 py-1.5 rounded-lg font-semibold hover:bg-dark transition-all shadow-md flex items-center w-fit self-start">
+                    View All <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                </a>
+            </div>
+            <div class="quick-card-cream dashboard-card p-5 rounded-2xl shadow-xl border-2 border-[#522B5B]">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-bold text-lg text-darkest">Latest Feedback</h4>
+                    <i data-lucide="bar-chart-2" class="w-6 h-6 text-darkest"></i>
+                </div>
+
+                <div class="flex flex-col items-center justify-center my-4">
+                    <div class="relative w-32 h-32 bg-gradient-to-br from-[#DFB6B2] to-[#FBE4D8] rounded-full flex items-center justify-center text-darkest border-4 border-medium shadow-lg">
+                        
+                        <span class="font-cursive font-bold text-5xl">
+                           {{ confidence_score|default:"N/A" }}<span class="text-3xl">%</span>
+                        </span>
+
+                    </div>
+                    <div class="text-center mt-3">
+                        <p class="text-md font-semibold text-[#854F6C]">Overall Confidence</p>
+                        <span
+                            class="text-xs text-darkest font-semibold bg-[#DFB6B2] px-2 py-0.5 rounded-full mt-1 inline-block shadow-sm">
+                            Keep practicing to improve!
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="bg-dark dashboard-card p-5 rounded-2xl shadow-xl text-lightest relative overflow-hidden flex flex-col justify-between cursor-pointer">
+                <div class="absolute inset-0 bg-darkest opacity-60"></div>
+                <i data-lucide="quote" class="w-6 h-6 absolute top-4 left-4 text-light z-10"></i>
+                <blockquote class="text-lg italic font-medium relative z-10 pt-4">
+                    <br><br>
+                    "The most important thing in communication is hearing what isn't said."
+                </blockquote>
+                <p class="text-right text-xs mt-3 relative z-10 text-[#DFB6B2]">~ Peter Drucker</p>
+            </div>
+        </div>
+    </div>
+
+</main>
 {% endblock %}
 
+
+{% block extra_scripts %}
+<script>
+    lucide.createIcons();
+
+    // Optional: Light/Dark Mode Toggle Logic
+    const toggleButton = document.getElementById('light-dark-toggle');
+    const body = document.body;
+    const modeIcon = document.getElementById('mode-icon');
+
+    const style = document.createElement('style');
+    document.head.appendChild(style);
+
+    function setDarkModeStyles(isDark) {
+        if (isDark) {
+            // We don't need to inject complex CSS here anymore, as all dark mode styles are now in the main <style> block
+            modeIcon.setAttribute('data-lucide', 'sun');
+            toggleButton.classList.remove('bg-light');
+            toggleButton.classList.add('bg-medium', 'text-lightest');
+        } else {
+            modeIcon.setAttribute('data-lucide', 'moon');
+            toggleButton.classList.remove('bg-medium', 'text-lightest');
+            toggleButton.classList.add('bg-light');
+        }
+        lucide.createIcons();
+    }
+
+    toggleButton.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        setDarkModeStyles(body.classList.contains('dark-mode'));
+    });
+
+    // Initial icon setup
+    setDarkModeStyles(body.classList.contains('dark-mode'));
+</script>
+{% endblock %}

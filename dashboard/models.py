@@ -203,3 +203,106 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+# ================== Interview Session Management ==================
+
+class InterviewSession(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    interview_details = models.ForeignKey(InterviewDetails, on_delete=models.CASCADE)
+    
+    SESSION_STATUS = [
+        ('active', 'Active'),
+        ('paused', 'Paused'),
+        ('completed', 'Completed'),
+        ('abandoned', 'Abandoned'),
+    ]
+    
+    status = models.CharField(max_length=20, choices=SESSION_STATUS, default='active')
+    started_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    total_questions = models.IntegerField(default=0)
+    questions_answered = models.IntegerField(default=0)
+    
+    # Overall session scores (calculated from individual question responses)
+    overall_confidence_score = models.FloatField(null=True, blank=True)  # 0-100
+    communication_score = models.FloatField(null=True, blank=True)       # 0-100
+    technical_score = models.FloatField(null=True, blank=True)           # 0-100
+    
+    # AI-generated overall feedback
+    session_feedback = models.TextField(blank=True, null=True)
+    
+    def __str__(self):
+        return f"Session - {self.user.username} ({self.started_at.strftime('%Y-%m-%d %H:%M')})"
+    
+    @property 
+    def duration_minutes(self):
+        if self.completed_at and self.started_at:
+            return (self.completed_at - self.started_at).total_seconds() / 60
+        return 0
+    
+    @property
+    def completion_percentage(self):
+        if self.total_questions > 0:
+            return (self.questions_answered / self.total_questions) * 100
+        return 0
+
+
+class SessionQuestion(models.Model):
+    session = models.ForeignKey(InterviewSession, on_delete=models.CASCADE, related_name='questions')
+    
+    question_number = models.IntegerField()
+    question_text = models.TextField()
+    user_answer = models.TextField(blank=True, null=True)
+    
+    # Timing information
+    asked_at = models.DateTimeField(auto_now_add=True)
+    answered_at = models.DateTimeField(null=True, blank=True)
+    time_taken_seconds = models.IntegerField(null=True, blank=True)  # Time taken to answer
+    
+    # AI evaluation scores
+    relevance_score = models.FloatField(null=True, blank=True)      # 0-100
+    clarity_score = models.FloatField(null=True, blank=True)        # 0-100
+    completeness_score = models.FloatField(null=True, blank=True)   # 0-100
+    
+    # AI feedback
+    ai_feedback = models.TextField(blank=True, null=True)
+    
+    # Improvement suggestions
+    improvement_areas = models.JSONField(default=list, blank=True)  # ["communication", "technical_depth", etc.]
+    
+    def __str__(self):
+        return f"Q{self.question_number} - Session {self.session.id}"
+    
+    @property
+    def overall_score(self):
+        scores = [self.relevance_score, self.clarity_score, self.completeness_score]
+        valid_scores = [s for s in scores if s is not None]
+        return sum(valid_scores) / len(valid_scores) if valid_scores else 0
+
+
+class SessionAnalytics(models.Model):
+    session = models.OneToOneField(InterviewSession, on_delete=models.CASCADE)
+    
+    # Performance metrics
+    average_response_time = models.FloatField(default=0.0)  # Average time per question
+    longest_response_time = models.FloatField(default=0.0)
+    shortest_response_time = models.FloatField(default=0.0)
+    
+    # Behavioral analysis
+    hesitation_count = models.IntegerField(default=0)       # Times user paused/restarted
+    word_count_total = models.IntegerField(default=0)       # Total words in all answers
+    avg_words_per_answer = models.FloatField(default=0.0)
+    
+    # Strengths and weaknesses (AI-determined)
+    key_strengths = models.JSONField(default=list, blank=True)
+    improvement_areas = models.JSONField(default=list, blank=True)
+    
+    # Recommendations for future practice
+    recommended_topics = models.JSONField(default=list, blank=True)
+    difficulty_recommendation = models.CharField(max_length=20, blank=True, null=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"Analytics - Session {self.session.id}"

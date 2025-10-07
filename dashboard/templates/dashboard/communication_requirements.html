@@ -1,116 +1,196 @@
 {% extends "dashboard/base.html" %}
 
-{% block title %}Communication Practice{% endblock %}
+{% block title %}Communication Practice Setup{% endblock %}
+
+{% block page_title %}Communication Practice Setup{% endblock %}
+
+{% block extra_head %}
+<style>
+    .form-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-input {
+        background: white;
+        border: 1px solid rgba(203, 213, 225, 0.8);
+        transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+        border-color: #3B82F6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="w-full min-h-screen bg-gradient-to-br from-[#190019] via-[#2B124C] to-[#522B5B] flex items-center justify-center p-8">
-    <div class="w-full max-w-[1000px] rounded-3xl shadow-2xl p-12 text-[#FBE4D8]">
-        <h2 class="text-4xl font-bold text-center mb-2">Communication Skills Practice</h2>
-        <p class="text-center mb-8 text-[#DFB6B2]">Complete the form below to create your personalized roleplay</p>
 
-        <form method="POST" enctype="multipart/form-data" class="space-y-6">
+<!-- Header Section -->
+<div class="mb-8">
+    <div class="text-center">
+        <h2 class="text-4xl font-bold text-primary-800 mb-4">Communication Skills Practice</h2>
+        <p class="text-xl text-primary-600 max-w-3xl mx-auto">
+            Setup your personalized communication practice session to improve your speaking and conversation skills.
+        </p>
+    </div>
+</div>
+
+<div class="max-w-4xl mx-auto">
+    <div class="form-card rounded-3xl p-8">
+
+        <form method="POST" enctype="multipart/form-data" class="space-y-8">
             {% csrf_token %}
 
-            <!-- Basic Info -->
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block mb-2 font-semibold">Full Name *</label>
-                    <input type="text" name="full_name" placeholder="Your Name" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" required />
-                </div>
-                <div>
-                    <label class="block mb-2 font-semibold">Age</label>
-                    <input type="number" name="age" placeholder="Your Age" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
-                </div>
-                <div class="col-span-2">
-                    <label class="block mb-2 font-semibold">Email</label>
-                    <input type="email" name="email" placeholder="you@example.com" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
-                </div>
-            </div>
-
-            <!-- Language & Proficiency -->
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block mb-2 font-semibold">Language</label>
-                    <select name="language" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
-                        <option value="english" selected>English</option>
-                        <option value="hindi">Hindi</option>
-                        <option value="spanish">Spanish</option>
-                        <option value="french">French</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block mb-2 font-semibold">Language Proficiency</label>
-                    <select name="language_proficiency" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
-                        <option value="basic" selected>Basic</option>
-                        <option value="intermediate">Intermediate</option>
-                        <option value="pro">Proficient</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Mode / Roleplay Level -->
+            <!-- Personal Information -->
             <div>
-                <label class="block mb-2 font-semibold">Roleplay Level</label>
-                <select name="mode" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
-                    <option value="basic_intro" selected>Basic Intro (Self Intro / Simple Conversation)</option>
-                    <option value="intermediate">Intermediate (Group / Peer Conversations)</option>
-                    <option value="pro">Pro Level (Professional Scenario)</option>
-                </select>
-            </div>
-
-            <!-- Reason -->
-            <div>
-                <label class="block mb-2 font-semibold">Reason for Learning</label>
-                <select id="reason_select" name="reason" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
-                    <option value="office">Office / Workplace Communication</option>
-                    <option value="travel">Travel / Tour Communication</option>
-                    <option value="students">Classroom / Student Interaction</option>
-                    <option value="presentation">Presentations / Public Speaking</option>
-                    <option value="personal" selected>Personal Growth / Confidence</option>
-                    <option value="custom">Other (User defined)</option>
-                </select>
-                <input type="text" name="custom_reason" id="custom_reason_input" placeholder="Write your reason here" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C] mt-2 hidden" />
-            </div>
-
-            <!-- JS to show custom reason -->
-            <script>
-                const reasonSelect = document.getElementById('reason_select');
-                const customReasonInput = document.getElementById('custom_reason_input');
-
-                reasonSelect.addEventListener('change', function() {
-                    if(this.value === 'custom') {
-                        customReasonInput.style.display = 'block';
-                    } else {
-                        customReasonInput.style.display = 'none';
-                        customReasonInput.value = '';
-                    }
-                });
-            </script>
-
-            <!-- Roleplay Settings -->
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block mb-2 font-semibold">Time per Round (seconds)</label>
-                    <input type="number" name="time_per_round" value="60" min="60" max="180" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
+                <h3 class="text-2xl font-bold text-primary-800 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    Personal Information
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Full Name *</label>
+                        <input type="text" name="full_name" placeholder="Your Name" required
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Age</label>
+                        <input type="number" name="age" placeholder="Your Age" min="13" max="100"
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block mb-2 font-semibold text-primary-700">Email</label>
+                        <input type="email" name="email" placeholder="you@example.com" 
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                    </div>
                 </div>
-                <div>
-                    <label class="block mb-2 font-semibold">Number of Rounds</label>
-                    <select name="num_rounds" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
-                        <option value="3" selected>3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
+            </div>
+
+            <!-- Language & Communication Settings -->
+            <div>
+                <h3 class="text-2xl font-bold text-primary-800 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                    </svg>
+                    Language & Communication Settings
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Practice Language</label>
+                        <select name="language" class="form-input w-full p-3 rounded-xl text-primary-800">
+                            <option value="english" selected>English</option>
+                            <option value="hindi">Hindi</option>
+                            <option value="spanish">Spanish</option>
+                            <option value="french">French</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Current Proficiency Level</label>
+                        <select name="language_proficiency" class="form-input w-full p-3 rounded-xl text-primary-800">
+                            <option value="basic" selected>Basic - Just starting out</option>
+                            <option value="intermediate">Intermediate - Some experience</option>
+                            <option value="pro">Advanced - Confident speaker</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <label class="block mb-2 font-semibold text-primary-700">Communication Scenario Level</label>
+                    <select name="mode" class="form-input w-full p-3 rounded-xl text-primary-800">
+                        <option value="basic_intro" selected>Basic - Self introduction & simple conversations</option>
+                        <option value="intermediate">Intermediate - Group discussions & peer interactions</option>
+                        <option value="pro">Advanced - Professional scenarios & presentations</option>
                     </select>
+                </div>
+            </div>
+
+            <!-- Practice Objectives -->
+            <div>
+                <h3 class="text-2xl font-bold text-primary-800 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                    </svg>
+                    Practice Objectives
+                </h3>
+                
+                <div>
+                    <label class="block mb-2 font-semibold text-primary-700">Primary Focus Area</label>
+                    <select id="reason_select" name="reason" class="form-input w-full p-3 rounded-xl text-primary-800">
+                        <option value="office">Office & Workplace Communication</option>
+                        <option value="travel">Travel & Tourism Conversations</option>
+                        <option value="students">Academic & Student Interactions</option>
+                        <option value="presentation">Presentations & Public Speaking</option>
+                        <option value="personal" selected>Personal Growth & Confidence Building</option>
+                        <option value="custom">Custom Focus Area</option>
+                    </select>
+                    <input type="text" name="custom_reason" id="custom_reason_input" 
+                        placeholder="Describe your specific communication goals..." 
+                        class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400 mt-3 hidden" />
+                </div>
+            </div>
+
+            <!-- Session Configuration -->
+            <div>
+                <h3 class="text-2xl font-bold text-primary-800 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Session Configuration
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Time per Round (seconds)</label>
+                        <input type="number" name="time_per_round" value="90" min="60" max="300" 
+                            class="form-input w-full p-3 rounded-xl text-primary-800" />
+                        <p class="text-sm text-primary-500 mt-1">Recommended: 60-120 seconds per conversation round</p>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Number of Conversation Rounds</label>
+                        <select name="num_rounds" class="form-input w-full p-3 rounded-xl text-primary-800">
+                            <option value="3" selected>3 Rounds (Quick practice)</option>
+                            <option value="4">4 Rounds (Standard)</option>
+                            <option value="5">5 Rounds (Comprehensive)</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
             <!-- Submit Button -->
-            <div class="text-center mt-6">
-                <button type="submit" class="bg-[#854F6C] px-8 py-3 rounded-xl hover:bg-[#FBE4D8] hover:text-[#190019] font-semibold text-lg transition">
-                    Submit Communication Practice
+            <div class="text-center pt-6 border-t border-primary-200">
+                <button type="submit" 
+                    class="bg-accent-500 hover:bg-accent-600 text-white px-12 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                    Start Communication Practice
                 </button>
+                <p class="text-sm text-primary-500 mt-3">This will create your personalized conversation practice session</p>
             </div>
         </form>
     </div>
 </div>
+
+<!-- JavaScript for custom reason toggle -->
+<script>
+    const reasonSelect = document.getElementById('reason_select');
+    const customReasonInput = document.getElementById('custom_reason_input');
+
+    reasonSelect.addEventListener('change', function() {
+        if(this.value === 'custom') {
+            customReasonInput.classList.remove('hidden');
+            customReasonInput.focus();
+        } else {
+            customReasonInput.classList.add('hidden');
+            customReasonInput.value = '';
+        }
+    });
+</script>
+
 {% endblock %}

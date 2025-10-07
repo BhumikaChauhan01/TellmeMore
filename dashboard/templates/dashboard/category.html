@@ -2,177 +2,226 @@
 
 {% block title %}Practice Categories{% endblock %}
 
+{% block page_title %}Practice Categories{% endblock %}
+
 {% block extra_head %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        /* Custom CSS for colors, fonts, and animations specific to this page */
-        :root {
-            --c1: #190019;
-            --c2: #2B124C;
-            --c3: #522B5B;
-            --c4: #854F6C;
-            --c5: #DFB6B2;
-            --c6: #FBE4D8;
-        }
-
-        /* The base body background is already set in base.html, but we can override or add if needed */
-        body {
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
-
-        /* --- Loader Styles --- */
-        #loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: var(--c1);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.5s ease-out;
-        }
-
-        .spinner {
-            width: 56px;
-            height: 56px;
-            border: 8px solid var(--c3);
-            border-top-color: var(--c5);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        
-        /* --- Image Scroller Animation --- */
-        .scroller {
-            height: 100%;
-            overflow: hidden;
-            -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
-            mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
-        }
-
-        .scroller-inner {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            animation: scroll-vertical 15s linear infinite;
-        }
-        
-        .scroller[data-direction="down"] .scroller-inner {
-             animation: scroll-vertical-reverse 15s linear infinite;
-        }
-
-        @keyframes scroll-vertical {
-            from {
-                transform: translateY(0);
-            }
-            to {
-                transform: translateY(-50%);
-            }
-        }
-        
-        @keyframes scroll-vertical-reverse {
-            from {
-                transform: translateY(-50%);
-            }
-            to {
-                transform: translateY(0);
-            }
-        }
-        
-        /* Custom shadow for the central card */
-        .card-shadow {
-            box-shadow: 0px 0px 40px rgba(223, 182, 178, 0.2);
-        }
-    </style>
+<style>
+    .category-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-4px) scale(1.02);
+        border-color: rgba(59, 130, 246, 0.3);
+        box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    
+    .category-button {
+        background: rgba(59, 130, 246, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .category-button:hover {
+        background: rgba(59, 130, 246, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+    }
+    
+    .category-button.primary {
+        background: linear-gradient(135deg, #3B82F6, #60A5FA);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    
+    .category-button.primary:hover {
+        background: linear-gradient(135deg, #2563EB, #3B82F6);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-    <div id="loader">
-        <div class="spinner"></div>
+
+<!-- Header Section -->
+<div class="mb-12">
+    <div class="text-center">
+        <h2 class="text-4xl font-bold text-primary-800 mb-4">Choose Your Practice Type</h2>
+        <p class="text-xl text-primary-600 max-w-3xl mx-auto">
+            Select the type of practice session that aligns with your professional development goals.
+        </p>
+    </div>
+</div>
+
+<!-- Practice Categories Grid -->
+<div class="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+    
+    <!-- Interview Practice -->
+    <div class="category-card rounded-3xl p-8">
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-accent-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-primary-800 mb-3">Interview Practice</h3>
+            <p class="text-primary-600 mb-6">Practice for HR, technical, and behavioral interviews with AI-powered feedback</p>
+        </div>
+        <div class="space-y-3">
+            <div class="flex items-center text-primary-600 text-sm">
+                <svg class="w-4 h-4 mr-2 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Multiple interview formats
+            </div>
+            <div class="flex items-center text-primary-600 text-sm">
+                <svg class="w-4 h-4 mr-2 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Real-time feedback
+            </div>
+            <div class="flex items-center text-primary-600 text-sm">
+                <svg class="w-4 h-4 mr-2 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Performance analytics
+            </div>
+        </div>
+        <a href="{% url 'dashboard:interview_requirements' %}" class="category-button block w-full text-center p-4 rounded-xl font-semibold text-primary-800 mt-6">
+            Start Interview Practice
+        </a>
     </div>
 
-    <div id="page-content" class="hidden w-full">
-
-        <div class="relative w-full flex justify-center items-center h-[70vh]">
-
-            <div class="hidden md:block absolute left-0 top-0 h-full w-1/5 lg:w-1/4">
-                <div class="scroller">
-                    <div class="scroller-inner">
-                        <img src="https://i.pinimg.com/736x/68/e1/f3/68e1f3e225a57e7240e8c54e43ddfb96.jpg" class="w-full h-auto rounded-lg mb-4">
-                        <img src="https://i.pinimg.com/736x/68/e1/f3/68e1f3e225a57e7240e8c54e43ddfb96.jpg" class="w-full h-auto rounded-lg mb-4">
-                        <img src="https://i.pinimg.com/736x/68/e1/f3/68e1f3e225a57e7240e8c54e43ddfb96.jpg" class="w-full h-auto rounded-lg mb-4">
-                        <img src="https://i.pinimg.com/736x/68/e1/f3/68e1f3e225a57e7240e8c54e43ddfb96.jpg" class="w-full h-auto rounded-lg mb-4">
-                        <img src="https://i.pinimg.com/736x/68/e1/f3/68e1f3e225a57e7240e8c54e43ddfb96.jpg" class="w-full h-auto rounded-lg mb-4">
-                        <img src="https://i.pinimg.com/736x/68/e1/f3/68e1f3e225a57e7240e8c54e43ddfb96.jpg" class="w-full h-auto rounded-lg mb-4">
-                    </div>
-                </div>
+    <!-- Presentation Practice -->
+    <div class="category-card rounded-3xl p-8">
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m0 0V1a1 1 0 011-1h2a1 1 0 011 1v4H5V1a1 1 0 011-1h2a1 1 0 011 1v3zM5 7h14l-1 12H6L5 7z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
+                </svg>
             </div>
-
-            <div class="relative z-10 w-full max-w-md p-8 rounded-2xl card-shadow" style="background-color: var(--c2);">
-                <h1 class="text-3xl font-bold text-center mb-8" style="color: var(--c6);">Choose a Category</h1>
-                <div class="space-y-4">
-                    <a href="{% url 'dashboard:interview_requirements' %}" class="block w-full text-center p-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c3); color: var(--c6);">
-                        Interview Practice
-                    </a>
-                    <a href="{% url 'dashboard:presentation_requirements' %}" class="block w-full text-center p-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c3); color: var(--c6);">
-                        Presentation Practice
-                    </a>
-                    <a href="{% url 'dashboard:communication_requirements' %}" class="block w-full text-center p-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c3); color: var(--c6);">
-                        Communication Skills
-                    </a>
-                    <a href="{% url 'dashboard:question_requirements' %}" class="block w-full text-center p-4 rounded-lg font-bold transition-all duration-300 transform hover:scale-105" style="background-color: var(--c5); color: var(--c1);">
-                        Make your own Set
-                    </a>
-                </div>
-            </div>
-
-            <div class="hidden md:block absolute right-0 top-0 h-full w-1/5 lg:w-1/4">
-                <div class="scroller" data-direction="down">
-                     <div class="scroller-inner">
-                        <img src="https://i.pinimg.com/1200x/c4/27/52/c4275261c9109469b66efbdcedda240b.jpg" class="w-full h-auto rounded-lg mb-4">
-                        <img src="https://i.pinimg.com/1200x/c4/27/52/c4275261c9109469b66efbdcedda240b.jpg" class="w-full h-auto rounded-lg mb-4">
-                        <img src="https://i.pinimg.com/1200x/c4/27/52/c4275261c9109469b66efbdcedda240b.jpg" class="w-full h-auto rounded-lg mb-4">
-                        <img src="https://i.pinimg.com/1200x/c4/27/52/c4275261c9109469b66efbdcedda240b.jpg" class="w-full h-auto rounded-lg mb-4">
-                        <img src="https://i.pinimg.com/1200x/c4/27/52/c4275261c9109469b66efbdcedda240b.jpg" class="w-full h-auto rounded-lg mb-4">
-                        <img src="https://i.pinimg.com/1200x/c4/27/52/c4275261c9109469b66efbdcedda240b.jpg" class="w-full h-auto rounded-lg mb-4">
-                    </div>
-                </div>
-            </div>
-
+            <h3 class="text-2xl font-bold text-primary-800 mb-3">Presentation Practice</h3>
+            <p class="text-primary-600 mb-6">Improve your public speaking and presentation delivery skills</p>
         </div>
-
+        <div class="space-y-3">
+            <div class="flex items-center text-primary-600 text-sm">
+                <svg class="w-4 h-4 mr-2 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Speech clarity analysis
+            </div>
+            <div class="flex items-center text-primary-600 text-sm">
+                <svg class="w-4 h-4 mr-2 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Audience targeting
+            </div>
+            <div class="flex items-center text-primary-600 text-sm">
+                <svg class="w-4 h-4 mr-2 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Content structure tips
+            </div>
         </div>
-{% endblock %}
+        <a href="{% url 'dashboard:presentation_requirements' %}" class="category-button block w-full text-center p-4 rounded-xl font-semibold text-primary-800 mt-6">
+            Start Presentation Practice
+        </a>
+    </div>
 
+    <!-- Communication Skills -->
+    <div class="category-card rounded-3xl p-8">
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-primary-700 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-primary-800 mb-3">Communication Skills</h3>
+            <p class="text-primary-600 mb-6">Enhance your overall communication and conversational abilities</p>
+        </div>
+        <div class="space-y-3">
+            <div class="flex items-center text-primary-600 text-sm">
+                <svg class="w-4 h-4 mr-2 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Language proficiency
+            </div>
+            <div class="flex items-center text-primary-600 text-sm">
+                <svg class="w-4 h-4 mr-2 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Tone and pace analysis
+            </div>
+            <div class="flex items-center text-primary-600 text-sm">
+                <svg class="w-4 h-4 mr-2 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Confidence building
+            </div>
+        </div>
+        <a href="{% url 'dashboard:communication_requirements' %}" class="category-button block w-full text-center p-4 rounded-xl font-semibold text-primary-800 mt-6">
+            Start Communication Practice
+        </a>
+    </div>
 
-{% block extra_scripts %}
-    <script>
-        // JavaScript to hide loader and show content when page is loaded
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            const pageContent = document.getElementById('page-content');
-            
-            // Fade out loader
-            loader.style.opacity = '0';
-            
-            // Wait for fade out animation to finish before hiding it
-            setTimeout(() => {
-                loader.style.display = 'none';
-                pageContent.classList.remove('hidden');
-            }, 500);
-        });
-        
-        // The mobile menu script is removed because the navbar is now controlled by base.html
-    </script>
+    <!-- Custom Question Set -->
+    <div class="category-card rounded-3xl p-8">
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-primary-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-primary-800 mb-3">Custom Question Set</h3>
+            <p class="text-primary-600 mb-6">Create personalized practice sessions tailored to your specific needs</p>
+        </div>
+        <div class="space-y-3">
+            <div class="flex items-center text-primary-600 text-sm">
+                <svg class="w-4 h-4 mr-2 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Create custom questions
+            </div>
+            <div class="flex items-center text-primary-600 text-sm">
+                <svg class="w-4 h-4 mr-2 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Targeted practice areas
+            </div>
+            <div class="flex items-center text-primary-600 text-sm">
+                <svg class="w-4 h-4 mr-2 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Flexible practice format
+            </div>
+        </div>
+        <a href="{% url 'dashboard:question_requirements' %}" class="category-button primary block w-full text-center p-4 rounded-xl font-bold text-white mt-6">
+            Create Custom Set ⭐
+        </a>
+    </div>
+</div>
+
+<!-- Help Section -->
+<div class="mt-16 text-center">
+    <div class="category-card rounded-2xl p-8 max-w-2xl mx-auto">
+        <h3 class="text-xl font-semibold text-primary-800 mb-4">Need Help Choosing?</h3>
+        <p class="text-primary-600 mb-6">
+            Not sure which practice type is right for you? Each category is designed to target specific skills essential for professional success.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'dashboard:analytics' %}" class="category-button px-6 py-3 rounded-xl font-medium text-primary-800">
+                View My Progress
+            </a>
+            <a href="{% url 'about' %}" class="category-button px-6 py-3 rounded-xl font-medium text-primary-800">
+                Learn More
+            </a>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

@@ -1,208 +1,238 @@
 {% extends 'base.html' %}
 
-{% block title %}About Us{% endblock %}
+{% block title %}About Us - TellmeMore{% endblock %}
 
 {% block extra_head %}
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
-
-  body {
-    background: linear-gradient(to bottom right, #2B124C, #522B5B, #854F6C);
-    color: #FBE4D8;
-    font-family: 'Poppins', sans-serif;
-    overflow-x: hidden;
+  .feature-icon {
+    background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
-
-  ::-webkit-scrollbar {
-    width: 8px;
+  
+  .team-card {
+    transition: all 0.3s ease;
   }
-
-  ::-webkit-scrollbar-track {
-    background: #2B124C;
+  
+  .team-card:hover {
+    transform: translateY(-8px) scale(1.02);
   }
-
-  ::-webkit-scrollbar-thumb {
-    background: #854F6C;
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #522B5B;
+  
+  .section-card {
+    backdrop-filter: blur(20px);
+    background: rgba(43, 18, 76, 0.6);
+    border: 1px solid rgba(133, 79, 108, 0.3);
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<main class="flex-grow pt-12 pb-20 px-6 relative z-10 w-full">
-  <div class="max-w-5xl mx-auto space-y-16">
-    <header class="text-center animate-fade-in">
-      <h1 class="text-6xl md:text-7xl font-extrabold text-[#FBE4D8] leading-tight drop-shadow-lg">About <span
-          class="text-[#DFB6B2]">TellmeMore</span></h1>
-      <p class="mt-6 text-2xl text-[#DFB6B2] opacity-90 font-light">Your intelligent companion for success.
+<section class="py-20 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- Hero Section -->
+    <div class="text-center mb-20">
+      <h1 class="text-5xl md:text-7xl font-black text-primary-100 leading-tight mb-8">
+        About <span class="text-gradient">TellmeMore</span>
+      </h1>
+      <p class="text-xl md:text-2xl text-primary-300 max-w-4xl mx-auto leading-relaxed">
+        Transforming interview preparation with AI-powered personalized coaching. 
+        <span class="text-primary-500 font-semibold">Your success is our mission.</span>
       </p>
-    </header>
+    </div>
 
-    <section class="bg-[#522B5B]/70 backdrop-blur-lg rounded-3xl p-10 shadow-2xl border border-[#854F6C] transform
-        hover:scale-[1.01] transition-all duration-300 ease-in-out">
-      <h2 class="text-4xl font-bold text-[#FBE4D8] mb-6 border-b-2 border-[#DFB6B2] pb-3 inline-block">Our Vision</h2>
-      <p class="text-lg text-[#DFB6B2] leading-relaxed">
-        TellmeMore's vision is to make communication practice easy and interactive.
-        <br><br>
-        👉🏻 To redefine interview/speech preparation with the power of AI.
-        <br><br>
-        👉🏻To help individuals build confidence, clarity, and communication skills.
-        <br><br>
-        👉🏻 To provide a journey that motivates continuous growth.
-        <br><br>
-        👉🏻 To empower every student and professional to become a confident communicator.
-    </section>
-
-    <section
-      class="bg-[#522B5B]/70 backdrop-blur-lg rounded-3xl p-10 shadow-2xl border border-[#854F6C] transform hover:scale-[1.01] transition-all duration-300 ease-in-out">
-      <h2 class="text-4xl font-bold text-[#FBE4D8] mb-8 border-b-2 border-[#DFB6B2] pb-3 inline-block">Key Features:
-        Empowering Your Journey</h2>
-      <div class="space-y-8">
-
-        <div class="flex flex-wrap justify-center gap-8 text-center">
-          <div
-            class="p-8 rounded-2xl bg-[#854F6C]/60 hover:bg-[#854F6C] shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out border border-[#DFB6B2]/30 w-full md:w-1/3 lg:w-1/4">
-            <svg class="w-12 h-12 mx-auto mb-4 text-[#FBE4D8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 17v2a2 2 0 002 2h2a2 2 0 002-2v-2m6 0H9M9 17V7a2 2 0 012-2h2a2 2 0 012 2v10m6 0H18">
-              </path>
-            </svg>
-            <h3 class="text-xl font-semibold text-[#FBE4D8] mb-2">AI-Driven Feedback</h3>
-            <p class="text-sm text-[#DFB6B2] opacity-90">Get instant, highly personalized feedback on your voice and
-              content to know exactly what to improve.</p>
+    <!-- Vision Section -->
+    <div class="section-card rounded-3xl p-10 mb-16 hover:scale-[1.01] transition-all duration-300">
+      <h2 class="text-4xl font-bold text-primary-100 mb-8 flex items-center">
+        <div class="w-12 h-12 bg-primary-500 rounded-xl flex items-center justify-center mr-4">
+          <svg class="w-6 h-6 text-primary-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+          </svg>
+        </div>
+        Our Vision
+      </h2>
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div class="space-y-6">
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-primary-500/20 rounded-lg flex items-center justify-center mt-1">
+              <span class="text-primary-500 font-bold">1</span>
+            </div>
+            <p class="text-primary-300 leading-relaxed">Redefine interview preparation with the power of AI technology</p>
           </div>
-
-          <div
-            class="p-8 rounded-2xl bg-[#854F6C]/60 hover:bg-[#854F6C] shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out border border-[#DFB6B2]/30 w-full md:w-1/3 lg:w-1/4">
-            <svg class="w-12 h-12 mx-auto mb-4 text-[#FBE4D8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
-            </svg>
-            <h3 class="text-xl font-semibold text-[#FBE4D8] mb-2">Customizable Practice</h3>
-            <p class="text-sm text-[#DFB6B2] opacity-90">Create your own custom question sets to practice and focus
-              on your specific needs.</p>
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-primary-500/20 rounded-lg flex items-center justify-center mt-1">
+              <span class="text-primary-500 font-bold">2</span>
+            </div>
+            <p class="text-primary-300 leading-relaxed">Help individuals build confidence, clarity, and communication skills</p>
           </div>
-
-          <div
-            class="p-8 rounded-2xl bg-[#854F6C]/60 hover:bg-[#854F6C] shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out border border-[#DFB6B2]/30 w-full md:w-1/3 lg:w-1/4">
-            <svg class="w-12 h-12 mx-auto mb-4 text-[#FBE4D8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-              </path>
-            </svg>
-            <h3 class="text-xl font-semibold text-[#FBE4D8] mb-2">In-depth Analytics</h3>
-            <p class="text-sm text-[#DFB6B2] opacity-90">Analyze your voice's pitch, tone, and pace to gain a
-              deeper understanding of your speaking style.</p>
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-primary-500/20 rounded-lg flex items-center justify-center mt-1">
+              <span class="text-primary-500 font-bold">3</span>
+            </div>
+            <p class="text-primary-300 leading-relaxed">Provide a journey that motivates continuous growth and learning</p>
+          </div>
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-primary-500/20 rounded-lg flex items-center justify-center mt-1">
+              <span class="text-primary-500 font-bold">4</span>
+            </div>
+            <p class="text-primary-300 leading-relaxed">Empower every student and professional to become a confident communicator</p>
           </div>
         </div>
-
-        <div class="flex flex-wrap justify-center gap-8 text-center">
-          <div
-            class="p-8 rounded-2xl bg-[#854F6C]/60 hover:bg-[#854F6C] shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out border border-[#DFB6B2]/30 w-full md:w-1/3 lg:w-1/4">
-            <svg class="w-12 h-12 mx-auto mb-4 text-[#FBE4D8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4">
-              </path>
-            </svg>
-            <h3 class="text-xl font-semibold text-[#FBE4D8] mb-2">Multi-Mode Simulation</h3>
-            <p class="text-sm text-[#DFB6B2] opacity-90">Prepare for diverse formats like interviews, presentations,
-              and group discussions in one place.</p>
-          </div>
-
-          <div
-            class="p-8 rounded-2xl bg-[#854F6C]/60 hover:bg-[#854F6C] shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out border border-[#DFB6B2]/30 w-full md:w-1/3 lg:w-1/4">
-            <svg class="w-12 h-12 mx-auto mb-4 text-[#FBE4D8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <h3 class="text-xl font-semibold text-[#FBE4D8] mb-2">Time-Limit Simulation</h3>
-            <p class="text-sm text-[#DFB6B2] opacity-90">Practice under real-time constraints to improve your speed
-              and
-              precision under pressure.</p>
-          </div>
-
-          <div
-            class="p-8 rounded-2xl bg-[#854F6C]/60 hover:bg-[#854F6C] shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out border border-[#DFB6B2]/30 w-full md:w-1/3 lg:w-1/4">
-            <svg class="w-12 h-12 mx-auto mb-4 text-[#FBE4D8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v4m0 0h-4m4 0l-5-5"></path>
-            </svg>
-            <h3 class="text-xl font-semibold text-[#FBE4D8] mb-2">Review and Playback</h3>
-            <p class="text-sm text-[#DFB6B2] opacity-90">All practice sessions and uploaded files can be reviewed anytime, helping you track and improve performance.</p>
-          </div>
+        <div class="bg-primary-800/40 rounded-2xl p-8 border border-primary-600">
+          <h3 class="text-2xl font-semibold text-primary-100 mb-4">Mission Statement</h3>
+          <p class="text-primary-300 leading-relaxed">
+            "To make communication practice easy, interactive, and accessible to everyone, regardless of their background or experience level."
+          </p>
         </div>
       </div>
-    </section>
+    </div>
 
-    <section class="bg-[#522B5B]/70 backdrop-blur-lg rounded-3xl p-10 shadow-2xl border border-[#854F6C] transform
-        hover:scale-[1.01] transition-all duration-300 ease-in-out">
-      <h2 class="text-4xl font-bold text-[#FBE4D8] mb-6 border-b-2 border-[#DFB6B2] pb-3 inline-block">Meet the
-        Developers</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Features Section -->
+    <div class="section-card rounded-3xl p-10 mb-16">
+      <h2 class="text-4xl font-bold text-primary-100 mb-12 text-center">
+        Key Features
+      </h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Feature 1 -->
+        <div class="bg-primary-800/40 rounded-2xl p-8 border border-primary-600 hover:border-primary-500 transition-all duration-300 hover:-translate-y-2">
+          <div class="w-16 h-16 bg-primary-500 rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-primary-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-primary-100 mb-4">AI-Powered Feedback</h3>
+          <p class="text-primary-300">Get instant, personalized feedback on your responses with detailed scoring and improvement suggestions.</p>
+        </div>
 
-        <div
-          class="bg-[#854F6C]/40 rounded-2xl p-6 text-center shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out border border-[#DFB6B2]/30">
-          <div class="w-32 h-32 mx-auto rounded-full overflow-hidden shadow-lg border-4 border-[#DFB6B2] mb-4">
+        <!-- Feature 2 -->
+        <div class="bg-primary-800/40 rounded-2xl p-8 border border-primary-600 hover:border-primary-500 transition-all duration-300 hover:-translate-y-2">
+          <div class="w-16 h-16 bg-primary-500 rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-primary-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-primary-100 mb-4">Performance Analytics</h3>
+          <p class="text-primary-300">Track your progress over time with detailed analytics and performance insights to identify improvement areas.</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="bg-primary-800/40 rounded-2xl p-8 border border-primary-600 hover:border-primary-500 transition-all duration-300 hover:-translate-y-2">
+          <div class="w-16 h-16 bg-primary-500 rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-primary-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-primary-100 mb-4">Real-Time Practice</h3>
+          <p class="text-primary-300">Practice under real interview conditions with time constraints and immediate evaluation.</p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="bg-primary-800/40 rounded-2xl p-8 border border-primary-600 hover:border-primary-500 transition-all duration-300 hover:-translate-y-2">
+          <div class="w-16 h-16 bg-primary-500 rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-primary-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-primary-100 mb-4">Multiple Formats</h3>
+          <p class="text-primary-300">Practice different interview types: technical, HR, presentations, and custom question sets.</p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="bg-primary-800/40 rounded-2xl p-8 border border-primary-600 hover:border-primary-500 transition-all duration-300 hover:-translate-y-2">
+          <div class="w-16 h-16 bg-primary-500 rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-primary-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-primary-100 mb-4">Customizable Practice</h3>
+          <p class="text-primary-300">Create personalized question sets and practice scenarios tailored to your specific needs.</p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="bg-primary-800/40 rounded-2xl p-8 border border-primary-600 hover:border-primary-500 transition-all duration-300 hover:-translate-y-2">
+          <div class="w-16 h-16 bg-primary-500 rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-primary-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v4m0 0h-4m4 0l-5-5"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-primary-100 mb-4">Session Review</h3>
+          <p class="text-primary-300">Review and replay your practice sessions to track improvement and identify patterns.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Team Section -->
+    <div class="section-card rounded-3xl p-10 mb-16">
+      <h2 class="text-4xl font-bold text-primary-100 mb-12 text-center">
+        Meet Our Team
+      </h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        
+        <!-- Team Member 1 -->
+        <div class="bg-primary-800/40 rounded-2xl p-8 text-center border border-primary-600 team-card">
+          <div class="w-24 h-24 rounded-full mx-auto mb-6 overflow-hidden border-4 border-primary-500">
             <img src="WhatsApp Image 2025-09-04 at 19.26.13_66d4db2b.jpg" alt="Priyanshi Khandelwal"
-              class="object-cover w-full h-full filter ">
+              class="object-cover w-full h-full">
           </div>
-          <h3 class="text-2xl font-semibold text-[#FBE4D8]">Priyanshi Khandelwal</h3>
-          <p class="text-sm text-[#DFB6B2] mt-1 opacity-80">Lead Frontend developer & designer </p>
-          <p class="text-sm text-[#DFB6B2] mt-3 leading-relaxed">The "Ye batao ye sahi hai" girl .</p>
+          <h3 class="text-xl font-semibold text-primary-100 mb-2">Priyanshi Khandelwal</h3>
+          <p class="text-primary-400 font-medium mb-4">Lead Frontend Developer & Designer</p>
+          <p class="text-primary-300 text-sm">
+            The "Ye batao ye sahi hai" girl who ensures every pixel is perfect.
+          </p>
         </div>
 
-        <div
-          class="bg-[#854F6C]/40 rounded-2xl p-6 text-center shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out border border-[#DFB6B2]/30">
-          <div class="w-32 h-32 mx-auto rounded-full overflow-hidden shadow-lg border-4 border-[#DFB6B2] mb-4">
-            <img src="IMG-20250324-WA0035.jpg" alt="Bhumika Chauhan" class="object-cover w-full h-full filter ">
+        <!-- Team Member 2 -->  
+        <div class="bg-primary-800/40 rounded-2xl p-8 text-center border border-primary-600 team-card">
+          <div class="w-24 h-24 rounded-full mx-auto mb-6 overflow-hidden border-4 border-primary-500">
+            <img src="IMG-20250324-WA0035.jpg" alt="Bhumika Chauhan" class="object-cover w-full h-full">
           </div>
-          <h3 class="text-2xl font-semibold text-[#FBE4D8]">Bhumika Chauhan</h3>
-          <p class="text-sm text-[#DFB6B2] mt-1 opacity-80">Lead AI Engineer and Backend Developer </p>
-          <p class="text-sm text-[#DFB6B2] mt-3 leading-relaxed">The "Sab perfect hona chahiye" girl .</p>
+          <h3 class="text-xl font-semibold text-primary-100 mb-2">Bhumika Chauhan</h3>
+          <p class="text-primary-400 font-medium mb-4">Lead AI Engineer & Backend Developer</p>
+          <p class="text-primary-300 text-sm">
+            The "Sab perfect hona chahiye" girl who makes the magic happen behind the scenes.
+          </p>
         </div>
 
-        <div
-          class="bg-[#854F6C]/40 rounded-2xl p-6 text-center shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out border border-[#DFB6B2]/30">
-          <div class="w-32 h-32 mx-auto rounded-full overflow-hidden shadow-lg border-4 border-[#DFB6B2] mb-4">
+        <!-- Team Member 3 -->
+        <div class="bg-primary-800/40 rounded-2xl p-8 text-center border border-primary-600 team-card">
+          <div class="w-24 h-24 rounded-full mx-auto mb-6 overflow-hidden border-4 border-primary-500">
             <img src="WhatsApp Image 2025-09-08 at 22.53.32_e6b4b08d.jpg" alt="Himanshi Baghel"
-              class="object-cover w-full h-full filter ">
+              class="object-cover w-full h-full">
           </div>
-          <h3 class="text-2xl font-semibold text-[#FBE4D8]">Himanshi Baghel</h3>
-          <p class="text-sm text-[#DFB6B2] mt-1 opacity-80">Content Writer and UI designer</p>
-          <p class="text-sm text-[#DFB6B2] mt-3 leading-relaxed">The "Mujhe batao me kya karu" girl.</p>
+          <h3 class="text-xl font-semibold text-primary-100 mb-2">Himanshi Baghel</h3>
+          <p class="text-primary-400 font-medium mb-4">Content Writer & UI Designer</p>
+          <p class="text-primary-300 text-sm">
+            The "Mujhe batao me kya karu" girl who crafts compelling content and designs.
+          </p>
         </div>
+
       </div>
-    </section>
+    </div>
 
-    <section
-      class="bg-[#522B5B]/70 backdrop-blur-lg rounded-3xl p-10 shadow-2xl border border-[#854F6C] transform hover:scale-[1.01] transition-all duration-300 ease-in-out">
-      <h2 class="text-4xl font-bold text-[#FBE4D8] mb-6 border-b-2 border-[#DFB6B2] pb-3 inline-block">Our Goal: Your
-        Triumph is Our Mission</h2>
-      <p class="text-lg text-[#DFB6B2] leading-relaxed">
-
-        TellmeMore isn't just a preparation tool.
-        <br><br>
-        Our goal is to empower users to communicate confidently and effectively in academic, professional, and
-        personal contexts.
-
+    <!-- CTA Section -->
+    <div class="section-card rounded-3xl p-10 text-center">
+      <h2 class="text-4xl font-bold text-primary-100 mb-8">
+        Ready to Transform Your Interview Skills?
+      </h2>
+      <p class="text-xl text-primary-300 mb-10 max-w-3xl mx-auto leading-relaxed">
+        TellmeMore isn't just a preparation tool - it's your pathway to confident communication. 
+        Join thousands of professionals who have already elevated their interview performance.
       </p>
-      <div class="mt-8 text-center">
-        <a href="#"
-          class="inline-block bg-[#DFB6B2] text-[#190019] px-8 py-4 rounded-full text-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out">
-          Start Your Practice Today! <span class="ml-2">🚀</span>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a href="{% url 'register' %}" 
+           class="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-400 hover:to-primary-500 text-primary-100 font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 btn-glow">
+          Start Your Journey Today 🚀
+        </a>
+        <a href="{% url 'how_to' %}" 
+           class="text-primary-300 hover:text-primary-100 font-medium px-6 py-4 rounded-xl border border-primary-600 hover:border-primary-500 transition-all duration-300">
+          Learn More About Features
         </a>
       </div>
-    </section>
+    </div>
+
   </div>
-</main>
+</section>
 {% endblock %}

@@ -1,120 +1,184 @@
 {% extends "dashboard/base.html" %}
 
-{% block title %}Interview Requirements{% endblock %}
+{% block title %}Interview Setup{% endblock %}
+
+{% block page_title %}Interview Setup{% endblock %}
+
+{% block extra_head %}
+<style>
+    .form-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-input {
+        background: white;
+        border: 1px solid rgba(203, 213, 225, 0.8);
+        transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+        border-color: #3B82F6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="w-full min-h-screen bg-gradient-to-br from-[#190019] via-[#2B124C] to-[#522B5B] flex items-center justify-center p-8">
-    <div class="w-full max-w-[1400px] rounded-3xl shadow-2xl p-12 text-[#FBE4D8]">
-        <h2 class="text-4xl font-bold text-center mb-2">Set Up Your Interview</h2>
-        <p class="text-center mb-8 text-[#DFB6B2]">Complete the form below to create your personalized interview</p>
 
-        <form method="POST" enctype="multipart/form-data" class="space-y-6">
+<!-- Header Section -->
+<div class="mb-8">
+    <div class="text-center">
+        <h2 class="text-4xl font-bold text-primary-800 mb-4">Setup Your Interview</h2>
+        <p class="text-xl text-primary-600 max-w-3xl mx-auto">
+            Complete the form below to create your personalized AI interview practice session.
+        </p>
+    </div>
+</div>
+
+<div class="max-w-4xl mx-auto">
+    <div class="form-card rounded-3xl p-8">
+
+        <form method="POST" enctype="multipart/form-data" class="space-y-8">
             {% csrf_token %}
 
-            <!-- Resume -->
+            <!-- Personal Information Section -->
             <div>
-                <label class="block mb-2 font-semibold"> Resume/Portfolio (optional)</label>
-                <input type="file" name="resume_file" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
+                <h3 class="text-2xl font-bold text-primary-800 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    Personal Information
+                </h3>
+                
+                <!-- Resume Upload -->
+                <div class="mb-6">
+                    <label class="block mb-2 font-semibold text-primary-700">Resume/Portfolio (optional)</label>
+                    <input type="file" name="resume_file" 
+                        class="form-input w-full p-3 rounded-xl text-primary-800" 
+                        accept=".pdf,.doc,.docx"/>
+                    <p class="text-sm text-primary-500 mt-1">Upload your resume in PDF or Word format</p>
+                </div>
+
+                <!-- Basic Info Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Full Name *</label>
+                        <input type="text" name="full_name" placeholder="Your Name" required
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Email *</label>
+                        <input type="email" name="email" placeholder="you@example.com" required
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Phone</label>
+                        <input type="text" name="phone" placeholder="+91 98765 43210" 
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Education *</label>
+                        <input type="text" name="education" placeholder="B.Tech Computer Science" required
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Branch/Specialization</label>
+                        <input type="text" name="branch" placeholder="Computer Science" 
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Skills *</label>
+                        <input type="text" name="skills" placeholder="Python, Django, SQL" required
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                        <p class="text-sm text-primary-500 mt-1">Comma separated skills</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6 mt-6">
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Experience</label>
+                        <input type="text" name="experience" placeholder="Write 'Fresher' if no experience" 
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">About You</label>
+                        <textarea name="about_you" rows="4" placeholder="Briefly describe yourself, interests, and career goals" 
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400 resize-none"></textarea>
+                    </div>
+                </div>
             </div>
 
-            <!-- Basic Info -->
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block mb-2 font-semibold">Full Name *</label>
-                    <input type="text" name="full_name" placeholder="Your Name" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
-                </div>
-                <div>
-                    <label class="block mb-2 font-semibold">Email *</label>
-                    <input type="email" name="email" placeholder="you@example.com" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
-                </div>
-                <div>
-                    <label class="block mb-2 font-semibold">Phone</label>
-                    <input type="text" name="phone" placeholder="+91 98765 43210" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
-                </div>
-                <div>
-                    <label class="block mb-2 font-semibold">Education *</label>
-                    <input type="text" name="education" placeholder="B.Tech Computer Science" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block mb-2 font-semibold">Branch</label>
-                    <input type="text" name="branch" placeholder="Computer Science" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
-                </div>
-                <div>
-                    <label class="block mb-2 font-semibold">Skills *</label>
-                    <input type="text" name="skills" placeholder="Python, Django, SQL" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
-                    <p class="text-sm text-[#DFB6B2] mt-1">Comma separated skills</p>
-                </div>
-            </div>
-
+            <!-- Interview Configuration Section -->
             <div>
-                <label class="block mb-2 font-semibold">Experience</label>
-                <input type="text" name="experience" placeholder="Write 'Fresher' if no experience" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
+                <h3 class="text-2xl font-bold text-primary-800 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                    </svg>
+                    Interview Configuration
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Target Role</label>
+                        <input type="text" name="role" placeholder="Software Developer" 
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Industry/Domain</label>
+                        <input type="text" name="domain" placeholder="IT, Finance, Healthcare" 
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Difficulty Level</label>
+                        <select name="difficulty" class="form-input w-full p-3 rounded-xl text-primary-800">
+                            <option value="easy">Easy - Basic questions</option>
+                            <option value="medium" selected>Medium - Intermediate level</option>
+                            <option value="hard">Hard - Advanced level</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Interview Type</label>
+                        <select name="mode" class="form-input w-full p-3 rounded-xl text-primary-800">
+                            <option value="hr">HR Interview</option>
+                            <option value="technical">Technical Interview</option>
+                            <option value="gd">Group Discussion</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Time per Question (seconds)</label>
+                        <input type="number" name="time_per_question" value="60" min="30" max="300"
+                            class="form-input w-full p-3 rounded-xl text-primary-800" />
+                        <p class="text-sm text-primary-500 mt-1">Recommended: 60-120 seconds</p>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Number of Questions</label>
+                        <select name="num_questions" class="form-input w-full p-3 rounded-xl text-primary-800">
+                            <option value="5">5 Questions (Quick)</option>
+                            <option value="10" selected>10 Questions (Standard)</option>
+                            <option value="20">20 Questions (Comprehensive)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <label class="block mb-2 font-semibold text-primary-700">Custom Keywords (Optional)</label>
+                    <input type="text" name="custom_keywords" placeholder="DSA, DBMS, Communication, Leadership" 
+                        class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                    <p class="text-sm text-primary-500 mt-1">Add specific topics you want to focus on</p>
+                </div>
             </div>
 
-            <div>
-                <label class="block mb-2 font-semibold">About You</label>
-                <textarea name="about_you" placeholder="Briefly describe yourself, interests, goals" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]"></textarea>
-            </div>
-
-            <!-- Interview Info -->
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block mb-2 font-semibold">Role</label>
-                    <input type="text" name="role" placeholder="Software Developer" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
-                </div>
-                <div>
-                    <label class="block mb-2 font-semibold">Domain</label>
-                    <input type="text" name="domain" placeholder="IT, Finance" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block mb-2 font-semibold">Difficulty</label>
-                    <select name="difficulty" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
-                        <option value="easy">Easy</option>
-                        <option value="medium" selected>Medium</option>
-                        <option value="hard">Hard</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block mb-2 font-semibold">Mode</label>
-                    <select name="mode" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
-                        <option value="hr">HR</option>
-                        <option value="technical">Technical</option>
-                        <option value="gd">Group Discussion</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block mb-2 font-semibold">Time per Question (seconds)</label>
-                    <input type="number" name="time_per_question" value="60" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
-                </div>
-                <div>
-                    <label class="block mb-2 font-semibold">Number of Questions</label>
-                    <select name="num_questions" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                    </select>
-                </div>
-            </div>
-
-            <div>
-                <label class="block mb-2 font-semibold">Custom Keywords</label>
-                <input type="text" name="custom_keywords" placeholder="DSA, DBMS, Communication" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
-            </div>
-
-            <!-- Submit -->
-            <div class="text-center mt-6">
-                <button type="submit" class="bg-[#854F6C] px-8 py-3 rounded-xl hover:bg-[#FBE4D8] hover:text-[#190019] font-semibold text-lg transition">
-                    Submit Interview Details
+            <!-- Submit Button -->
+            <div class="text-center pt-6 border-t border-primary-200">
+                <button type="submit" 
+                    class="bg-accent-500 hover:bg-accent-600 text-white px-12 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                    Start AI Interview Session
                 </button>
+                <p class="text-sm text-primary-500 mt-3">This will create your personalized interview session</p>
             </div>
         </form>
     </div>

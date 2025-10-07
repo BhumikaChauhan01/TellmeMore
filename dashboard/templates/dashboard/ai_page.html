@@ -1,54 +1,32 @@
 {% extends "dashboard/base.html" %}
 
-{% block title %}Quantum AI Interface{% endblock %}
+{% block title %}AI Interview Session{% endblock %}
+
+{% block page_title %}AI Interview Session{% endblock %}
 
 {% block extra_head %}
-<script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
-    /* * Custom Tailwind Configuration for Premium Aesthetic 
-     * Note: In a real project, use a custom tailwind.config.js file.
-     */
-    :root {
-        --color-bg-dark: #070213;         /* Ultra Dark Space Black */
-        --color-primary-dark: #120a2e;    /* Dark Card Background / Midnight Blue */
-        --color-accent-purple: #a78bfa;   /* Bright Violet (purple-400) */
-        --color-accent-pink: #f472b6;     /* Hot Pink (pink-400) for secondary focus */
-        --color-text-light: #eef2ff;      /* Light text (indigo-50) */
-        --color-border: #3730a3;          /* Subtler border/divider (indigo-700) */
-        --color-shadow-purple: rgba(167, 139, 250, 0.4); /* Neon Shadow Purple */
-        --color-shadow-pink: rgba(244, 114, 182, 0.4);   /* Neon Shadow Pink */
-    }
-
-    /* Override Default Colors and set global dark background */
-    html {
-        background-color: var(--color-bg-dark);
+    /* Clean Professional AI Interface Styling */
+    .ai-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
     }
     
-    /* Subtle background gradient for "AI control room" vibe */
-    .bg-futuristic {
-        background-color: var(--color-bg-dark);
-        background-image: 
-            radial-gradient(circle at 10% 20%, var(--color-primary-dark) 0%, transparent 40%),
-            radial-gradient(circle at 90% 80%, var(--color-primary-dark) 0%, transparent 40%);
-        min-height: 100vh;
+    .ai-card:hover {
+        border-color: rgba(59, 130, 246, 0.3);
+        box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
 
-    /* Premium, Subtle Neon Glow for Cards and Hovered Buttons */
-    .premium-card-shadow {
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 0 20px 0px rgba(167, 139, 250, 0.1);
-    }
-    .glow-hover:hover {
-        box-shadow: 0 0 15px var(--color-shadow-purple);
-        transform: translateY(-2px);
-    }
-
-    /* Typing Animation for AI Response (smooth blinking cursor) */
+    /* Typing Animation for AI Response */
     .typing-cursor::after {
         content: "|";
         display: inline-block;
-        color: var(--color-accent-pink);
+        color: #3B82F6;
         margin-left: 2px;
         animation: blink-caret 0.7s step-end infinite;
     }
@@ -58,26 +36,20 @@
         50% { opacity: 1; }
     }
     
-    /* Pulse Animation for Active State (Microphone/AI Speaking) */
-    .pulse-glow-purple {
-        animation: pulse-glow-anim-purple 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-    .pulse-glow-pink {
-        animation: pulse-glow-anim-pink 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    /* Pulse Animation for Active States */
+    .pulse-blue {
+        animation: pulse-blue-anim 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
 
-    @keyframes pulse-glow-anim-purple {
-        0%, 100% { box-shadow: 0 0 0 0 var(--color-shadow-purple), 0 0 0 0 var(--color-shadow-purple); }
-        50% { box-shadow: 0 0 8px 4px rgba(167, 139, 250, 0.7), 0 0 0 8px rgba(167, 139, 250, 0.1); }
-    }
-    @keyframes pulse-glow-anim-pink {
-        0%, 100% { box-shadow: 0 0 0 0 var(--color-shadow-pink), 0 0 0 0 var(--color-shadow-pink); }
-        50% { box-shadow: 0 0 8px 4px rgba(244, 114, 182, 0.7), 0 0 0 8px rgba(244, 114, 182, 0.1); }
+    @keyframes pulse-blue-anim {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+        50% { box-shadow: 0 0 8px 4px rgba(59, 130, 246, 0.6), 0 0 0 8px rgba(59, 130, 246, 0.1); }
     }
     
-    /* Timer Critical Glow */
+    /* Timer Critical State */
     .timer-critical {
         box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+        background-color: rgba(239, 68, 68, 0.1);
     }
 
     /* Custom Scrollbar for Chat Display */
@@ -85,155 +57,189 @@
         width: 8px;
     }
     #chat-display::-webkit-scrollbar-thumb {
-        background-color: var(--color-accent-purple);
+        background-color: #3B82F6;
         border-radius: 4px;
     }
     #chat-display::-webkit-scrollbar-track {
-        background-color: var(--color-primary-dark);
+        background-color: #F1F5F9;
     }
     
-    /* Utility class for transition */
-    .transition-all-300 {
-        transition: all 0.3s ease-in-out;
+    /* Message bubbles */
+    .message-ai {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.05));
+        border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .message-user {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(22, 163, 74, 0.05));
+        border: 1px solid rgba(34, 197, 94, 0.2);
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="bg-futuristic min-h-screen py-10 px-4 sm:px-8 text-[--color-text-light] font-sans">
+
+<!-- Header Section -->
+<div class="mb-8">
+    <div class="text-center">
+        <h2 class="text-4xl font-bold text-primary-800 mb-4">AI Interview Session</h2>
+        <p class="text-xl text-primary-600 max-w-3xl mx-auto">
+            Practice with our AI interviewer. Get real-time feedback and improve your interview performance.
+        </p>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
     
-    <h1 class="text-4xl sm:text-5xl font-extrabold text-center mb-12 tracking-tighter text-[--color-text-light] drop-shadow-lg">
-        <span class="text-[--color-accent-purple]">Quantum</span> <span class="text-[--color-accent-pink]">AI</span> Interface
-    </h1>
-    
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        
-        <div id="ai-panel" class="lg:col-span-1 flex flex-col space-y-6 p-6 rounded-3xl bg-[--color-primary-dark] border border-[--color-border] premium-card-shadow transition-all-300 h-full">
-            <h2 class="text-2xl font-bold border-b pb-4 border-[--color-border] mb-2 text-[--color-accent-pink] flex items-center">
-                <i data-lucide="cog" class="w-6 h-6 mr-3"></i> Session Context
-            </h2>
+    <!-- Control Panel -->
+    <div id="ai-panel" class="lg:col-span-1 flex flex-col space-y-6">
+        <div class="ai-card rounded-3xl p-6 h-full flex flex-col">
+            <h3 class="text-2xl font-bold text-primary-800 border-b border-primary-200 pb-4 mb-6 flex items-center">
+                <i data-lucide="settings" class="w-6 h-6 mr-3 text-accent-500"></i> 
+                Session Control
+            </h3>
             
-            <div class="space-y-4">
+            <div class="space-y-4 flex-1">
                 
-                <div class="p-4 bg-[--color-bg-dark] rounded-xl shadow-inner border border-indigo-700/50">
-                    <p class="text-sm font-semibold text-[--color-accent-purple] flex items-center">
+                <!-- System Status -->
+                <div class="p-4 bg-primary-50 rounded-xl border border-primary-200">
+                    <p class="text-sm font-semibold text-accent-600 flex items-center mb-2">
                         <i data-lucide="monitor" class="w-4 h-4 mr-2"></i> System Status
                     </p>
-                    <p id="ai-status" class="text-sm italic mt-2 text-gray-400">
-                        Click 'Start Session' at the bottom to begin your interactive interview.
+                    <p id="ai-status" class="text-sm text-primary-600">
+                        Click 'Start Session' below to begin your AI interview practice.
                     </p>
                 </div>
 
-                <div class="p-4 bg-[--color-bg-dark] rounded-xl shadow-inner border border-indigo-700/50">
-                    <p class="text-sm font-semibold text-[--color-accent-purple]">
-                        <i data-lucide="clock" class="w-4 h-4 mr-2"></i> Answer Time Remaining:
+                <!-- Timer -->
+                <div class="p-4 bg-primary-50 rounded-xl border border-primary-200">
+                    <p class="text-sm font-semibold text-accent-600 flex items-center mb-2">
+                        <i data-lucide="clock" class="w-4 h-4 mr-2"></i> Answer Time Remaining
                     </p>
                     <div id="answer-timer" 
-                        class="text-4xl font-mono font-extrabold px-3 py-2 mt-2 rounded-lg tracking-widest text-center bg-gray-900/50 border border-gray-700 w-full transition-colors duration-500">
+                        class="text-3xl font-mono font-bold px-3 py-2 mt-2 rounded-lg text-center bg-white border border-primary-300 w-full transition-colors duration-500 text-primary-800">
                         00:00
                     </div>
                 </div>
 
             </div>
             
-            <div class="pt-6 border-t border-[--color-border] flex flex-col space-y-4 mt-auto">
+            <!-- Control Buttons -->
+            <div class="pt-6 border-t border-primary-200 flex flex-col space-y-4 mt-auto">
                 <button id="start-session-btn"
-                    class="w-full px-4 py-3 bg-green-600/70 text-[--color-text-light] font-bold rounded-xl shadow-lg hover:bg-green-500 glow-hover transition-all-300 text-lg">
-                    <i data-lucide="rocket" class="w-5 h-5 mr-2 inline-block"></i> Start Session
+                    class="w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition-all duration-300 text-lg">
+                    <i data-lucide="play" class="w-5 h-5 mr-2 inline-block"></i> Start Session
                 </button>
                 <div class="flex space-x-4">
                     <button id="pause-btn" disabled
-                        class="flex-1 px-4 py-3 bg-indigo-700/70 text-[--color-text-light] font-semibold rounded-xl shadow-lg hover:bg-indigo-600 glow-hover transition-all-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="flex-1 px-4 py-3 bg-accent-500 hover:bg-accent-600 text-white font-semibold rounded-xl shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
                         <i data-lucide="pause" class="w-5 h-5 mr-1 inline-block"></i> <span id="pause-text">Pause</span>
                     </button>
                     <button id="start-over-btn"
-                        class="flex-1 px-4 py-3 bg-yellow-600/70 text-gray-900 font-semibold rounded-xl shadow-lg hover:bg-yellow-500 glow-hover transition-all-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="flex-1 px-4 py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl shadow-lg transition-all duration-300">
                         <i data-lucide="rotate-ccw" class="w-5 h-5 mr-1 inline-block"></i> Reset
                     </button>
                 </div>
                 <button id="end-session-btn" disabled
-                    class="w-full text-center px-4 py-3 bg-red-700/70 text-[--color-text-light] font-bold rounded-xl shadow-lg hover:bg-red-600 glow-hover transition-all-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                    class="w-full px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-lg transition-all duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed">
                     <i data-lucide="square" class="w-5 h-5 mr-2 inline-block"></i> End Session
                 </button>
             </div>
-            
         </div>
-        
-        <div class="lg:col-span-2 flex flex-col h-[80vh] min-h-[600px] p-6 rounded-3xl bg-[--color-primary-dark] border border-[--color-border] shadow-2xl shadow-[--color-shadow-purple] transition-all-300">
+    </div>
+    
+    <!-- Chat Interface -->
+    <div class="lg:col-span-2 flex flex-col">
+        <div class="ai-card rounded-3xl p-6 h-[80vh] min-h-[600px] flex flex-col">
             
-            <h2 class="text-2xl font-bold border-b pb-4 border-[--color-border] mb-4 text-[--color-accent-purple] flex items-center">
-                <i data-lucide="message-circle-code" class="w-6 h-6 mr-3"></i> Core Interaction
-            </h2>
+            <h3 class="text-2xl font-bold text-primary-800 border-b border-primary-200 pb-4 mb-6 flex items-center">
+                <i data-lucide="message-circle" class="w-6 h-6 mr-3 text-accent-500"></i> 
+                Interview Chat
+            </h3>
             
-            <div id="chat-display" class="flex-grow overflow-y-auto space-y-6 p-2 mb-6 scroll-smooth">
+            <!-- Chat Display -->
+            <div id="chat-display" class="flex-grow overflow-y-auto space-y-4 p-2 mb-6 scroll-smooth">
                 
+                <!-- Welcome Message -->
                 <div class="flex justify-start">
-                    <div class="max-w-xs sm:max-w-lg bg-[--color-bg-dark] p-4 rounded-2xl rounded-tl-sm shadow-xl border border-[--color-accent-purple]/50 transition-all-300 animate-fade-in">
-                        <p class="font-bold text-[--color-accent-purple] mb-1 flex items-center">
-                            <i data-lucide="bot" class="w-4 h-4 mr-2"></i> AI Assistant
+                    <div class="max-w-xs sm:max-w-lg message-ai p-4 rounded-2xl rounded-tl-sm shadow-sm">
+                        <p class="font-semibold text-accent-600 mb-2 flex items-center text-sm">
+                            <i data-lucide="bot" class="w-4 h-4 mr-2"></i> AI Interviewer
                         </p>
-                        <p class="text-sm">Welcome to the Quantum Chat Interface. I'm ready to begin the interview. Please click **'Start Session'** on the left to activate the interface.</p>
+                        <p class="text-primary-700 text-sm leading-relaxed">
+                            Welcome to your AI interview practice session. I'm here to help you improve your interview skills. 
+                            Click 'Start Session' on the left to begin our conversation.
+                        </p>
                     </div>
                 </div>
                 
+                <!-- AI Message Template -->
                 <div id="ai-message-template" class="flex justify-start hidden">
-                    <div class="max-w-xs sm:max-w-lg bg-[--color-bg-dark] p-4 rounded-2xl rounded-tl-sm shadow-xl border border-[--color-accent-purple]/50 transition-all-300 opacity-0 transform translate-y-4">
-                        <p class="font-bold text-[--color-accent-purple] mb-1 flex items-center">
-                            <i data-lucide="brain" class="w-4 h-4 mr-2"></i> AI Question / Feedback
+                    <div class="max-w-xs sm:max-w-lg message-ai p-4 rounded-2xl rounded-tl-sm shadow-sm opacity-0 transform translate-y-4 transition-all duration-300">
+                        <p class="font-semibold text-accent-600 mb-2 flex items-center text-sm">
+                            <i data-lucide="brain" class="w-4 h-4 mr-2"></i> AI Interviewer
                         </p>
-                        <p class="text-sm" data-message-content></p>
+                        <p class="text-primary-700 text-sm leading-relaxed" data-message-content></p>
                     </div>
                 </div>
                 
+                <!-- User Message Template -->
                 <div id="user-message-template" class="flex justify-end hidden">
-                    <div class="max-w-xs sm:max-w-lg bg-[--color-accent-pink]/20 p-4 rounded-2xl rounded-br-sm shadow-xl border border-[--color-accent-pink]/50 transition-all-300 opacity-0 transform translate-y-4">
-                        <p class="font-bold text-[--color-accent-pink] mb-1 flex items-center">
-                            <i data-lucide="user" class="w-4 h-4 mr-2"></i> Your Response
+                    <div class="max-w-xs sm:max-w-lg message-user p-4 rounded-2xl rounded-br-sm shadow-sm opacity-0 transform translate-y-4 transition-all duration-300">
+                        <p class="font-semibold text-green-600 mb-2 flex items-center text-sm">
+                            <i data-lucide="user" class="w-4 h-4 mr-2"></i> You
                         </p>
-                        <p class="text-sm" data-message-content></p>
+                        <p class="text-primary-700 text-sm leading-relaxed" data-message-content></p>
                     </div>
                 </div>
 
             </div>
             
-            <div class="flex items-center space-x-4 pt-4 border-t border-[--color-border]">
+            <!-- Input Area -->
+            <div class="flex items-center space-x-4 pt-4 border-t border-primary-200">
                 
+                <!-- AI Button -->
                 <button id="ai-interaction-btn" disabled 
-                    class="relative p-3 rounded-full bg-[--color-accent-purple] text-[--color-text-light] transition-all-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="relative p-3 rounded-full bg-accent-500 hover:bg-accent-600 text-white transition-all duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                     aria-label="Ask AI for next step">
-                    <i id="ai-mic-icon" data-lucide="message-square-text" class="w-6 h-6 transition-all-300"></i>
-                    <span id="ai-prompt-text" class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-[--color-accent-purple] opacity-0 transition-opacity duration-300 whitespace-nowrap">AI Waiting</span>
+                    <i id="ai-mic-icon" data-lucide="message-square-text" class="w-6 h-6"></i>
+                    <span id="ai-prompt-text" class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs font-medium text-accent-600 opacity-0 transition-opacity duration-300 whitespace-nowrap">AI Ready</span>
                 </button>
                 
+                <!-- Text Input -->
                 <div class="relative flex-grow">
-                    <input type="text" id="chat-input" placeholder="Type your response and hit Enter or use the Voice Mic..." 
-                        class="w-full p-3 pl-5 pr-14 bg-[--color-bg-dark] rounded-full border border-[--color-border] text-[--color-text-light] placeholder-gray-500 focus:border-[--color-accent-pink] focus:ring-1 focus:ring-[--color-accent-pink] transition-colors duration-200 disabled:opacity-70"
+                    <input type="text" id="chat-input" placeholder="Type your response here..." 
+                        class="w-full p-3 pl-5 pr-14 bg-white rounded-full border border-primary-300 text-primary-800 placeholder-primary-500 focus:border-accent-500 focus:ring-2 focus:ring-accent-200 transition-colors duration-200 disabled:opacity-70 disabled:bg-primary-50"
                         disabled>
-                    {% csrf_token %} <button id="send-btn" disabled class="absolute right-1 top-1/2 transform -translate-y-1/2 p-2 bg-[--color-accent-pink] rounded-full hover:bg-pink-300 transition-all-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <i data-lucide="send" class="w-5 h-5 text-[--color-bg-dark]"></i>
+                    {% csrf_token %} 
+                    <button id="send-btn" disabled 
+                        class="absolute right-1 top-1/2 transform -translate-y-1/2 p-2 bg-accent-500 hover:bg-accent-600 rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i data-lucide="send" class="w-5 h-5 text-white"></i>
                     </button>
                 </div>
                 
+                <!-- Voice Button -->
                 <button id="user-interaction-btn" disabled 
-                    class="relative p-3 rounded-full bg-[--color-accent-pink] text-[--color-text-light] transition-all-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="relative p-3 rounded-full bg-green-500 hover:bg-green-600 text-white transition-all duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                     aria-label="Start/Stop recording">
-                    <i id="user-mic-icon" data-lucide="mic" class="w-6 h-6 transition-all-300"></i>
-                    <span id="user-prompt-text" class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-[--color-accent-pink] opacity-0 transition-opacity duration-300 whitespace-nowrap">Start Answer</span>
+                    <i id="user-mic-icon" data-lucide="mic" class="w-6 h-6"></i>
+                    <span id="user-prompt-text" class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs font-medium text-green-600 opacity-0 transition-opacity duration-300 whitespace-nowrap">Voice</span>
                 </button>
                 
             </div>
-            
         </div>
+    </div>
         
     </div>
 </div>
 
-<div id="custom-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 transition-opacity duration-300 opacity-0 hidden">
-    <div class="bg-[--color-primary-dark] p-8 rounded-2xl shadow-2xl w-full max-w-sm transform transition-all duration-300 scale-90 text-[--color-text-light] border border-[--color-border] text-center">
-        <p id="modal-message" class="text-lg font-semibold mb-6"></p>
+<!-- Modal -->
+<div id="custom-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 transition-opacity duration-300 opacity-0 hidden">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-sm transform transition-all duration-300 scale-90 border border-primary-200 text-center">
+        <p id="modal-message" class="text-lg font-semibold mb-6 text-primary-800"></p>
         <div id="modal-actions" class="flex justify-center space-x-4">
-            <button id="modal-cancel" class="px-5 py-2 bg-gray-700/70 rounded-lg hover:bg-gray-600 transition-all-300 hidden">Cancel</button>
-            <button id="modal-ok" class="px-5 py-2 bg-[--color-accent-purple] rounded-lg hover:bg-[--color-accent-pink] transition-all-300 text-white font-bold"></button>
+            <button id="modal-cancel" class="px-5 py-2 bg-primary-200 hover:bg-primary-300 text-primary-700 rounded-lg transition-all duration-300 hidden">Cancel</button>
+            <button id="modal-ok" class="px-5 py-2 bg-accent-500 hover:bg-accent-600 rounded-lg transition-all duration-300 text-white font-bold">OK</button>
         </div>
     </div>
 </div>
@@ -300,11 +306,14 @@
         // --- Constants & Elements ---
         const ANSWER_TIME_LIMIT = 60; // 60 seconds per question
         const AI_RESPONSE_SIM_DELAY = 40; // Time in ms per character for typing animation
-        const AI_QUESTION_BANK = [
-            "Excellent point. Building on that, how do you approach technical debt in an agile sprint, and what's your preferred way to quantify its impact?",
-            "That's a very thorough answer. Now, walk me through a complex architectural decision you had to make, including the tradeoffs and the final outcome.",
-            "I see. Let's pivot slightly. Describe a situation where you had to influence a cross-functional team without direct authority. What was the result?"
-        ];
+        // Dynamic question generation from Gemini API
+        let AI_QUESTION_BANK = [];
+        let interviewContext = {
+            position: '{{ interview_details.role|default:"Software Developer" }}',
+            skills: '{{ interview_details.skills|default:"Python, JavaScript, Problem Solving" }}',
+            difficulty: '{{ interview_details.difficulty|default:"medium" }}',
+            mode: '{{ interview_details.mode|default:"technical" }}'
+        };
         const USER_RESPONSE_BANK = [
             "My team achieved a 15% efficiency increase in my previous role by implementing a new automated reporting system.",
             "In that project, I chose a microservices architecture, prioritizing scalability over initial development speed. The latency trade-off was minimal, but the deployment flexibility was a huge win.",
@@ -524,11 +533,11 @@
             aiButton.classList.add('pulse-glow-purple');
         };
 
-        const startAITurn = () => {
+        const startAITurn = async () => {
             if (isPaused || isAITalking) return;
             
-            if (currentQuestionIndex >= AI_QUESTION_BANK.length) {
-                showModal("Interview Complete!", false, () => endSessionBtn.click());
+            if (currentQuestionIndex >= 10) { // Limit to 10 questions
+                showModal("Interview Complete! Generating your feedback report...", false, () => endSessionBtn.click());
                 return;
             }
 
@@ -541,27 +550,34 @@
             aiPromptText.textContent = "AI Speaking...";
             aiPromptText.classList.add('opacity-100');
             aiMicIcon.setAttribute('data-lucide', 'headphones');
-            aiStatusText.textContent = `AI is providing feedback and asking Question ${currentQuestionIndex + 1}.`;
+            aiStatusText.textContent = `AI is generating question ${currentQuestionIndex + 1}...`;
             lucide.createIcons();
             
-            const question = AI_QUESTION_BANK[currentQuestionIndex];
-            
-            // Simulate AI generating and speaking a question with typing effect
-            appendMessage(true, question, true, () => {
-                // Animation Complete Callback
+            try {
+                const question = await generateQuestionWithGemini(currentQuestionIndex);
+                
+                // Simulate AI generating and speaking a question with typing effect
+                appendMessage(true, question, true, () => {
+                    // Animation Complete Callback
+                    isAITalking = false;
+                    aiButton.classList.remove('pulse-glow-purple');
+                    aiPromptText.textContent = "AI Waiting";
+                    
+                    // Next step: Enable user to answer
+                    aiStatusText.textContent = "Ready! Respond via text or voice mic below.";
+                    setButtonStatesForUserTurn(true);
+                    userPromptText.classList.add('opacity-100');
+                    
+                    // Start answer timer implicitly with the user's turn
+                    startAnswerTimer();
+                    chatInput.focus();
+                });
+            } catch (error) {
+                console.error('Error in startAITurn:', error);
+                aiStatusText.textContent = "Error generating question. Please try again.";
                 isAITalking = false;
-                aiButton.classList.remove('pulse-glow-purple');
-                aiPromptText.textContent = "AI Waiting";
-                
-                // Next step: Enable user to answer
-                aiStatusText.textContent = "Ready! Respond via text or voice mic below.";
-                setButtonStatesForUserTurn(true);
-                userPromptText.classList.add('opacity-100');
-                
-                // Start answer timer implicitly with the user's turn
-                startAnswerTimer();
-                chatInput.focus();
-            });
+                aiButton.disabled = false;
+            }
         };
 
         const startUserRecording = () => {
@@ -633,6 +649,75 @@
                 smoothScrollToBottom();
             }, 1500); // Delay to show "Processing..."
         };
+
+        // --- Gemini API Integration ---
+        async function generateQuestionWithGemini(questionIndex) {
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            try {
+                const response = await fetch('/dashboard/generate_question/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        question_number: questionIndex + 1,
+                        context: interviewContext,
+                        previous_answers: getPreviousAnswers()
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    return data.question;
+                } else {
+                    throw new Error(data.error || 'Failed to generate question');
+                }
+            } catch (error) {
+                console.error('Error generating question:', error);
+                // Fallback questions
+                const fallbackQuestions = [
+                    `Tell me about your experience with ${interviewContext.skills.split(',')[0]}.`,
+                    "Describe a challenging project you've worked on and how you overcame obstacles.",
+                    "How do you stay updated with the latest technologies in your field?",
+                    "Walk me through your problem-solving approach when facing a complex technical issue."
+                ];
+                return fallbackQuestions[questionIndex % fallbackQuestions.length];
+            }
+        }
+        
+        function getPreviousAnswers() {
+            const messages = chatDisplay.querySelectorAll('.flex.justify-end [data-message-content]');
+            return Array.from(messages).map(msg => msg.textContent).slice(0, -1); // Exclude current
+        }
+        
+        async function evaluateAnswerWithGemini(answer) {
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            try {
+                const response = await fetch('/dashboard/evaluate_answer/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        answer: answer,
+                        question_number: currentQuestionIndex,
+                        context: interviewContext
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    return data.feedback;
+                }
+            } catch (error) {
+                console.error('Error evaluating answer:', error);
+            }
+            return "Thank you for your response. Let's move to the next question.";
+        }
 
         // --- Event Listeners ---
         startSessionBtn.addEventListener('click', startSession);

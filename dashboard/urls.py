@@ -24,6 +24,8 @@ urlpatterns = [
     path("profile_edit/",views.profile_edit_view, name="profile_edit"), 
 
     path('ai_session/', views.ai_page_view, name='ai_page'),
+    path('generate_question/', views.generate_question, name='generate_question'),
+    path('evaluate_answer/', views.evaluate_answer, name='evaluate_answer'),
 ]
 
 if settings.DEBUG:

@@ -1,69 +1,212 @@
 {% extends "dashboard/base.html" %}
 
-{% block title %}Create Your Question Set{% endblock %}
+{% block title %}Create Custom Question Set{% endblock %}
+
+{% block page_title %}Create Custom Question Set{% endblock %}
+
+{% block extra_head %}
+<style>
+    .form-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-input {
+        background: white;
+        border: 1px solid rgba(203, 213, 225, 0.8);
+        transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+        border-color: #3B82F6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+    
+    .question-item {
+        background: rgba(248, 250, 252, 0.8);
+        border: 1px solid rgba(226, 232, 240, 0.6);
+        transition: all 0.3s ease;
+    }
+    
+    .question-item:hover {
+        border-color: rgba(59, 130, 246, 0.3);
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="w-full min-h-screen bg-gradient-to-br from-[#190019] via-[#2B124C] to-[#522B5B] flex items-center justify-center p-8">
-    <div class="w-full max-w-[1200px] rounded-3xl shadow-2xl p-12 text-[#FBE4D8]">
-        <h2 class="text-4xl font-bold text-center mb-4">Create Your Question Set</h2>
-        <form method="POST" class="space-y-6">
+
+<!-- Header Section -->
+<div class="mb-8">
+    <div class="text-center">
+        <h2 class="text-4xl font-bold text-primary-800 mb-4">Create Custom Question Set</h2>
+        <p class="text-xl text-primary-600 max-w-3xl mx-auto">
+            Design your own personalized practice questions for targeted skill development.
+        </p>
+    </div>
+</div>
+
+<div class="max-w-4xl mx-auto">
+    <div class="form-card rounded-3xl p-8">
+
+        <form method="POST" class="space-y-8">
             {% csrf_token %}
 
-            <!-- Topic Info -->
+            <!-- Question Set Information -->
             <div>
-                <label class="block mb-2 font-semibold">Topic Name *</label>
-                <input type="text" name="topic_name" placeholder="Enter topic name" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" required />
-            </div>
-            <div>
-                <label class="block mb-2 font-semibold">Short Description (optional)</label>
-                <textarea name="short_description" placeholder="Optional description" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]"></textarea>
-            </div>
-
-            <!-- Settings -->
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block mb-2 font-semibold">Number of Questions</label>
-                    <select name="num_questions" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
-                        <option value="1">1</option>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block mb-2 font-semibold">Time per Question (seconds)</label>
-                    <input type="number" name="time_per_question" value="60" min="60" max="180" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
+                <h3 class="text-2xl font-bold text-primary-800 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Question Set Details
+                </h3>
+                
+                <div class="grid grid-cols-1 gap-6">
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Question Set Name *</label>
+                        <input type="text" name="topic_name" placeholder="e.g., Python Programming, Leadership Skills, Data Structures" required
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Description (Optional)</label>
+                        <textarea name="short_description" rows="3" placeholder="Describe the purpose and scope of this question set..." 
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400 resize-none"></textarea>
+                    </div>
                 </div>
             </div>
 
-            <!-- Questions -->
-            <div id="questions-container" class="space-y-4">
-                <label class="block mb-2 font-semibold">Write Your Questions</label>
-                <textarea name="question_1" placeholder="Write question 1" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" required></textarea>
+            <!-- Configuration -->
+            <div>
+                <h3 class="text-2xl font-bold text-primary-800 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Practice Configuration
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Initial Number of Questions</label>
+                        <select name="num_questions" id="num_questions_select" class="form-input w-full p-3 rounded-xl text-primary-800">
+                            <option value="1">1 Question (Quick test)</option>
+                            <option value="3">3 Questions (Short set)</option>
+                            <option value="5" selected>5 Questions (Standard)</option>
+                            <option value="10">10 Questions (Comprehensive)</option>
+                            <option value="15">15 Questions (Extended)</option>
+                            <option value="20">20 Questions (Full practice)</option>
+                        </select>
+                        <p class="text-sm text-primary-500 mt-1">You can add more questions below</p>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Time per Question (seconds)</label>
+                        <input type="number" name="time_per_question" value="90" min="30" max="300" 
+                            class="form-input w-full p-3 rounded-xl text-primary-800" />
+                        <p class="text-sm text-primary-500 mt-1">Recommended: 60-120 seconds</p>
+                    </div>
+                </div>
             </div>
-            <button type="button" onclick="addQuestion()" class="bg-[#854F6C] px-4 py-2 rounded-xl hover:bg-[#FBE4D8] hover:text-[#190019] font-semibold transition">+ Add Question</button>
 
-            <!-- Submit -->
-            <div class="text-center mt-6">
-                <button type="submit" class="bg-[#854F6C] px-8 py-3 rounded-xl hover:bg-[#FBE4D8] hover:text-[#190019] font-semibold text-lg transition">
-                    Save Question Set
+            <!-- Questions Section -->
+            <div>
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-primary-800 flex items-center">
+                        <svg class="w-6 h-6 mr-3 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Your Questions
+                    </h3>
+                    <button type="button" onclick="addQuestion()" 
+                        class="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-xl font-medium transition-colors">
+                        <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                        Add Question
+                    </button>
+                </div>
+                
+                <div id="questions-container" class="space-y-4">
+                    <div class="question-item p-4 rounded-xl">
+                        <label class="block mb-2 font-medium text-primary-700">Question 1 *</label>
+                        <textarea name="question_1" placeholder="Enter your first question here..." required
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400 resize-none" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center pt-6 border-t border-primary-200">
+                <button type="submit" 
+                    class="bg-accent-500 hover:bg-accent-600 text-white px-12 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                    Create Question Set
                 </button>
+                <p class="text-sm text-primary-500 mt-3">Your custom questions will be saved for practice sessions</p>
             </div>
         </form>
     </div>
 </div>
 
 <script>
-let questionCount = 2;  // Start from 2 because 1 already exists
+let questionCount = 2;  // Start from 2 because question 1 already exists
+
 function addQuestion() {
-    let container = document.getElementById('questions-container');
-    let textarea = document.createElement('textarea');
-    textarea.name = 'question_' + questionCount;
-    textarea.placeholder = 'Write question ' + questionCount;
-    textarea.className = 'w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]';
-    container.appendChild(textarea);
+    const container = document.getElementById('questions-container');
+    
+    // Create question wrapper
+    const questionDiv = document.createElement('div');
+    questionDiv.className = 'question-item p-4 rounded-xl';
+    
+    // Create label
+    const label = document.createElement('label');
+    label.className = 'block mb-2 font-medium text-primary-700';
+    label.textContent = `Question ${questionCount}`;
+    
+    // Create textarea
+    const textarea = document.createElement('textarea');
+    textarea.name = `question_${questionCount}`;
+    textarea.placeholder = `Enter question ${questionCount} here...`;
+    textarea.className = 'form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400 resize-none';
+    textarea.rows = 3;
+    
+    // Create remove button
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'mt-2 text-red-600 hover:text-red-800 text-sm font-medium transition-colors';
+    removeBtn.innerHTML = '🗑️ Remove Question';
+    removeBtn.onclick = function() {
+        questionDiv.remove();
+        updateQuestionNumbers();
+    };
+    
+    // Append elements
+    questionDiv.appendChild(label);
+    questionDiv.appendChild(textarea);
+    questionDiv.appendChild(removeBtn);
+    container.appendChild(questionDiv);
+    
     questionCount++;
+    
+    // Scroll to the new question
+    questionDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    textarea.focus();
+}
+
+function updateQuestionNumbers() {
+    const questions = document.querySelectorAll('#questions-container .question-item');
+    questions.forEach((question, index) => {
+        const label = question.querySelector('label');
+        const textarea = question.querySelector('textarea');
+        const questionNum = index + 1;
+        
+        label.textContent = `Question ${questionNum}${questionNum === 1 ? ' *' : ''}`;
+        textarea.name = `question_${questionNum}`;
+        textarea.placeholder = `Enter question ${questionNum} here...`;
+    });
+    
+    questionCount = questions.length + 1;
 }
 </script>
+
 {% endblock %}

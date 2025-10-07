@@ -1,0 +1,13 @@
+media/
+
+core/__pycache__/
+core/migrations/__pycache__/
+core/migrations/*.pyc
+
+db.sqlite3
+dashboard/__pycache__/
+dashboard/migrations/__pycache__/
+dashboard/migrations/*.pyc
+
+TellmeMore/__pycache__/
+TellmeMore/.env

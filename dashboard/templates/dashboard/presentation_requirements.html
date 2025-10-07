@@ -1,72 +1,127 @@
 {% extends "dashboard/base.html" %}
 
-{% block title %}Presentation Requirements{% endblock %}
+{% block title %}Presentation Practice Setup{% endblock %}
+
+{% block page_title %}Presentation Practice Setup{% endblock %}
+
+{% block extra_head %}
+<style>
+    .form-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-input {
+        background: white;
+        border: 1px solid rgba(203, 213, 225, 0.8);
+        transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+        border-color: #3B82F6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="w-full min-h-screen bg-gradient-to-br from-[#190019] via-[#2B124C] to-[#522B5B] flex items-center justify-center p-8">
-    <div class="w-full max-w-[1400px] rounded-3xl shadow-2xl p-12 text-[#FBE4D8]">
-        <h2 class="text-4xl font-bold text-center mb-2">Set Up Your Presentation</h2>
-        <p class="text-center mb-8 text-[#DFB6B2]">Complete the form below to create your personalized presentation</p>
 
-        <form method="POST" enctype="multipart/form-data" class="space-y-6">
+<!-- Header Section -->
+<div class="mb-8">
+    <div class="text-center">
+        <h2 class="text-4xl font-bold text-primary-800 mb-4">Presentation Practice Setup</h2>
+        <p class="text-xl text-primary-600 max-w-3xl mx-auto">
+            Setup your presentation practice session to improve your public speaking and delivery skills.
+        </p>
+    </div>
+</div>
+
+<div class="max-w-4xl mx-auto">
+    <div class="form-card rounded-3xl p-8">
+
+        <form method="POST" enctype="multipart/form-data" class="space-y-8">
             {% csrf_token %}
 
-            <!-- PPT Upload -->
+            <!-- Presentation Content -->
             <div>
-                <label class="block mb-2 font-semibold">Upload PPT (optional)</label>
-                <input type="file" name="ppt_file" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
+                <h3 class="text-2xl font-bold text-primary-800 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Presentation Content
+                </h3>
+                
+                <!-- File Upload -->
+                <div class="mb-6">
+                    <label class="block mb-2 font-semibold text-primary-700">Upload Presentation (Optional)</label>
+                    <input type="file" name="ppt_file" 
+                        class="form-input w-full p-3 rounded-xl text-primary-800" 
+                        accept=".ppt,.pptx,.pdf"/>
+                    <p class="text-sm text-primary-500 mt-1">Upload your PowerPoint or PDF presentation for practice</p>
+                </div>
+
+                <!-- Topic Information -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Presentation Topic *</label>
+                        <input type="text" name="topic_name" placeholder="Enter your presentation topic" required
+                            class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400" />
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Target Audience *</label>
+                        <select name="audience_type" class="form-input w-full p-3 rounded-xl text-primary-800">
+                            <option value="employees">Corporate Employees</option>
+                            <option value="students">Students & Academics</option>
+                            <option value="teachers">Teachers & Educators</option>
+                            <option value="general" selected>General Public</option>
+                            <option value="executives">Executives & Leadership</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="mt-6">
+                    <label class="block mb-2 font-semibold text-primary-700">Presentation Overview</label>
+                    <textarea name="description" rows="4" placeholder="Describe your presentation topic, key points, and objectives..." 
+                        class="form-input w-full p-3 rounded-xl text-primary-800 placeholder-primary-400 resize-none"></textarea>
+                </div>
             </div>
 
-            <!-- Topic Info -->
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block mb-2 font-semibold">Topic Name *</label>
-                    <input type="text" name="topic_name" placeholder="Your Topic" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" required />
-                </div>
-                <div>
-                    <label class="block mb-2 font-semibold">Audience Type *</label>
-                    <select name="audience_type" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
-                        <option value="employees">Employees</option>
-                        <option value="students">Students</option>
-                        <option value="teachers">Teachers</option>
-                        <option value="general" selected>General Audience</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Description -->
+            <!-- Practice Settings -->
             <div>
-                <label class="block mb-2 font-semibold">Description</label>
-                <textarea name="description" placeholder="Write about your topic" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]"></textarea>
-            </div>
-
-            <!-- Settings -->
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block mb-2 font-semibold">Time per Question (seconds)</label>
-                    <input type="number" name="time_per_question" value="60" min="10" max="180" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
+                <h3 class="text-2xl font-bold text-primary-800 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Practice Configuration
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Time per Q&A Round (seconds)</label>
+                        <input type="number" name="time_per_question" value="90" min="30" max="300" 
+                            class="form-input w-full p-3 rounded-xl text-primary-800" />
+                        <p class="text-sm text-primary-500 mt-1">Time allocated for each audience question</p>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-primary-700">Number of Q&A Questions</label>
+                        <select name="num_questions" class="form-input w-full p-3 rounded-xl text-primary-800">
+                            <option value="3">3 Questions (Quick)</option>
+                            <option value="5" selected>5 Questions (Standard)</option>
+                            <option value="8">8 Questions (Comprehensive)</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label class="block mb-2 font-semibold">Number of Questions</label>
-                    <select name="num_questions" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]">
-                        <option value="5" selected>5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                    </select>
-                </div>
             </div>
 
-            <!-- Custom Keywords -->
-            <div>
-                <label class="block mb-2 font-semibold">Custom Keywords</label>
-                <input type="text" name="custom_keywords" placeholder="Confidence, Body Language, Communication" class="w-full p-3 rounded-xl bg-[#2B124C] border border-[#854F6C] focus:outline-none focus:ring-2 focus:ring-[#854F6C]" />
-            </div>
-
-            <!-- Submit -->
-            <div class="text-center mt-6">
-                <button type="submit" class="bg-[#854F6C] px-8 py-3 rounded-xl hover:bg-[#FBE4D8] hover:text-[#190019] font-semibold text-lg transition">
-                    Submit Presentation Details
+            <!-- Submit Button -->
+            <div class="text-center pt-6 border-t border-primary-200">
+                <button type="submit" 
+                    class="bg-accent-500 hover:bg-accent-600 text-white px-12 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                    Start Presentation Practice
                 </button>
             </div>
         </form>

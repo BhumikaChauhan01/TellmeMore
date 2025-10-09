@@ -5,136 +5,152 @@
 
 {% block content %}
 
-<!-- Hero Section -->
 <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
-    <!-- Animated Background -->
     <div class="absolute inset-0 bg-gradient-to-br from-primary-950 via-primary-900 to-primary-700">
-        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23854F6C" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
-    </div>
-    
-    <!-- Floating Elements -->
-    <div class="absolute inset-0 pointer-events-none">
-        <div class="absolute top-20 left-10 w-32 h-32 bg-primary-500/20 rounded-full blur-xl animate-pulse"></div>
-        <div class="absolute top-60 right-20 w-24 h-24 bg-primary-300/30 rounded-full blur-lg animate-bounce" style="animation-delay: 2s;"></div>
-        <div class="absolute bottom-40 left-1/4 w-40 h-40 bg-primary-700/25 rounded-full blur-2xl animate-pulse" style="animation-delay: 4s;"></div>
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=" 60" height="60" viewBox="0 0 60 60"
+            xmlns="http://www.w3.org/2000/svg" %3E%3Cg fill="none" fill-rule="evenodd" %3E%3Cg fill="%23854F6C"
+            fill-opacity="0.05" %3E%3Ccircle cx="30" cy="30" r="1.5" /%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40">
+        </div>
     </div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-6 text-center">
-        <!-- Badge -->
-        <div class="inline-flex items-center px-4 py-2 bg-primary-500/20 border border-primary-500/40 rounded-full text-primary-300 text-sm font-medium mb-8 backdrop-blur-sm">
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute top-20 left-10 w-32 h-32 bg-primary-500/20 rounded-full blur-xl animate-pulse"></div>
+        <div class="absolute top-60 right-20 w-24 h-24 bg-primary-300/30 rounded-full blur-lg animate-bounce"
+            style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-40 left-1/4 w-40 h-40 bg-primary-700/25 rounded-full blur-2xl animate-pulse"
+            style="animation-delay: 4s;"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 text-center pt-32 pb-16">
+        <div
+            class="inline-flex items-center px-4 py-2 bg-primary-500/20 border border-primary-500/40 rounded-full text-primary-300 text-sm font-medium mb-8 backdrop-blur-sm">
             <span class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
             AI-Powered Interview Training
         </div>
 
-        <!-- Main Headline -->
         <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-primary-100 leading-tight mb-8">
             <span class="block">Master Your</span>
-            <span class="block bg-gradient-to-r from-primary-300 via-primary-500 to-primary-100 bg-clip-text text-transparent">
+            <span
+                class="block bg-gradient-to-r from-primary-300 via-primary-500 to-primary-100 bg-clip-text text-transparent">
                 Interview Skills
             </span>
         </h1>
 
-        <!-- Subtitle -->
         <p class="text-xl md:text-2xl text-primary-300 max-w-4xl mx-auto mb-12 leading-relaxed">
-            Practice with AI-powered mock interviews, get instant feedback, and land your dream job with confidence. 
+            Practice with AI-powered mock interviews, get instant feedback, and land your dream job with confidence.
             <span class="text-primary-500 font-semibold">Join thousands who've already succeeded.</span>
         </p>
 
-        <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-6 justify-center mb-16">
-            <a href="{% url 'register' %}" class="group relative px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-primary-100 text-lg font-bold rounded-2xl shadow-2xl hover:shadow-primary-500/25 transition-all duration-300 transform hover:scale-105 overflow-hidden btn-glow">
-                <div class="absolute inset-0 bg-gradient-to-r from-primary-400 to-primary-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <a href="{% url 'register' %}"
+                class="group relative px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-primary-100 text-lg font-bold rounded-2xl shadow-2xl hover:shadow-primary-500/25 transition-all duration-300 transform hover:scale-105 overflow-hidden btn-glow">
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-primary-400 to-primary-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                </div>
                 <span class="relative flex items-center justify-center">
                     Start Free Practice
-                    <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="currentColor"
+                        viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                            clip-rule="evenodd" />
                     </svg>
                 </span>
             </a>
-            <a href="{% url 'about' %}" class="px-8 py-4 border-2 border-primary-300 text-primary-300 text-lg font-semibold rounded-2xl hover:bg-primary-300 hover:text-primary-950 transition-all duration-300 transform hover:scale-105">
+            <a href="{% url 'about' %}"
+                class="px-8 py-4 border-2 border-primary-300 text-primary-300 text-lg font-semibold rounded-2xl hover:bg-primary-300 hover:text-primary-950 transition-all duration-300 transform hover:scale-105">
                 Watch Demo
             </a>
         </div>
 
-        <!-- Stats -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div class="bg-primary-900/60 backdrop-blur-md border border-primary-700 rounded-2xl p-6 hover:bg-primary-900/80 transition-all duration-300">
+            <div
+                class="group bg-primary-900/60 backdrop-blur-md border border-primary-700 rounded-2xl p-6 transition-all duration-300 transform hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary-500/30 feature-card">
                 <div class="text-3xl md:text-4xl font-bold text-primary-100 mb-2">50K+</div>
                 <div class="text-primary-300">Successful Interviews</div>
             </div>
-            <div class="bg-primary-900/60 backdrop-blur-md border border-primary-700 rounded-2xl p-6 hover:bg-primary-900/80 transition-all duration-300">
+            <div
+                class="group bg-primary-900/60 backdrop-blur-md border border-primary-700 rounded-2xl p-6 transition-all duration-300 transform hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary-500/30 feature-card">
                 <div class="text-3xl md:text-4xl font-bold text-primary-100 mb-2">95%</div>
                 <div class="text-primary-300">Success Rate</div>
             </div>
-            <div class="bg-primary-900/60 backdrop-blur-md border border-primary-700 rounded-2xl p-6 hover:bg-primary-900/80 transition-all duration-300">
+            <div
+                class="group bg-primary-900/60 backdrop-blur-md border border-primary-700 rounded-2xl p-6 transition-all duration-300 transform hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary-500/30 feature-card">
                 <div class="text-3xl md:text-4xl font-bold text-primary-100 mb-2">24/7</div>
                 <div class="text-primary-300">AI Availability</div>
             </div>
         </div>
     </div>
 
-    <!-- Scroll Indicator -->
     <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
         <svg class="w-6 h-6 text-[#DFB6B2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
         </svg>
     </div>
 </section>
 
-<!-- Features Section -->
 <section class="py-20 bg-gradient-to-b from-[#190019] to-[#2B124C]">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-bold text-[#FBE4D8] mb-6">Why Choose TellmeMore?</h2>
             <p class="text-xl text-[#DFB6B2] max-w-3xl mx-auto">
-                Our AI-powered platform provides personalized interview training that adapts to your skills and career goals.
+                Our AI-powered platform provides personalized interview training that adapts to your skills and career
+                goals.
             </p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8 mb-16">
-            <!-- Feature 1 -->
-            <div class="group bg-gradient-to-br from-[#2B124C] to-[#522B5B] rounded-3xl p-8 hover:from-[#522B5B] hover:to-[#854F6C] transition-all duration-500 transform hover:scale-105 border border-[#522B5B]">
-                <div class="w-16 h-16 bg-[#854F6C] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+            <div
+                class="group bg-gradient-to-br from-[#2B124C] to-[#522B5B] rounded-3xl p-8 hover:from-[#522B5B] hover:to-[#854F6C] transition-all duration-500 transform hover:scale-105 border border-[#522B5B] feature-card">
+                <div
+                    class="w-16 h-16 bg-[#854F6C] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                     <svg class="w-8 h-8 text-[#FBE4D8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                     </svg>
                 </div>
                 <h3 class="text-2xl font-bold text-[#FBE4D8] mb-4">AI-Powered Questions</h3>
                 <p class="text-[#DFB6B2] leading-relaxed">
-                    Our Gemini AI generates personalized interview questions based on your role, skills, and experience level.
+                    Our Gemini AI generates personalized interview questions based on your role, skills, and experience
+                    level.
                 </p>
             </div>
 
-            <!-- Feature 2 -->
-            <div class="group bg-gradient-to-br from-[#2B124C] to-[#522B5B] rounded-3xl p-8 hover:from-[#522B5B] hover:to-[#854F6C] transition-all duration-500 transform hover:scale-105 border border-[#522B5B]">
-                <div class="w-16 h-16 bg-[#854F6C] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+            <div
+                class="group bg-gradient-to-br from-[#2B124C] to-[#522B5B] rounded-3xl p-8 hover:from-[#522B5B] hover:to-[#854F6C] transition-all duration-500 transform hover:scale-105 border border-[#522B5B] feature-card">
+                <div
+                    class="w-16 h-16 bg-[#854F6C] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                     <svg class="w-8 h-8 text-[#FBE4D8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                 </div>
                 <h3 class="text-2xl font-bold text-[#FBE4D8] mb-4">Instant Feedback</h3>
                 <p class="text-[#DFB6B2] leading-relaxed">
-                    Get immediate, detailed feedback on your responses with scores for clarity, relevance, and completeness.
+                    Get immediate, detailed feedback on your responses with scores for clarity, relevance, and
+                    completeness.
                 </p>
             </div>
 
-            <!-- Feature 3 -->
-            <div class="group bg-gradient-to-br from-[#2B124C] to-[#522B5B] rounded-3xl p-8 hover:from-[#522B5B] hover:to-[#854F6C] transition-all duration-500 transform hover:scale-105 border border-[#522B5B]">
-                <div class="w-16 h-16 bg-[#854F6C] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+            <div
+                class="group bg-gradient-to-br from-[#2B124C] to-[#522B5B] rounded-3xl p-8 hover:from-[#522B5B] hover:to-[#854F6C] transition-all duration-500 transform hover:scale-105 border border-[#522B5B] feature-card">
+                <div
+                    class="w-16 h-16 bg-[#854F6C] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                     <svg class="w-8 h-8 text-[#FBE4D8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
                 </div>
                 <h3 class="text-2xl font-bold text-[#FBE4D8] mb-4">Progress Analytics</h3>
                 <p class="text-[#DFB6B2] leading-relaxed">
-                    Track your improvement with detailed analytics, performance trends, and personalized recommendations.
+                    Track your improvement with detailed analytics, performance trends, and personalized
+                    recommendations.
                 </p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- How It Works Section -->
 <section class="py-20 bg-[#2B124C]">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
@@ -143,35 +159,38 @@
         </div>
 
         <div class="grid md:grid-cols-3 gap-12">
-            <!-- Step 1 -->
             <div class="text-center relative">
-                <div class="w-20 h-20 bg-gradient-to-br from-[#854F6C] to-[#DFB6B2] rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-[#FBE4D8]">
+                <div
+                    class="w-20 h-20 bg-gradient-to-br from-[#854F6C] to-[#DFB6B2] rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-[#FBE4D8]">
                     1
                 </div>
                 <h3 class="text-2xl font-bold text-[#FBE4D8] mb-4">Setup Your Profile</h3>
                 <p class="text-[#DFB6B2]">
-                    Tell us about your skills, experience, and target role. Upload your resume for personalized questions.
+                    Tell us about your skills, experience, and target role. Upload your resume for personalized
+                    questions.
                 </p>
-                <!-- Connecting Line -->
-                <div class="hidden md:block absolute top-10 left-full w-12 h-px bg-gradient-to-r from-[#854F6C] to-transparent transform translate-x-4"></div>
+                <div
+                    class="hidden md:block absolute top-10 left-full w-12 h-px bg-gradient-to-r from-[#854F6C] to-transparent transform translate-x-4">
+                </div>
             </div>
 
-            <!-- Step 2 -->
             <div class="text-center relative">
-                <div class="w-20 h-20 bg-gradient-to-br from-[#854F6C] to-[#DFB6B2] rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-[#FBE4D8]">
+                <div
+                    class="w-20 h-20 bg-gradient-to-br from-[#854F6C] to-[#DFB6B2] rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-[#FBE4D8]">
                     2
                 </div>
                 <h3 class="text-2xl font-bold text-[#FBE4D8] mb-4">Choose Interview Type</h3>
                 <p class="text-[#DFB6B2]">
                     Select from technical, HR, or behavioral interviews. Set difficulty level and session duration.
                 </p>
-                <!-- Connecting Line -->
-                <div class="hidden md:block absolute top-10 left-full w-12 h-px bg-gradient-to-r from-[#854F6C] to-transparent transform translate-x-4"></div>
+                <div
+                    class="hidden md:block absolute top-10 left-full w-12 h-px bg-gradient-to-r from-[#854F6C] to-transparent transform translate-x-4">
+                </div>
             </div>
 
-            <!-- Step 3 -->
             <div class="text-center">
-                <div class="w-20 h-20 bg-gradient-to-br from-[#854F6C] to-[#DFB6B2] rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-[#FBE4D8]">
+                <div
+                    class="w-20 h-20 bg-gradient-to-br from-[#854F6C] to-[#DFB6B2] rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-[#FBE4D8]">
                     3
                 </div>
                 <h3 class="text-2xl font-bold text-[#FBE4D8] mb-4">Practice & Improve</h3>
@@ -183,7 +202,8 @@
     </div>
 </section>
 
-<!-- CTA Section -->
+
+
 <section class="py-20 bg-gradient-to-br from-[#854F6C] via-[#522B5B] to-[#2B124C]">
     <div class="max-w-4xl mx-auto text-center px-6">
         <h2 class="text-4xl md:text-5xl font-bold text-[#FBE4D8] mb-6">
@@ -193,10 +213,12 @@
             Join thousands of successful candidates who've used TellmeMore to land their dream jobs.
         </p>
         <div class="flex flex-col sm:flex-row gap-6 justify-center">
-            <a href="{% url 'register' %}" class="px-8 py-4 bg-[#FBE4D8] text-[#190019] text-lg font-bold rounded-2xl shadow-2xl hover:bg-[#DFB6B2] transition-all duration-300 transform hover:scale-105">
+            <a href="{% url 'register' %}"
+                class="px-8 py-4 bg-[#FBE4D8] text-[#190019] text-lg font-bold rounded-2xl shadow-2xl hover:bg-[#DFB6B2] transition-all duration-300 transform hover:scale-105">
                 Start Your Free Trial
             </a>
-            <a href="{% url 'about' %}" class="px-8 py-4 border-2 border-[#FBE4D8] text-[#FBE4D8] text-lg font-semibold rounded-2xl hover:bg-[#FBE4D8] hover:text-[#190019] transition-all duration-300 transform hover:scale-105">
+            <a href="{% url 'about' %}"
+                class="px-8 py-4 border-2 border-[#FBE4D8] text-[#FBE4D8] text-lg font-semibold rounded-2xl hover:bg-[#FBE4D8] hover:text-[#190019] transition-all duration-300 transform hover:scale-105">
                 Learn More
             </a>
         </div>
@@ -207,40 +229,58 @@
 
 {% block extra_head %}
 <style>
+    /* Custom Color Palette (for reference)
+    --primary-950: #190019 (Very Dark Purple/Black)
+    --primary-900: #2B124C (Dark Violet)
+    --primary-700: #522B5B (Medium Dark Violet)
+    --primary-500: #854F6C (Muted Raspberry/Plum)
+    --primary-300: #DFB6B2 (Light Taupe/Rose)
+    --primary-100: #FBE4D8 (Off-White/Cream)
+    */
+
     /* Enhanced animations and effects */
     @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-20px); }
+
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-20px);
+        }
     }
-    
+
     @keyframes gradient-shift {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
+
+        0%,
+        100% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
     }
-    
-    @keyframes glow-pulse {
-        0%, 100% { box-shadow: 0 0 20px rgba(133, 79, 108, 0.3); }
-        50% { box-shadow: 0 0 40px rgba(133, 79, 108, 0.6), 0 0 60px rgba(133, 79, 108, 0.3); }
-    }
-    
+
     /* Smooth scrolling */
     html {
         scroll-behavior: smooth;
     }
-    
+
     /* Custom gradient text animation */
     .gradient-text {
         background: linear-gradient(-45deg, #DFB6B2, #854F6C, #522B5B, #FBE4D8);
         background-size: 400% 400%;
         animation: gradient-shift 3s ease infinite;
     }
-    
-    /* Hover effects for cards */
+
+    /* Hover effects for cards - Applied to both Features and Stats */
     .feature-card {
         position: relative;
         overflow: hidden;
     }
-    
+
     .feature-card::before {
         content: '';
         position: absolute;
@@ -248,20 +288,20 @@
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
         transition: left 0.5s ease;
     }
-    
+
     .feature-card:hover::before {
         left: 100%;
     }
-    
+
     /* Enhanced button effects */
     .btn-glow {
         position: relative;
         overflow: hidden;
     }
-    
+
     .btn-glow::after {
         content: '';
         position: absolute;
@@ -274,50 +314,58 @@
         transform: translate(-50%, -50%);
         transition: width 0.6s, height 0.6s;
     }
-    
+
     .btn-glow:hover::after {
         width: 300px;
         height: 300px;
     }
-    
+
     /* Parallax effect */
     .parallax {
         transform: translateZ(0);
         backface-visibility: hidden;
     }
-    
+
     /* Loading animation for elements */
     .fade-in-up {
         opacity: 0;
         transform: translateY(30px);
         animation: fadeInUp 0.8s ease forwards;
     }
-    
-    .fade-in-up:nth-child(1) { animation-delay: 0.1s; }
-    .fade-in-up:nth-child(2) { animation-delay: 0.2s; }
-    .fade-in-up:nth-child(3) { animation-delay: 0.3s; }
-    
+
+    .fade-in-up:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .fade-in-up:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .fade-in-up:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
     @keyframes fadeInUp {
         to {
             opacity: 1;
             transform: translateY(0);
         }
     }
-    
+
     /* Custom scrollbar */
     ::-webkit-scrollbar {
         width: 8px;
     }
-    
+
     ::-webkit-scrollbar-track {
         background: #190019;
     }
-    
+
     ::-webkit-scrollbar-thumb {
         background: linear-gradient(to bottom, #854F6C, #DFB6B2);
         border-radius: 4px;
     }
-    
+
     ::-webkit-scrollbar-thumb:hover {
         background: linear-gradient(to bottom, #DFB6B2, #854F6C);
     }
@@ -325,13 +373,13 @@
 
 <script>
     // Enhanced scroll animations
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Intersection Observer for scroll animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
         };
-        
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -340,7 +388,7 @@
                 }
             });
         }, observerOptions);
-        
+
         // Observe all sections for scroll animations
         document.querySelectorAll('section').forEach(section => {
             section.style.opacity = '0';
@@ -348,7 +396,7 @@
             section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
             observer.observe(section);
         });
-        
+
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -362,7 +410,7 @@
                 }
             });
         });
-        
+
         // Add floating animation to hero elements
         const floatingElements = document.querySelectorAll('.absolute.pointer-events-none div');
         floatingElements.forEach((el, index) => {

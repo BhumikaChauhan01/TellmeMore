@@ -21,6 +21,7 @@ def dashboard_view(request):
 
 @login_required
 def my_sessions(request):
+    # user_answers = AIInterviewAnswer.objects.filter(user=request.user).order_by('-created_at')
     return render(request, "dashboard/my_sessions.html")
 
 @login_required
@@ -231,7 +232,7 @@ def profile_edit_view(request):
 
 # Configure Gemini API
 try:
-    genai.configure(api_key="AIzaSyAUM5CHOJcSzf3_vEndyITY5JPBO-JR3fw")
+    genai.configure(api_key="AIzaSyCPyL7RbHSf22xH4vPbk1UB7ETLJ4kq2Xg")
     model = genai.GenerativeModel('gemini-2.0-flash')
 except Exception as e:
     model = None
@@ -701,3 +702,24 @@ def ai_page_view(request):
     """Complex AI interview page - redirect to simple interview for now"""
     # For now, redirect to the simple interview since the complex one was causing issues
     return redirect('dashboard:simple_interview')
+
+
+#==================================================================================================
+@login_required
+def save_ai_answer(request):
+    if request.method == "POST" and request.user.is_authenticated:
+        question_id = request.POST.get('question_id')
+        answer = request.POST.get('answer')
+        feedback = request.POST.get('feedback')
+
+        # Save to DB
+        question = AIQuestion.objects.get(id=question_id)
+        AIInterviewAnswer.objects.create(
+            user=request.user,
+            question=question,
+            answer=answer,
+            feedback=feedback
+        )
+
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'fail'}, status=400)

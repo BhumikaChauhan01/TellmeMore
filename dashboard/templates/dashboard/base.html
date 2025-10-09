@@ -1,17 +1,19 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Dashboard{% endblock %} - TellmeMore</title>
-    <meta name="description" content="TellmeMore Dashboard - Manage your AI-powered mock interview practice sessions and track your progress.">
-    
+    <meta name="description"
+        content="TellmeMore Dashboard - Manage your AI-powered mock interview practice sessions and track your progress.">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Custom Configuration for Tailwind -->
+
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -50,161 +52,315 @@
             }
         }
     </script>
-    
+
     <style>
-        /* Enhanced CSS Variables for Consistent Theming */
+        /* CSS Variables for Light and Dark Themes with Lilac/Purple Accents */
         :root {
+            /* Light Theme Colors */
             --color-bg-primary: #FFFFFF;
-            --color-bg-secondary: #F8FAFC;
-            --color-bg-tertiary: #F1F5F9;
-            --color-accent-primary: #3B82F6;
-            --color-accent-secondary: #60A5FA;
-            --color-text-primary: #0F172A;
-            --color-text-secondary: #475569;
+            --color-bg-secondary: #F9F7FE;
+            --color-bg-tertiary: #F3F0FF;
+            --color-bg-sidebar: rgba(255, 255, 255, 0.95);
+            --color-bg-glass: rgba(255, 255, 255, 0.95);
+
+            --color-accent-primary: #8B5CF6;
+            --color-accent-secondary: #A78BFA;
+            --color-accent-hover: #7C3AED;
+            --color-accent-light: #EDE9FE;
+
+            --color-text-primary: #1E1B4B;
+            --color-text-secondary: #6B7280;
+            --color-text-muted: #9CA3AF;
+
+            --color-border-primary: #E9D5FF;
+            --color-border-secondary: #DDD6FE;
+
+            --color-shadow: rgba(139, 92, 246, 0.1);
+            --color-overlay: rgba(0, 0, 0, 0.5);
         }
-        
+
+        /* Dark Theme Colors */
+        .dark {
+            --color-bg-primary: #0F172A;
+            --color-bg-secondary: #1E293B;
+            --color-bg-tertiary: #334155;
+            --color-bg-sidebar: rgba(30, 41, 59, 0.95);
+            --color-bg-glass: rgba(30, 41, 59, 0.95);
+
+            --color-accent-primary: #A78BFA;
+            --color-accent-secondary: #C4B5FD;
+            --color-accent-hover: #8B5CF6;
+            --color-accent-light: #312E81;
+
+            --color-text-primary: #F1F5F9;
+            --color-text-secondary: #CBD5E1;
+            --color-text-muted: #94A3B8;
+
+            --color-border-primary: #cab7e6ff;
+            --color-border-secondary: #5B21B6;
+
+            --color-shadow: rgba(167, 139, 250, 0.15);
+            --color-overlay: rgba(0, 0, 0, 0.7);
+        }
+
+        /* Smooth Transitions for Theme Switch */
+        * {
+            transition: background-color 0.3s ease,
+                color 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        /* Apply CSS Variables to Elements */
+        body {
+            background-color: var(--color-bg-secondary);
+            color: var(--color-text-primary);
+        }
+
         /* Glass Effects */
         .glass {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--color-bg-glass);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--color-border-primary);
+            box-shadow: 0 4px 6px -1px var(--color-shadow);
         }
-        
+
         /* Sidebar Styling */
+        .sidebar {
+            background: var(--color-bg-sidebar);
+        }
+
         .sidebar-link {
             transition: all 0.3s ease;
             border-radius: 0.75rem;
+            color: var(--color-text-secondary);
         }
-        
+
         .sidebar-link:hover {
-            background: rgba(59, 130, 246, 0.1);
+            background: var(--color-accent-light);
             transform: translateX(4px);
             border-left: 3px solid var(--color-accent-primary);
+            color: var(--color-text-primary);
         }
-        
+
         .sidebar-link.active {
-            background: rgba(59, 130, 246, 0.15);
+            background: var(--color-accent-light);
             border-left: 3px solid var(--color-accent-primary);
+            color: var(--color-accent-primary);
         }
-        
-        /* Enhanced Glow Effects */
-        .glow:focus {
-            box-shadow: 0 0 0 2px var(--color-accent-primary), 
-                        0 0 20px rgba(59, 130, 246, 0.3);
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--color-accent-light);
+            border-radius: 15px;
+            cursor: pointer;
+            border: 2px solid var(--color-border-primary);
             transition: all 0.3s ease;
         }
-        
+
+        .theme-toggle:hover {
+            box-shadow: 0 0 15px var(--color-shadow);
+        }
+
+        .theme-toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: var(--color-accent-primary);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dark .theme-toggle-slider {
+            transform: translateX(30px);
+        }
+
+        /* Enhanced Glow Effects */
+        .glow:focus {
+            box-shadow: 0 0 0 2px var(--color-accent-primary),
+                0 0 20px var(--color-shadow);
+            transition: all 0.3s ease;
+        }
+
         /* Text Gradients */
         .text-gradient {
-            background: linear-gradient(135deg, #3B82F6, #60A5FA, #2563EB);
+            background: linear-gradient(135deg, #8B5CF6, #A78BFA, #7C3AED);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
+        /* Profile & Header Elements */
+        .profile-avatar {
+            border-color: var(--color-border-primary);
+            background-color: var(--color-bg-tertiary);
+        }
+
+        .profile-avatar:hover {
+            border-color: var(--color-accent-primary);
+        }
+
+        /* Main Content Background */
+        main {
+            background: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-tertiary) 100%);
+        }
+
+        /* Border Colors */
+        .border-themed {
+            border-color: var(--color-border-primary);
+        }
+
+        /* Background Pattern */
+        .bg-pattern {
+            opacity: 0.05;
+        }
+
+        .dark .bg-pattern {
+            opacity: 0.03;
+        }
+
+        /* Mobile Menu Button */
+        #mobile-menu-btn {
+            background-color: var(--color-bg-glass);
+            color: var(--color-text-primary);
+            border-color: var(--color-border-primary);
+        }
+
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .sidebar-mobile {
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
             }
-            
+
             .sidebar-mobile.open {
                 transform: translateX(0);
             }
         }
+
+        /* Logo Gradient */
+        .logo-gradient {
+            background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+        }
+
+        /* Tooltip */
+        .tooltip {
+            background-color: var(--color-bg-tertiary);
+            border-color: var(--color-border-primary);
+            color: var(--color-text-primary);
+        }
     </style>
-    
-    <!-- Preload fonts for better performance -->
+
+    <script>
+        (function () {
+            const theme = localStorage.getItem('theme') || 'light';
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
     {% block extra_head %}{% endblock %}
 </head>
-<body class="font-body bg-primary-50 text-primary-900 antialiased overflow-x-hidden">
 
-    <!-- Mobile Menu Button -->
-    <button id="mobile-menu-btn" class="md:hidden fixed top-4 left-4 z-50 bg-white/90 backdrop-blur-md text-primary-700 p-3 rounded-xl shadow-lg border border-primary-200">
+<body class="font-body antialiased overflow-x-hidden">
+
+    <button id="mobile-menu-btn" class="md:hidden fixed top-4 left-4 z-50 backdrop-blur-md p-3 rounded-xl shadow-lg">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
     </button>
 
-    <!-- Sidebar -->
-    <aside id="sidebar" class="w-64 glass flex-shrink-0 flex flex-col fixed h-full z-40 sidebar-mobile md:translate-x-0">
-        <!-- Logo -->
-        <div class="p-6 border-b border-primary-200">
+    <aside id="sidebar"
+        class="sidebar glass w-64 flex-shrink-0 flex flex-col fixed h-full z-40 sidebar-mobile md:translate-x-0">
+        <div class="p-6 border-b border-themed">
             <a href="{% url 'dashboard:dashboard' %}" class="flex items-center space-x-3 group">
-                <div class="w-10 h-10 bg-gradient-to-br from-accent-500 to-accent-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <span class="text-white font-bold text-xl">T</span>
+                <div class="w-12 h-12 transition-transform duration-300">
+                    <img src="{% static 'images/logo.png' %}">
                 </div>
                 <span class="text-2xl font-bold text-gradient hover:scale-105 transition-transform duration-300">
                     TellmeMore
                 </span>
             </a>
         </div>
-        
-        <!-- Navigation -->
+
         <nav class="p-4 flex-1 overflow-y-auto space-y-2">
-            <a href="{% url 'dashboard:dashboard' %}" class="sidebar-link flex items-center space-x-3 p-3 text-primary-600 hover:text-primary-800">
+            <a href="{% url 'dashboard:dashboard' %}" class="sidebar-link flex items-center space-x-3 p-3">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5v6m3-6v6m5-6v6"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5v6m3-6v6m5-6v6" />
                 </svg>
                 <span class="font-medium">Dashboard</span>
             </a>
-            
-            <a href="{% url 'dashboard:category' %}" class="sidebar-link flex items-center space-x-3 p-3 text-primary-600 hover:text-primary-800">
+
+            <a href="{% url 'dashboard:category' %}" class="sidebar-link flex items-center space-x-3 p-3">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
                 <span class="font-medium">Practice Categories</span>
             </a>
-            
-            <a href="{% url 'dashboard:my_sessions' %}" class="sidebar-link flex items-center space-x-3 p-3 text-primary-600 hover:text-primary-800">
+
+            <a href="{% url 'dashboard:my_sessions' %}" class="sidebar-link flex items-center space-x-3 p-3">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                 </svg>
                 <span class="font-medium">My Sessions</span>
             </a>
-            
-            <a href="{% url 'dashboard:analytics' %}" class="sidebar-link flex items-center space-x-3 p-3 text-primary-600 hover:text-primary-800">
+
+            <a href="{% url 'dashboard:analytics' %}" class="sidebar-link flex items-center space-x-3 p-3">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
                 <span class="font-medium">Analytics</span>
             </a>
-            
-            <a href="{% url 'dashboard:uploaded_items' %}" class="sidebar-link flex items-center space-x-3 p-3 text-primary-600 hover:text-primary-800">
+
+            <a href="{% url 'dashboard:uploaded_items' %}" class="sidebar-link flex items-center space-x-3 p-3">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
                 </svg>
                 <span class="font-medium">Uploads</span>
             </a>
 
-            <div class="h-px bg-primary-200 my-4"></div>
+            <div class="h-px bg-themed my-4" style="background-color: var(--color-border-primary);"></div>
 
-            <!-- Profile & Logout -->
-            <a href="{% url 'dashboard:profile' %}" class="sidebar-link flex items-center space-x-3 p-3 text-primary-600 hover:text-primary-800">
+            <a href="{% url 'dashboard:profile' %}" class="sidebar-link flex items-center space-x-3 p-3">
                 <div class="flex-shrink-0">
                     {% if user.userprofile.profile_picture %}
-                        <img src="{{ user.userprofile.profile_picture.url }}" class="h-6 w-6 rounded-full object-cover border border-primary-300" alt="Profile">
+                    <img src="{{ user.userprofile.profile_picture.url }}"
+                        class="h-6 w-6 rounded-full object-cover border border-themed" alt="Profile">
                     {% else %}
-                        <div class="w-6 h-6 bg-accent-500 rounded-full flex items-center justify-center">
-                            <span class="text-xs font-bold text-white">{{ user.first_name|first|upper|default:'U' }}</span>
-                        </div>
+                    <div class="w-6 h-6 logo-gradient rounded-full flex items-center justify-center">
+                        <span class="text-xs font-bold text-white">{{ user.first_name|first|upper|default:'U' }}</span>
+                    </div>
                     {% endif %}
                 </div>
                 <span class="font-medium">Profile Settings</span>
             </a>
-            
+
             <form action="{% url 'logout' %}" method="POST" class="w-full">
                 {% csrf_token %}
-                <button type="submit" class="sidebar-link flex items-center space-x-3 p-3 w-full text-left text-primary-600 hover:text-primary-800">
+                <button type="submit" class="sidebar-link flex items-center space-x-3 p-3 w-full text-left">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
                     <span class="font-medium">Logout</span>
                 </button>
@@ -212,70 +368,84 @@
         </nav>
     </aside>
 
-    <!-- Main Content Area -->
     <div class="md:ml-64 flex-1 flex flex-col min-h-screen">
-        <!-- Header -->
-        <header class="glass sticky top-0 z-30 border-b border-primary-200">
+        <header class="glass sticky top-0 z-30 border-b border-themed">
             <div class="flex items-center justify-between px-6 py-4">
-                <!-- Header Title & Breadcrumb -->
                 <div class="flex items-center space-x-4">
-                    <h1 class="text-2xl font-bold text-primary-800">
+                    <h1 class="text-2xl font-bold" style="color: var(--color-text-primary);">
                         {% block page_title %}Dashboard{% endblock %}
                     </h1>
                     {% block breadcrumb %}{% endblock %}
                 </div>
-                
-                <!-- User Profile Section -->
+
                 <div class="flex items-center space-x-4">
+                  <div class="flex items-center space-x-4">
                     <div class="hidden sm:flex flex-col items-end">
-                        <span class="text-primary-800 font-semibold">{{ user.first_name|default:'User' }} {{ user.last_name|default:'' }}</span>
-                        <span class="text-primary-500 text-sm">{{ user.email }}</span>
+                        <span class="font-semibold" style="color: var(--color-text-primary);">{{ user.first_name|default:'User' }} {{ user.last_name|default:'' }}</span>
+                        <span class="text-sm" style="color: var(--color-text-secondary);">{{ user.email }}</span>
                     </div>
-                    
-                    <a href="{% url 'dashboard:profile' %}" class="group relative">
-                        <div class="h-12 w-12 rounded-xl border-2 border-primary-300 hover:border-accent-500 transition-all duration-300 transform hover:scale-105 overflow-hidden bg-primary-100">
-                            {% if user.userprofile.profile_picture %}
-                                <img src="{{ user.userprofile.profile_picture.url }}" class="w-full h-full object-cover" alt="Profile Picture">
-                            {% else %}
-                                <div class="w-full h-full flex items-center justify-center text-accent-600 font-bold text-lg">
+
+
+                        <a href="{% url 'dashboard:profile' %}" class="group relative">
+                            <div
+                                class="h-12 w-12 rounded-xl border-2 profile-avatar transition-all duration-300 transform hover:scale-105 overflow-hidden">
+                                {% if user.userprofile.profile_picture %}
+                                <img src="{{ user.userprofile.profile_picture.url }}" class="w-full h-full object-cover"
+                                    alt="Profile Picture">
+                                {% else %}
+                                <div class="w-full h-full flex items-center justify-center font-bold text-lg"
+                                    style="color: var(--color-accent-primary);">
                                     {{ user.first_name|first|upper|default:'U' }}
                                 </div>
-                            {% endif %}
+                                {% endif %}
+                            </div>
+                            <div
+                                class="tooltip absolute right-0 top-full mt-2 border text-sm rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap shadow-lg">
+                                View Profile
+                            </div>
+                        </a>
+                    </div>
+
+
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                        <div class="theme-toggle-slider">
+                            <svg id="theme-icon-light" class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <svg id="theme-icon-dark" class="w-3 h-3 text-white hidden" fill="currentColor"
+                                viewBox="0 0 20 20">
+                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                            </svg>
                         </div>
-                        <!-- Profile tooltip -->
-                        <div class="absolute right-0 top-full mt-2 bg-white border border-primary-200 text-primary-700 text-sm rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap shadow-lg">
-                            View Profile
-                        </div>
-                    </a>
+                    </button>
                 </div>
             </div>
         </header>
 
-        <!-- Main Content -->
-        <main class="flex-1 p-6 bg-gradient-to-br from-primary-50 to-primary-100 relative">
-            <!-- Background Pattern -->
-            <div class="absolute inset-0 opacity-5">
+        <main class="flex-1 p-6 relative">
+            <div class="bg-pattern absolute inset-0">
                 <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
                     <g fill="none" fill-rule="evenodd">
-                        <g fill="#3B82F6" fill-opacity="0.1">
-                            <circle cx="30" cy="30" r="2"/>
+                        <g fill="#8B5CF6" fill-opacity="0.1">
+                            <circle cx="30" cy="30" r="2" />
                         </g>
                     </g>
                 </svg>
             </div>
-            
-            <!-- Content Container -->
+
             <div class="relative z-10 max-w-7xl mx-auto">
                 {% block content %}{% endblock %}
             </div>
         </main>
     </div>
 
-    <!-- Mobile Sidebar Overlay -->
-    <div id="sidebar-overlay" class="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30 hidden"></div>
+    <div id="sidebar-overlay" class="md:hidden fixed inset-0 bg-opacity-50 z-30 hidden"
+        style="background-color: var(--color-overlay);"></div>
 
-    <!-- JavaScript for Mobile Menu -->
     <script>
+        // Mobile Menu Toggle
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
@@ -296,8 +466,53 @@
                 }
             });
         });
+
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const themeIconLight = document.getElementById('theme-icon-light');
+        const themeIconDark = document.getElementById('theme-icon-dark');
+
+        // Function to update theme icons
+        function updateThemeIcons(theme) {
+            if (theme === 'dark') {
+                themeIconLight.classList.add('hidden');
+                themeIconDark.classList.remove('hidden');
+            } else {
+                themeIconLight.classList.remove('hidden');
+                themeIconDark.classList.add('hidden');
+            }
+        }
+
+        // Initialize theme on page load
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        updateThemeIcons(currentTheme);
+
+        // Theme toggle click handler
+        themeToggle.addEventListener('click', () => {
+            const isDark = htmlElement.classList.contains('dark');
+
+            if (isDark) {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                updateThemeIcons('light');
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                updateThemeIcons('dark');
+            }
+        });
+
+        // Set active sidebar link based on current URL
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            }
+        });
     </script>
 
     {% block extra_scripts %}{% endblock %}
 </body>
+
 </html>

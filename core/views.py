@@ -27,3 +27,6 @@ def about_view(request):
 def how_to_view(request):
     return render(request, "how_to.html")
 
+def contact_view(request):
+    return render(request, 'contact_us.html')
+

@@ -306,3 +306,19 @@ class SessionAnalytics(models.Model):
     
     def __str__(self):
         return f"Analytics - Session {self.session.id}"
+    
+
+
+
+
+
+
+# class AIQuestion(models.Model):
+#     text = models.TextField()
+
+# class AIInterviewAnswer(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     question = models.ForeignKey(AIQuestion, on_delete=models.CASCADE)
+#     answer = models.TextField()
+#     feedback = models.TextField(null=True, blank=True)
+#     created_at = models.DateTimeField(auto_now_add=True)

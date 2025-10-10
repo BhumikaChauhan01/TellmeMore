@@ -309,16 +309,33 @@ class SessionAnalytics(models.Model):
     
 
 
+#=============================================================================================
 
 
-
-
-# class AIQuestion(models.Model):
-#     text = models.TextField()
-
-# class AIInterviewAnswer(models.Model):
+# # Each interview session belongs to a user
+# class InterviewSession(models.Model):
 #     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     question = models.ForeignKey(AIQuestion, on_delete=models.CASCADE)
-#     answer = models.TextField()
-#     feedback = models.TextField(null=True, blank=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
+#     started_at = models.DateTimeField(auto_now_add=True)
+#     ended_at = models.DateTimeField(null=True, blank=True)
+#     status = models.CharField(max_length=50, default="active")  # active / completed
+
+#     def __str__(self):
+#         return f"Session {self.id} by {self.user.username} - {self.status}"
+
+
+# # Each question (and user answer) is linked to an InterviewSession
+# class SessionQuestion(models.Model):
+#     session = models.ForeignKey(InterviewSession, on_delete=models.CASCADE, related_name='questions')
+#     question_number = models.IntegerField(default=1)
+#     question_text = models.TextField()
+#     user_answer = models.TextField(blank=True, null=True)
+
+#     def __str__(self):
+#         return f"Q{self.question_number} - {self.session.user.username}"
+
+
+
+
+
+
+

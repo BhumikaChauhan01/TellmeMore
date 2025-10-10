@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import InterviewDetails, PresentationPractice, CommunicationPractice, CustomQuestionSet, CustomQuestion , UserProfile
+from .models import InterviewDetails, PresentationPractice, CommunicationPractice, CustomQuestionSet, CustomQuestion , UserProfile , InterviewSession, SessionQuestion
 
 # --- Simple models registration --- #
 admin.site.register(InterviewDetails)
@@ -31,3 +31,27 @@ class CustomQuestionAdmin(admin.ModelAdmin):
     list_display = ('question_text', 'question_set')
     list_filter = ('question_set',)
     search_fields = ('question_text',)
+
+
+
+
+
+
+
+# #==============================================================================
+# # Inline view so you can see questions under each session in admin panel
+# class SessionQuestionInline(admin.TabularInline):
+#     model = SessionQuestion
+#     extra = 0
+
+# @admin.register(InterviewSession)
+# class InterviewSessionAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'user', 'status', 'started_at', 'ended_at')
+#     list_filter = ('status', 'started_at')
+#     search_fields = ('user__username',)
+#     inlines = [SessionQuestionInline]
+
+# @admin.register(SessionQuestion)
+# class SessionQuestionAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'session', 'question_number', 'question_text', 'user_answer')
+#     search_fields = ('question_text', 'user_answer')

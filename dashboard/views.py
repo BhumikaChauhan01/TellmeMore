@@ -705,21 +705,23 @@ def ai_page_view(request):
 
 
 #==================================================================================================
-@login_required
-def save_ai_answer(request):
-    if request.method == "POST" and request.user.is_authenticated:
-        question_id = request.POST.get('question_id')
-        answer = request.POST.get('answer')
-        feedback = request.POST.get('feedback')
+# @login_required
+# def my_sessions(request):
+#     sessions = InterviewSession.objects.filter(user=request.user).order_by('-started_at')
+#     selected_session = None
+#     questions = []
 
-        # Save to DB
-        question = AIQuestion.objects.get(id=question_id)
-        AIInterviewAnswer.objects.create(
-            user=request.user,
-            question=question,
-            answer=answer,
-            feedback=feedback
-        )
+#     session_id = request.GET.get("session_id")
+#     if session_id:
+#         try:
+#             selected_session = InterviewSession.objects.get(id=session_id, user=request.user)
+#             questions = SessionQuestion.objects.filter(session=selected_session).order_by('question_number')
+#         except InterviewSession.DoesNotExist:
+#             selected_session = None
 
-        return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'fail'}, status=400)
+#     return render(request, "dashboard/my_sessions.html", {
+#         "sessions": sessions,
+#         "selected_session": selected_session,
+#         "questions": questions
+#     })
+
